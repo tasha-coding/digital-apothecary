@@ -1,35 +1,37 @@
 [
   {
-    "id":"h1",
-    "name":"Chamomile",
-    "latin":"Matricaria chamomilla",
-    "systems":["nervous","digestive"],
-    "actions":["nervine","carminative"],
-    "contraindications":["ragweed allergy"],
-    "drug_interactions":[],
-    "pregnancy":"safe",
-    "education":"Traditionally used for calming and digestive support."
+    "name": "Ashwagandha",
+    "categories": ["adaptogen", "nervine"],
+    "supports": ["stress", "energy", "sleep"],
+    "contraindications": ["pregnancy"],
+    "synergy": ["Rhodiola", "Holy Basil"]
   },
   {
-    "id":"h2",
-    "name":"St Johns Wort",
-    "latin":"Hypericum perforatum",
-    "systems":["nervous"],
-    "actions":["mood support"],
-    "contraindications":[],
-    "drug_interactions":["SSRI","SNRI","birth control"],
-    "pregnancy":"unsafe",
-    "education":"Traditionally used for mood balance."
+    "name": "Rhodiola",
+    "categories": ["adaptogen", "cognitive"],
+    "supports": ["energy", "focus", "stress"],
+    "contraindications": ["high_anxiety"],
+    "synergy": ["Ashwagandha"]
   },
   {
-    "id":"h3",
-    "name":"Ginger",
-    "latin":"Zingiber officinale",
-    "systems":["digestive","circulatory"],
-    "actions":["anti-inflammatory","carminative"],
-    "contraindications":[],
-    "drug_interactions":["blood thinner"],
-    "pregnancy":"caution",
-    "education":"Traditionally used for digestion and circulation."
+    "name": "Holy Basil",
+    "categories": ["adaptogen", "nervine"],
+    "supports": ["stress", "anxiety", "inflammation"],
+    "contraindications": [],
+    "synergy": ["Ashwagandha"]
+  },
+  {
+    "name": "Chamomile",
+    "categories": ["nervine"],
+    "supports": ["sleep", "anxiety", "digestion"],
+    "contraindications": [],
+    "synergy": ["Lemon Balm"]
+  },
+  {
+    "name": "Ginger",
+    "categories": ["carminative"],
+    "supports": ["digestion", "bloating", "inflammation"],
+    "contraindications": [],
+    "synergy": ["Turmeric"]
   }
 ]

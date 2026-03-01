@@ -1,4 +1,5 @@
 import { auth, db } from "./firebase.js";
+import { runHerbEngine } from "./herbEngine.js";
 import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const steps = document.querySelectorAll(".step");
