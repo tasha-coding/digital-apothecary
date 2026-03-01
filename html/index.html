@@ -33,25 +33,22 @@
             our carefully curated collection of plants and herbs.</p>
     </section>
 
-    <section class="featured-herbs" id="herbs">
-        <h2>Featured Herbs</h2>
-        <div class="herb-grid">
-            <div class="herb-card">
-                <img src="images/lavender.jpg" alt="Lavender">
-                <h3>Lavender</h3>
-                <p>Calming and soothing, perfect for relaxation and sleep.</p>
-            </div>
-            <div class="herb-card">
-                <img src="images/echinacea.jpg" alt="Echinacea">
-                <h3>Echinacea</h3>
-                <p>Supports immune health naturally and effectively.</p>
-            </div>
-            <div class="herb-card">
-                <img src="images/mint.jpg" alt="Peppermint">
-                <h3>Peppermint</h3>
-                <p>Refreshing and invigorating, aids digestion and focus.</p>
-            </div>
-        </div>
+    <!-- Dynamic Herb Library Section -->
+    <section class="herb-library" id="herbs">
+        <h2>Herbal Library</h2>
+        <ul id="herb-list" class="herb-list">
+            <!-- Herb links will be injected here by JavaScript -->
+        </ul>
+    </section>
+
+    <!-- Herb Detail Section (hidden by default) -->
+    <section id="herb-detail" class="herb-detail" style="display:none;">
+        <button id="back-button">← Back to Herb List</button>
+        <h2 id="herb-name"></h2>
+        <p><strong>Categories:</strong> <span id="herb-categories"></span></p>
+        <p><strong>Supports:</strong> <span id="herb-supports"></span></p>
+        <p><strong>Contraindications:</strong> <span id="herb-contra"></span></p>
+        <p><strong>Synergy:</strong> <span id="herb-synergy"></span></p>
     </section>
 
     <section class="cta" id="cta">
@@ -73,7 +70,9 @@
         <p>© 2026 Luxury Botanical Apothecary | Crafted with care</p>
     </footer>
 
-    <script src="script.js"></script>
+    <!-- Include herb data and app script -->
+    <script src="herbs.js"></script>
+    <script src="app.js"></script>
 </body>
 
 </html>
