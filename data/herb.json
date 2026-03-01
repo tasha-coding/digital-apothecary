@@ -1,0 +1,35 @@
+[
+  {
+    "id":"h1",
+    "name":"Chamomile",
+    "latin":"Matricaria chamomilla",
+    "systems":["nervous","digestive"],
+    "actions":["nervine","carminative"],
+    "contraindications":["ragweed allergy"],
+    "drug_interactions":[],
+    "pregnancy":"safe",
+    "education":"Traditionally used for calming and digestive support."
+  },
+  {
+    "id":"h2",
+    "name":"St Johns Wort",
+    "latin":"Hypericum perforatum",
+    "systems":["nervous"],
+    "actions":["mood support"],
+    "contraindications":[],
+    "drug_interactions":["SSRI","SNRI","birth control"],
+    "pregnancy":"unsafe",
+    "education":"Traditionally used for mood balance."
+  },
+  {
+    "id":"h3",
+    "name":"Ginger",
+    "latin":"Zingiber officinale",
+    "systems":["digestive","circulatory"],
+    "actions":["anti-inflammatory","carminative"],
+    "contraindications":[],
+    "drug_interactions":["blood thinner"],
+    "pregnancy":"caution",
+    "education":"Traditionally used for digestion and circulation."
+  }
+]
