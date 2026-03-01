@@ -138,172 +138,59 @@ footer {
     color: #3a503a;
 }
 
-.intake-body {
-    background: linear-gradient(#f5f9f6, #eef5ef);
-    font-family: 'Segoe UI', sans-serif;
+/* --- Utility Layouts --- */
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
 }
 
-.intake-container {
-    max-width: 700px;
-    margin: auto;
-    padding: 40px;
-    background: white;
-    border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+.card {
+    background: #fff;
+    padding: 1.25rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 
-.intake-header {
-    text-align: center;
-    margin-bottom: 30px;
-}
-
-.step {
-    display: none;
-    animation: fadeIn 0.5s ease;
-}
-
-.step.active {
-    display: block;
-}
-
-.progress-bar {
-    height: 8px;
-    background: #e0ebe3;
-    border-radius: 20px;
-    margin-bottom: 30px;
-}
-
-.progress-fill {
-    height: 100%;
-    background: #6f8f72;
-    width: 0%;
-    border-radius: 20px;
-    transition: width 0.4s ease;
-}
-
-button {
-    background: #6f8f72;
-    color: white;
-    border: none;
-    padding: 10px 18px;
-    border-radius: 8px;
-    cursor: pointer;
-}
-
-button:hover {
-    background: #5d7d60;
-}
-
-.nav-buttons {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
-}
-
-input[type="range"] {
-    width: 100%;
-    margin-bottom: 15px;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.herb-results {
-    margin-top: 30px;
-}
-
-.herb-card {
-    background: #f4f8f5;
-    padding: 20px;
-    border-radius: 12px;
-    margin-bottom: 15px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-}
-
-.herb-library {
-    padding: 2rem;
-    background-color: #f9f7f2; /* soft herbal background */
-}
-
-.herb-library h2 {
-    text-align: center;
-    color: #4a5a2a;
-    font-size: 2rem;
-    margin-bottom: 1rem;
-}
-
-.herb-list {
-    list-style: none;
-    padding: 0;
+.grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 0.8rem;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
 }
 
-.herb-list li {
-    background-color: #ffffff;
-    border: 1px solid #d6d3c8;
-    padding: 0.8rem 1rem;
-    border-radius: 8px;
-    text-align: center;
-    transition: all 0.2s ease-in-out;
-}
-
-.herb-list li a {
-    text-decoration: none;
-    color: #4a5a2a;
-    font-weight: 500;
-    display: block;
-}
-
-.herb-list li:hover {
-    background-color: #e8f0dc;
-    transform: translateY(-3px);
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-}
-
-#herb-detail {
-    padding: 2rem;
-    background-color: #f0f5e6;
-    border-radius: 8px;
-    max-width: 600px;
-    margin: 2rem auto;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-}
-
-#herb-detail h2 {
-    color: #3b4a1a;
+.controls {
+    display: flex;
+    gap: 0.75rem;
     margin-bottom: 1rem;
 }
 
-#herb-detail p {
-    font-size: 1rem;
-    line-height: 1.5;
-    margin-bottom: 0.6rem;
-    color: #333;
+input,
+select,
+button {
+    font: inherit;
 }
 
-#back-button {
-    display: inline-block;
-    margin-bottom: 1rem;
-    background-color: #4a5a2a;
-    color: #fff;
-    border: none;
-    padding: 0.5rem 1rem;
+input,
+select {
+    padding: 0.6rem;
+    border: 1px solid #d8d8d8;
     border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.2s ease-in-out;
 }
 
-#back-button:hover {
-    background-color: #6b7b3a;
+.auth-layout {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+}
+
+.auth-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.detail-img {
+    width: 100%;
+    max-width: 520px;
+    border-radius: 10px;
+    margin-bottom: 1rem;
 }

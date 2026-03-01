@@ -3,124 +3,35 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Your Wellness Intake</title>
+<title>Comprehensive Intake</title>
 <link rel="stylesheet" href="style.css">
-<script type="module" src="intake.js" defer></script>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 </head>
+<body>
 
-<body class="intake-body">
+<header><h1>Comprehensive Health Intake</h1></header>
 
-<div class="intake-container">
 
-  <div class="intake-header">
-    <h1>🌿 Your Botanical Wellness Assessment</h1>
-    <p>Thoughtful questions help us craft deeply personalized herbal support.</p>
+<section class="container">
+  <div class="card">
+    <h2>Select Current Symptoms</h2>
+
+    <label><input type="checkbox" value="stress"> Stress</label><br>
+    <label><input type="checkbox" value="tired"> Low energy / tiredness</label><br>
+    <label><input type="checkbox" value="anxiety"> Anxiety</label><br>
+    <label><input type="checkbox" value="digestive"> Digestive discomfort</label><br>
+    <label><input type="checkbox" value="immune"> Immune support</label><br><br>
+
+
+    <button class="btn" id="submitIntake">Submit Intake</button>
   </div>
+</section>
 
-  <div class="progress-bar">
-    <div class="progress-fill" id="progressFill"></div>
-  </div>
-
-  <form id="intakeForm">
-
-  <!-- STEP 1 -->
-  <section class="step active">
-    <h2>🌱 Foundational Profile</h2>
-
-    <label>Age Range</label>
-    <select name="age">
-      <option>18–25</option>
-      <option>26–35</option>
-      <option>36–45</option>
-      <option>46–55</option>
-      <option>56+</option>
-    </select>
-
-    <label>Biological Sex</label>
-    <select name="sex">
-      <option>Female</option>
-      <option>Male</option>
-      <option>Other</option>
-    </select>
-
-    <label>Are you pregnant or breastfeeding?</label>
-    <select name="pregnancy">
-      <option>No</option>
-      <option>Pregnant</option>
-      <option>Breastfeeding</option>
-    </select>
-
-    <button type="button" class="next-btn">Next</button>
-  </section>
-
-  <!-- STEP 2 -->
-  <section class="step">
-    <h2>🌿 Your Primary Goals</h2>
-
-    <label><input type="checkbox" name="goals" value="energy"> Restore Energy</label>
-    <label><input type="checkbox" name="goals" value="stress"> Calm Stress</label>
-    <label><input type="checkbox" name="goals" value="sleep"> Improve Sleep</label>
-    <label><input type="checkbox" name="goals" value="hormones"> Balance Hormones</label>
-    <label><input type="checkbox" name="goals" value="digestion"> Improve Digestion</label>
-    <label><input type="checkbox" name="goals" value="focus"> Sharpen Focus</label>
-
-    <div class="nav-buttons">
-      <button type="button" class="back-btn">Back</button>
-      <button type="button" class="next-btn">Next</button>
-    </div>
-  </section>
-
-  <!-- STEP 3 -->
-  <section class="step">
-    <h2>🌾 Symptom Mapping</h2>
-
-    <label>Afternoon Fatigue</label>
-    <input type="range" min="0" max="5" name="fatigue">
-
-    <label>Anxiety / Tension</label>
-    <input type="range" min="0" max="5" name="anxiety">
-
-    <label>Brain Fog</label>
-    <input type="range" min="0" max="5" name="brainfog">
-
-    <label>Bloating</label>
-    <input type="range" min="0" max="5" name="bloating">
-
-    <label>Sleep Disturbance</label>
-    <input type="range" min="0" max="5" name="sleepdisturb">
-
-    <div class="nav-buttons">
-      <button type="button" class="back-btn">Back</button>
-      <button type="button" class="next-btn">Next</button>
-    </div>
-  </section>
-
-  <!-- STEP 4 -->
-  <section class="step">
-    <h2>🌬 Lifestyle Landscape</h2>
-
-    <label>Stress Level (1–10)</label>
-    <input type="range" min="1" max="10" name="stresslevel">
-
-    <label>Hours of Sleep</label>
-    <input type="number" name="sleephours">
-
-    <label>Caffeine per Day</label>
-    <select name="caffeine">
-      <option>None</option>
-      <option>1 cup</option>
-      <option>2–3 cups</option>
-      <option>4+ cups</option>
-    </select>
-
-    <div class="nav-buttons">
-      <button type="button" class="back-btn">Back</button>
-      <button type="submit">Complete Assessment</button>
-    </div>
-  </section>
-
-  </form>
-</div>
-
+<script src="firebase.js"></script>
+<script src="auth.js"></script>
+<script src="intake.js"></script>
 </body>
 </html>

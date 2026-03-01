@@ -1,67 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard</title>
-<link rel="stylesheet" href="style.css">
-
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Herb Library</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header><h1>Your Herbal Dashboard</h1></header>
-
-<div class="container">
-  <div id="results"></div>
-</div>
-
-<script src="firebase.js"></script>
-<script src="auth.js"></script>
-<script src="dashboard.js"></script>
-</body>
-</html>
-herbs.html
-herbs.html
-+22
--2
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Herb Library</title>
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
-<header>
+  <header>
     <div class="logo">Luxury Botanical</div>
     <nav>
-        <a href="index.html">Home</a>
-        <a href="herbs.html">Herbs</a>
+      <a href="index.html">Home</a>
+      <a href="herbs.html">Herbs</a>
     </nav>
-</header>
+  </header>
 
-<section class="container">
-    <link rel="stylesheet" href="style.css">
+  <section class="container">
     <h1>Herb Library</h1>
 
     <div class="controls">
-        <input type="text" id="search" placeholder="Search herbs...">
-        <select id="filter">
-            <option value="all">All Categories</option>
-            <option value="sleep">Sleep</option>
-            <option value="digestion">Digestion</option>
-            <option value="immune">Immune</option>
-        </select>
+        
+      <input type="text" id="search" placeholder="Search herbs...">
+      <select id="filter">
+        <option value="all">All Categories</option>
+        <option value="sleep">Sleep</option>
+        <option value="digestion">Digestion</option>
+        <option value="immune">Immune</option>
+      </select>
     </div>
 
     <div id="herb-list" class="grid"></div>
-</section>
-</section>
+  </section>
 
-<script src="app.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
