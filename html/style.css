@@ -186,13 +186,42 @@ footer {
 }
 
 /* --- Utility Layouts --- */
-  .container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            max-width: 1200px;
-            margin: 20px auto;
-        }
+ .container {
+    display: flex;
+    flex-direction: column;   /* allows vertical stacking */
+    align-items: center;
+    max-width: 1200px;
+    margin: 20px auto;
+}
+.controls {
+    width: 100%;
+    max-width: 700px;
+    display: flex;
+    gap: 12px;
+    margin: 20px 0;
+    justify-content: center;
+    align-items: center;
+}
+
+.controls input {
+    flex: 1;
+    padding: 0.6rem 1rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.controls button {
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+}
+
+.controls select {
+    min-width: 160px;
+    padding: 0.6rem;
+    border-radius: 6px;
+}
+
+
   .card {
             border: 1px solid #ccc;
             border-radius: 5px;
