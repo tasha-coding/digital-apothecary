@@ -1,0 +1,1120 @@
+### CURRENT FILE TREE
+data/herb.json
+html/admin.html
+html/dashboard.html
+html/herb.html
+html/herbs.html
+html/index.html
+html/intake.html
+html/register.html
+js/admin.js
+js/app.js
+js/auth.js
+js/dashboard.js
+js/firebase.js
+js/herbEngine.js
+js/intake.js
+js/script.js
+readme.md
+style.css
+
+===== FILE: data/herb.json =====
+     1	[
+     2	  {"name":"Alfalfa","categories":["nutrient-rich","detox"],"supports":["nutrient_support","detoxification"],"contraindications":["autoimmune_conditions"],"synergy":["Nettle"]},
+     3	  {"name":"Anise","categories":["carminative","digestive"],"supports":["digestion","bloating"],"contraindications":["pregnancy"],"synergy":["Fennel"]},
+     4	  {"name":"Ashwagandha","categories":["adaptogen","nervine"],"supports":["stress","energy","sleep"],"contraindications":["pregnancy"],"synergy":["Rhodiola","Holy Basil","Ginseng"]},
+     5	  {"name":"Basil","categories":["nervine","digestive"],"supports":["digestion","stress"],"contraindications":[],"synergy":["Holy Basil"]},
+     6	  {"name":"Bay Leaf","categories":["digestive","antimicrobial"],"supports":["digestion","antioxidant_support"],"contraindications":[],"synergy":["Thyme","Rosemary"]},
+     7	  {"name":"Black Cohosh","categories":["hormonal","nervine"],"supports":["menopause_symptoms"],"contraindications":["pregnancy","liver_disease"],"synergy":["Red Clover"]},
+     8	  {"name":"Blue Vervain","categories":["nervine","digestive"],"supports":["stress","digestion"],"contraindications":["pregnancy"],"synergy":["Chamomile"]},
+     9	  {"name":"Burdock Root","categories":["detox","liver"],"supports":["liver_health","skin_health"],"contraindications":[],"synergy":["Dandelion"]},
+    10	  {"name":"Cardamom","categories":["digestive","carminative"],"supports":["digestion","bloating"],"contraindications":[],"synergy":["Ginger"]},
+    11	  {"name":"Cayenne","categories":["circulatory","digestive"],"supports":["circulation","digestion","pain"],"contraindications":["ulcers"],"synergy":["Ginger","Turmeric"]},
+    12	  {"name":"Catnip","categories":["nervine","digestive"],"supports":["sleep","digestion"],"contraindications":[],"synergy":["Chamomile"]},
+    13	  {"name":"Chamomile","categories":["nervine"],"supports":["sleep","anxiety","digestion"],"contraindications":[],"synergy":["Lemon Balm"]},
+    14	  {"name":"Chervil","categories":["digestive","carminative"],"supports":["digestion","detox"],"contraindications":[],"synergy":["Parsley"]},
+    15	  {"name":"Chaga","categories":["immune","antioxidant"],"supports":["immune_support","antioxidant_support"],"contraindications":[],"synergy":["Reishi"]},
+    16	  {"name":"Chicory","categories":["liver","digestive"],"supports":["liver_health","digestion"],"contraindications":[],"synergy":["Dandelion","Milk Thistle"]},
+    17	  {"name":"Cinnamon","categories":["digestive","circulatory"],"supports":["blood_sugar","digestion","circulation"],"contraindications":["liver_disease"],"synergy":["Ginger"]},
+    18	  {"name":"Coriander","categories":["digestive","carminative"],"supports":["digestion","detoxification"],"contraindications":[],"synergy":["Fennel"]},
+    19	  {"name":"Corn Silk","categories":["diuretic","digestive"],"supports":["kidney_health","digestion"],"contraindications":[],"synergy":["Nettle","Parsley"]},
+    20	  {"name":"Dandelion","categories":["diuretic","liver"],"supports":["liver_health","detox","digestion"],"contraindications":["gallstones"],"synergy":["Milk Thistle","Burdock Root","Nettle"]},
+    21	  {"name":"Echinacea","categories":["immune","antimicrobial"],"supports":["immune_support","infection"],"contraindications":["autoimmune_conditions"],"synergy":["Goldenseal","Pau d'Arco"]},
+    22	  {"name":"Fenugreek","categories":["hormonal","digestive"],"supports":["lactation_support","digestion"],"contraindications":["pregnancy"],"synergy":["Fennel"]},
+    23	  {"name":"Fennel","categories":["carminative","digestive"],"supports":["digestion","bloating","lactation_support"],"contraindications":["pregnancy"],"synergy":["Anise","Fenugreek"]},
+    24	  {"name":"Garlic","categories":["cardiovascular","immune"],"supports":["immune_support","blood_pressure","cholesterol"],"contraindications":["blood_thinners"],"synergy":["Ginger"]},
+    25	  {"name":"Ginkgo Biloba","categories":["cognitive","circulatory"],"supports":["memory","circulation","focus"],"contraindications":["blood_thinners"],"synergy":["Gotu Kola","Pine Bark","Hawthorn"]},
+    26	  {"name":"Ginger","categories":["carminative"],"supports":["digestion","bloating","inflammation"],"contraindications":[],"synergy":["Turmeric","Cayenne","Cinnamon","Peppermint","Cardamom"]},
+    27	  {"name":"Ginseng","categories":["adaptogen","energy"],"supports":["energy","stress","immune_support"],"contraindications":["high_blood_pressure"],"synergy":["Ashwagandha","Rhodiola","Cordyceps","Maca"]},
+    28	  {"name":"Goldenseal","categories":["immune","antimicrobial"],"supports":["infection","digestion"],"contraindications":["pregnancy","high_blood_pressure"],"synergy":["Echinacea"]},
+    29	  {"name":"Gotu Kola","categories":["cognitive","circulatory"],"supports":["memory","circulation","skin healing"],"contraindications":["liver_disease"],"synergy":["Ginkgo Biloba"]},
+    30	  {"name":"Hawthorn","categories":["cardiovascular"],"supports":["heart_health","circulation"],"contraindications":["hypotension"],"synergy":["Ginkgo Biloba","Hibiscus"]},
+    31	  {"name":"Hibiscus","categories":["cardiovascular","immune"],"supports":["blood_pressure","immune_support"],"contraindications":["pregnancy"],"synergy":["Hawthorn"]},
+    32	  {"name":"Horehound","categories":["respiratory","digestive"],"supports":["respiratory_health","digestion"],"contraindications":[],"synergy":["Mullein","Thyme"]},
+    33	  {"name":"Holy Basil","categories":["adaptogen","nervine"],"supports":["stress","anxiety","inflammation"],"contraindications":[],"synergy":["Ashwagandha","Basil"]},
+    34	  {"name":"Lavender","categories":["nervine","antimicrobial"],"supports":["sleep","anxiety","relaxation"],"contraindications":[],"synergy":["Chamomile","Lemon Balm"]},
+    35	  {"name":"Lemon Balm","categories":["nervine","antiviral"],"supports":["anxiety","sleep","mood"],"contraindications":[],"synergy":["Chamomile","Lavender"]},
+    36	  {"name":"Licorice Root","categories":["adaptogen","digestive"],"supports":["stress","digestion","adrenal_support"],"contraindications":["high_blood_pressure"],"synergy":["Ashwagandha"]},
+    37	  {"name":"Maca","categories":["adaptogen","hormonal"],"supports":["energy","hormonal_balance"],"contraindications":["thyroid_conditions"],"synergy":["Ginseng","Shatavari","Catuaba"]},
+    38	  {"name":"Marshmallow Root","categories":["mucilaginous","digestive"],"supports":["soothe_throat","digestion"],"contraindications":[],"synergy":["Slippery Elm"]},
+    39	  {"name":"Meadowsweet","categories":["anti-inflammatory","digestive"],"supports":["pain","digestion"],"contraindications":["pregnancy","blood_thinners"],"synergy":["Ginger","Turmeric"]},
+    40	  {"name":"Milk Thistle","categories":["liver","detox"],"supports":["liver_health","detoxification"],"contraindications":["allergy_to_silymarin"],"synergy":["Dandelion","Chicory","Thistle"]},
+    41	  {"name":"Moringa","categories":["nutrient-rich","adaptogen"],"supports":["energy","nutrition","immune_support"],"contraindications":[],"synergy":["Ashwagandha","Ginseng"]},
+    42	  {"name":"Mullein","categories":["respiratory"],"supports":["lung_health","cough"],"contraindications":[],"synergy":["Horehound"]},
+    43	  {"name":"Nettle","categories":["diuretic","nutrient-rich"],"supports":["allergies","detoxification","iron_support"],"contraindications":["kidney_disease"],"synergy":["Dandelion","Alfalfa","Parsley"]},
+    44	  {"name":"Oatstraw","categories":["nervine","mineral-rich"],"supports":["stress","nervous_system"],"contraindications":[],"synergy":["Chamomile","Lemon Balm"]},
+    45	  {"name":"Oregano","categories":["antimicrobial","digestive"],"supports":["immune_support","digestion"],"contraindications":[],"synergy":["Thyme"]},
+    46	  {"name":"Passionflower","categories":["nervine","sedative"],"supports":["sleep","anxiety"],"contraindications":["pregnancy"],"synergy":["Valerian","Chamomile"]},
+    47	  {"name":"Pau d'Arco","categories":["immune","antimicrobial"],"supports":["infection","immune_support"],"contraindications":["pregnancy"],"synergy":["Echinacea"]},
+    48	  {"name":"Peppermint","categories":["digestive","nervine"],"supports":["digestion","headache"],"contraindications":["GERD"],"synergy":["Ginger","Chamomile"]},
+    49	  {"name":"Pine Bark","categories":["circulatory","antioxidant"],"supports":["circulation","antioxidant_support"],"contraindications":[],"synergy":["Ginkgo Biloba"]},
+    50	  {"name":"Red Clover","categories":["hormonal","blood"],"supports":["menopause_support","circulation"],"contraindications":["hormone_sensitive_cancers"],"synergy":["Black Cohosh"]},
+    51	  {"name":"Reishi","categories":["immune","adaptogen"],"supports":["immune_support","stress"],"contraindications":[],"synergy":["Chaga","Ginseng"]},
+    52	  {"name":"Rhodiola","categories":["adaptogen","cognitive"],"supports":["energy","focus","stress"],"contraindications":["high_anxiety"],"synergy":["Ashwagandha","Ginseng"]},
+    53	  {"name":"Rosemary","categories":["cognitive","digestive"],"supports":["memory","digestion","circulation"],"contraindications":["pregnancy"],"synergy":["Sage","Bay Leaf"]},
+    54	  {"name":"Sage","categories":["cognitive","antimicrobial"],"supports":["memory","digestion","oral_health"],"contraindications":["pregnancy"],"synergy":["Rosemary"]},
+    55	  {"name":"Shatavari","categories":["adaptogen","hormonal"],"supports":["hormonal_balance","fertility"],"contraindications":["pregnancy"],"synergy":["Maca","Ashwagandha"]},
+    56	  {"name":"Skullcap","categories":["nervine","sedative"],"supports":["anxiety","sleep","nervous_tension"],"contraindications":[],"synergy":["Chamomile","Lemon Balm"]},
+    57	  {"name":"Slippery Elm","categories":["mucilaginous","digestive"],"supports":["soothe_throat","digestion"],"contraindications":[],"synergy":["Marshmallow Root"]},
+    58	  {"name":"Spearmint","categories":["digestive","nervine"],"supports":["digestion","stress"],"contraindications":[],"synergy":["Peppermint"]},
+    59	  {"name":"St. John's Wort","categories":["antidepressant","nervine"],"supports":["mood","anxiety"],"contraindications":["SSRIs","pregnancy","photosensitivity"],"synergy":["Lemon Balm","Saffron"]},
+    60	  {"name":"Thyme","categories":["antimicrobial","respiratory"],"supports":["respiratory_health","immune_support"],"contraindications":[],"synergy":["Oregano","Bay Leaf","Horehound"]},
+    61	  {"name":"Tarragon","categories":["digestive","carminative"],"supports":["digestion","appetite"],"contraindications":[],"synergy":["Fennel"]},
+    62	  {"name":"Turmeric","categories":["anti-inflammatory","liver"],"supports":["inflammation","joint health","digestion"],"contraindications":["gallstones"],"synergy":["Ginger","Cayenne","Meadowsweet"]},
+    63	  {"name":"Valerian","categories":["nervine","sedative"],"supports":["sleep","anxiety"],"contraindications":["pregnancy","liver_disease"],"synergy":["Chamomile","Lemon Balm"]},
+    64	  {"name":"Yarrow","categories":["circulatory","anti-inflammatory"],"supports":["wound_healing","circulation","fever"],"contraindications":["pregnancy"],"synergy":["Chamomile"]},
+    65	  {"name":"Yohimbe","categories":["circulatory","energy"],"supports":["energy","circulation"],"contraindications":["high_blood_pressure","heart_conditions"],"synergy":["Ginseng"]}
+    66	]
+
+===== FILE: html/admin.html =====
+     1	<!-- admin.html -->
+     2	<!DOCTYPE html>
+     3	<html lang="en">
+     4	
+     5	<head>
+     6	  <meta charset="UTF-8">
+     7	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     8	  <title>Admin Dashboard</title>
+     9	  <link rel="stylesheet" href="style.css">
+    10	
+    11	 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    12	<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    13	<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    14	</head>
+    15	
+    16	<body>
+    17	  <header>
+    18	    <h1>Admin Dashboard</h1>
+    19	  </header>
+    20	  <div class="container">
+    21	    <div id="adminResults"></div>
+    22	  </div>
+    23	
+    24	  <script src="firebase.js"></script>
+    25	  <script src="auth.js"></script>
+    26	  <script src="admin.js"></script>
+    27	</body>
+    28	
+    29	</html>
+
+===== FILE: html/dashboard.html =====
+     1	<!DOCTYPE html>
+     2	<html lang="en">
+     3	<head>
+     4	<meta charset="UTF-8">
+     5	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+     6	<title>Dashboard</title>
+     7	<link rel="stylesheet" href="style.css">
+     8	
+     9	
+    10	<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    11	<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    12	<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    13	</head>
+    14	<body>
+    15	<header><h1>Your Herbal Dashboard</h1></header>
+    16	
+    17	<div class="container">
+    18	  <div id="results"></div>
+    19	</div>
+    20	
+    21	<script src="firebase.js"></script>
+    22	<script src="auth.js"></script>
+    23	<script src="dashboard.js"></script>
+    24	</body>
+    25	</html>
+
+===== FILE: html/herb.html =====
+     1	<!DOCTYPE html>
+     2	<html lang="en">
+     3	<head>
+     4	<meta charset="UTF-8">
+     5	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+     6	<title>Herb Details</title>
+     7	<link rel="stylesheet" href="style.css">
+     8	</head>
+     9	<body>
+    10	
+    11	<header>
+    12	    <div class="logo">Luxury Botanical</div>
+    13	    <nav>
+    14	        <a href="index.html">Home</a>
+    15	        <a href="herbs.html">Herbs</a>
+    16	    </nav>
+    17	</header>
+    18	
+    19	<section class="container">
+    20	    <div id="herb-detail"></div>
+    21	</section>
+    22	
+    23	<footer>
+    24	    <p>© 2026 Luxury Botanical Apothecary</p>
+    25	</footer>
+    26	
+    27	<script src="app.js"></script>
+    28	</body>
+    29	</html>
+
+===== FILE: html/herbs.html =====
+     1	<!DOCTYPE html>
+     2	<html lang="en">
+     3	<head>
+     4	  <meta charset="UTF-8">
+     5	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     6	  <title>Herb Library</title>
+     7	  <link rel="stylesheet" href="style.css">
+     8	</head>
+     9	<body>
+    10	  <header>
+    11	    <div class="logo">Luxury Botanical</div>
+    12	    <nav>
+    13	      <a href="index.html">Home</a>
+    14	      <a href="herbs.html">Herbs</a>
+    15	    </nav>
+    16	  </header>
+    17	
+    18	  <section class="container">
+    19	    <h1>Herb Library</h1>
+    20	
+    21	    <div class="controls">
+    22	        
+    23	      <input type="text" id="search" placeholder="Search herbs...">
+    24	      <select id="filter">
+    25	        <option value="all">All Categories</option>
+    26	        <option value="sleep">Sleep</option>
+    27	        <option value="digestion">Digestion</option>
+    28	        <option value="immune">Immune</option>
+    29	      </select>
+    30	    </div>
+    31	
+    32	    <div id="herb-list" class="grid"></div>
+    33	  </section>
+    34	
+    35	  <script src="app.js"></script>
+    36	</body>
+    37	</html>
+
+===== FILE: html/index.html =====
+     1	<!DOCTYPE html>
+     2	<html lang="en">
+     3	
+     4	<head>
+     5	    <meta charset="UTF-8">
+     6	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     7	    <title>Luxury Botanical Apothecary</title>
+     8	    <link rel="stylesheet" href="style.css">
+     9	</head>
+    10	
+    11	<body>
+    12	
+    13	    <header id="header">
+    14	        <div class="logo">Luxury Botanical</div>
+    15	        <nav>
+    16	            <a href="index.html">Home</a>
+    17	            <a href="register.html">Login</a>
+    18	            <a href="intake.html">Intake Form</a>
+    19	            <a href="#herbs">Herbs</a>
+    20	            <a href="#contact">Contact</a>
+    21	        </nav>
+    22	    </header>
+    23	
+    24	    <section class="hero" id="hero">
+    25	        <h1>Modern Herbal Wisdom</h1>
+    26	        <p>Discover common medicinal herbs found in the United States.</p>
+    27	        <a href="#herbs" class="btn">Explore Herbs</a>
+    28	    </section>
+    29	
+    30	    <section class="about" id="about">
+    31	        <h2>Welcome to Luxury Botanical</h2>
+    32	        <p>We bring centuries-old herbal knowledge into modern wellness. From calming teas to natural remedies, explore
+    33	            our carefully curated collection of plants and herbs.</p>
+    34	    </section>
+    35	
+    36	    <!-- Dynamic Herb Library Section -->
+    37	    <section class="herb-library" id="herbs">
+    38	        <h2>Herbal Library</h2>
+    39	        <ul id="herb-list" class="herb-list">
+    40	            <!-- Herb links will be injected here by JavaScript -->
+    41	        </ul>
+    42	    </section>
+    43	
+    44	    <!-- Herb Detail Section (hidden by default) -->
+    45	    <section id="herb-detail" class="herb-detail" style="display:none;">
+    46	        <button id="back-button">← Back to Herb List</button>
+    47	        <h2 id="herb-name"></h2>
+    48	        <p><strong>Categories:</strong> <span id="herb-categories"></span></p>
+    49	        <p><strong>Supports:</strong> <span id="herb-supports"></span></p>
+    50	        <p><strong>Contraindications:</strong> <span id="herb-contra"></span></p>
+    51	        <p><strong>Synergy:</strong> <span id="herb-synergy"></span></p>
+    52	    </section>
+    53	
+    54	    <section class="cta" id="cta">
+    55	        <h2>Get Started With Us</h2>
+    56	        <p>Join our community to access personalized herbal recommendations and track your wellness journey.</p>
+    57	        <div class="cta-buttons">
+    58	            <a href="register.html" class="btn">Create Account</a>
+    59	            <a href="intake.html" class="btn">Take Intake Form</a>
+    60	        </div>
+    61	    </section>
+    62	
+    63	    <section class="contact" id="contact">
+    64	        <h2>Contact Us</h2>
+    65	        <p>Have questions or need guidance on herbal remedies? Reach out, and we'll help you find the perfect herb.</p>
+    66	        <a href="mailto:info@luxurybotanical.com" class="btn">Email Us</a>
+    67	    </section>
+    68	
+    69	    <footer>
+    70	        <p>© 2026 Luxury Botanical Apothecary | Crafted with care</p>
+    71	    </footer>
+    72	
+    73	    <!-- Include herb data and app script -->
+    74	    <script src="herbs.js"></script>
+    75	    <script src="app.js"></script>
+    76	</body>
+    77	
+    78	</html>
+
+===== FILE: html/intake.html =====
+     1	<!DOCTYPE html>
+     2	<html lang="en">
+     3	<head>
+     4	<meta charset="UTF-8">
+     5	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+     6	<title>Comprehensive Intake</title>
+     7	<link rel="stylesheet" href="style.css">
+     8	
+     9	<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    10	<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    11	<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    12	</head>
+    13	<body>
+    14	
+    15	<header><h1>Comprehensive Health Intake</h1></header>
+    16	
+    17	
+    18	<section class="container">
+    19	  <div class="card">
+    20	    <h2>Select Current Symptoms</h2>
+    21	
+    22	    <label><input type="checkbox" value="stress"> Stress</label><br>
+    23	    <label><input type="checkbox" value="tired"> Low energy / tiredness</label><br>
+    24	    <label><input type="checkbox" value="anxiety"> Anxiety</label><br>
+    25	    <label><input type="checkbox" value="digestive"> Digestive discomfort</label><br>
+    26	    <label><input type="checkbox" value="immune"> Immune support</label><br><br>
+    27	
+    28	
+    29	    <button class="btn" id="submitIntake">Submit Intake</button>
+    30	  </div>
+    31	</section>
+    32	
+    33	<script src="firebase.js"></script>
+    34	<script src="auth.js"></script>
+    35	<script src="intake.js"></script>
+    36	</body>
+    37	</html>
+
+===== FILE: html/register.html =====
+     1	<!DOCTYPE html>
+     2	<html>
+     3	<html lang="en">
+     4	<head>
+     5	  <title>Register</title>
+     6	  <meta charset="UTF-8">
+     7	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     8	  <title>Account Access</title>
+     9	  <link rel="stylesheet" href="style.css">
+    10	  
+    11	
+    12	  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    13	  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    14	  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    15	</head>
+    16	<body>
+    17	  <header>
+    18	    <div class="logo">Luxury Botanical</div>
+    19	    <nav>
+    20	      <a href="index.html">Home</a>
+    21	      <a href="herbs.html">Herbs</a>
+    22	    </nav>
+    23	  </header>
+    24	
+    25	
+    26	  <section class="container auth-layout">
+    27	    <div class="card auth-card">
+    28	      <h2>Create Account</h2>
+    29	      <input id="registerName" type="text" placeholder="Full Name">
+    30	      <input id="registerEmail" type="email" placeholder="Email">
+    31	      <input id="registerPassword" type="password" placeholder="Password">
+    32	      <select id="registerRole">
+    33	        <option value="user">User</option>
+    34	        <option value="admin">Admin</option>
+    35	      </select>
+    36	      <button class="btn" id="registerBtn" type="button">Register</button>
+    37	    </div>
+    38	
+    39	    
+    40	    <div class="card auth-card">
+    41	      <h2>Login</h2>
+    42	      <input id="loginEmail" type="email" placeholder="Email">
+    43	      <input id="loginPassword" type="password" placeholder="Password">
+    44	      <button class="btn" id="loginBtn" type="button">Login</button>
+    45	    </div>
+    46	  </section>
+    47	
+    48	  <section class="container">
+    49	    <p id="authMessage" class="status-message" aria-live="polite"></p>
+    50	  </section>
+    51	
+    52	  <script src="firebase.js"></script>
+    53	  <script src="auth.js"></script>
+    54	</body>
+    55	</html>
+
+===== FILE: js/admin.js =====
+     1	// admin.js
+     2	auth.onAuthStateChanged(async user=>{
+     3	  if(!user){
+     4	    window.location = "register.html";
+     5	    return;
+     6	  }
+     7	
+     8	  const doc = await db.collection("users").doc(user.uid).get();
+     9	  if(doc.data()?.role!=="admin") {
+    10	    window.location="intake.html";
+    11	    return;
+    12	  }
+    13	
+    14	  const snapshot = await db.collection("intakes").get();
+    15	  let html="<h2>All Intakes</h2>";
+    16	  snapshot.forEach(doc=>{
+    17	    const data = doc.data();
+    18	    html+=`<p>User: ${data.userId} | Symptoms: ${(data.symptoms || []).join(", ")}</p>`;
+    19	  });
+    20	  document.getElementById("adminResults").innerHTML=html;
+    21	});
+
+===== FILE: js/app.js =====
+     1	const herbListEl = document.getElementById("herb-list");
+     2	const detailSection = document.getElementById("herb-detail");
+     3	const listSection = document.getElementById("herb-list").parentElement; // Section containing the list
+     4	
+     5	const nameEl = document.getElementById("herb-name");
+     6	const categoriesEl = document.getElementById("herb-categories");
+     7	const supportsEl = document.getElementById("herb-supports");
+     8	const contraEl = document.getElementById("herb-contra");
+     9	const synergyEl = document.getElementById("herb-synergy");
+    10	const backButton = document.getElementById("back-button");
+    11	
+    12	// Populate the herb list as clickable links
+    13	herbs.forEach(herb => {
+    14	    const li = document.createElement("li");
+    15	    li.innerHTML = `<a href="#" class="herb-link" data-name="${herb.name}">${herb.name}</a>`;
+    16	    herbListEl.appendChild(li);
+    17	});
+    18	
+    19	// Add click handler for each herb
+    20	document.addEventListener("click", e => {
+    21	    if (e.target.classList.contains("herb-link")) {
+    22	        e.preventDefault();
+    23	        const herbName = e.target.dataset.name;
+    24	        showHerbDetail(herbName);
+    25	    }
+    26	});
+    27	
+    28	// Show herb details
+    29	function showHerbDetail(name) {
+    30	    const herb = herbs.find(h => h.name === name);
+    31	    if (!herb) return;
+    32	
+    33	    nameEl.textContent = herb.name;
+    34	    categoriesEl.textContent = herb.categories.join(", ");
+    35	    supportsEl.textContent = herb.supports.join(", ");
+    36	    contraEl.textContent = herb.contraindications.length ? herb.contraindications.join(", ") : "None";
+    37	    synergyEl.textContent = herb.synergy.length ? herb.synergy.join(", ") : "None";
+    38	
+    39	    listSection.style.display = "none";
+    40	    detailSection.style.display = "block";
+    41	}
+    42	
+    43	// Back button to return to herb list
+    44	backButton.addEventListener("click", () => {
+    45	    detailSection.style.display = "none";
+    46	    listSection.style.display = "block";
+    47	});
+
+===== FILE: js/auth.js =====
+     1	function setAuthMessage(message, isError = false) {
+     2	  const el = document.getElementById("authMessage");
+     3	  if (!el) return;
+     4	  el.textContent = message;
+     5	  el.classList.toggle("error", isError);
+     6	}
+     7	// REGISTER
+     8	const registerBtn = document.getElementById("registerBtn");
+     9	if (registerBtn) {
+    10	  registerBtn.onclick = async () => {
+    11	    
+    12	    const name = document.getElementById("registerName")?.value?.trim();
+    13	    const email = document.getElementById("registerEmail")?.value?.trim();
+    14	    const password = document.getElementById("registerPassword")?.value;
+    15	    const role = document.getElementById("registerRole")?.value || "user";
+    16	
+    17	    
+    18	if (!name || !email || !password) {
+    19	      setAuthMessage("Please complete all registration fields.", true);
+    20	      return;
+    21	    }
+    22	     try {
+    23	      setAuthMessage("Creating account...");
+    24	      const userCred = await auth.createUserWithEmailAndPassword(email, password);
+    25	      await db.collection("users").doc(userCred.user.uid).set({ name, email, role });
+    26	      window.location = "intake.html";
+    27	    } catch (error) {
+    28	      setAuthMessage(error.message || "Registration failed.", true);
+    29	    }
+    30	  };
+    31	}
+    32	
+    33	// LOGIN
+    34	const loginBtn = document.getElementById("loginBtn");
+    35	iif (loginBtn) 
+    36	  loginBtn.onclick = async () => {
+    37	    
+    38	     const email = document.getElementById("loginEmail")?.value?.trim();
+    39	    const password = document.getElementById("loginPassword")?.value;
+    40	
+    41	    if (!email || !password) {
+    42	      setAuthMessage("Please enter both email and password.", true);
+    43	      return;
+    44	    }
+    45	
+    46	
+    47	    if (!email || !password) return;
+    48	
+    49	    try {
+    50	      setAuthMessage("Signing in...");
+    51	      const userCred = await auth.signInWithEmailAndPassword(email, password);
+    52	      const userDoc = await db.collection("users").doc(userCred.user.uid).get();
+    53	
+    54	      if (userDoc.data()?.role === "admin") {
+    55	        window.location = "admin.html";
+    56	      } else {
+    57	        window.location = "intake.html";
+    58	      }
+    59	    } catch (error) {
+    60	      setAuthMessage(error.message || "Login failed.", true);
+    61	    }
+    62	  }
+
+===== FILE: js/dashboard.js =====
+     1	const herbDB = [
+     2	  {name:"Ashwagandha",supports:["stress","tired","anxiety"]},
+     3	  {name:"Rhodiola",supports:["stress","tired"]},
+     4	  {name:"Chamomile",supports:["stress","digestive","anxiety"]},
+     5	  {name:"Peppermint",supports:["digestive"]},
+     6	  {name:"Lavender",supports:["stress","anxiety"]},
+     7	  {name:"Echinacea",supports:["immune"]}
+     8	];
+     9	
+    10	const synergyPairs = [
+    11	  {herbs:["Ashwagandha","Rhodiola"],reason:"Adaptogen stack for stress + energy."},
+    12	  {herbs:["Chamomile","Lavender"],reason:"Calming synergy."},
+    13	  {herbs:["Peppermint","Ginger"],reason:"Digestive support pairing."}
+    14	];
+    15	
+    16	auth.onAuthStateChanged(async user=>{
+    17	  if(!user){
+    18	    window.location = "register.html";
+    19	    return;
+    20	  }
+    21	
+    22	  const snapshot = await db.collection("intakes")
+    23	    .where("userId","==",user.uid)
+    24	    .orderBy("createdAt","desc")
+    25	    .limit(1)
+    26	    .get();
+    27	
+    28	  if(snapshot.empty){
+    29	    document.getElementById("results").innerHTML = "<p>No intake found yet. Please complete the intake form first.</p>";
+    30	    return;
+    31	  }
+    32	
+    33	  const symptoms = snapshot.docs[0].data().symptoms;
+    34	
+    35	  let scored = herbDB.map(h=>{
+    36	    let score=0;
+    37	    symptoms.forEach(s=>{ if(h.supports.includes(s)) score+=2; });
+    38	    return {...h,score};
+    39	  });
+    40	
+    41	  scored.sort((a,b)=>b.score-a.score);
+    42	
+    43	   
+    44	  const activeHerbs = scored.filter(h=>h.score>0).map(h=>h.name);
+    45	  const foundPairs = synergyPairs.filter(pair => 
+    46	    activeHerbs.includes(pair.herbs[0]) && activeHerbs.includes(pair.herbs[1])
+    47	  );
+    48	
+    49	  let html="<h2>Recommended Herbs</h2>";
+    50	  scored.filter(h=>h.score>0).forEach(h=>{
+    51	    html+=`<p><strong>${h.name}</strong> (Score: ${h.score})</p>`;
+    52	  });
+    53	
+    54	  if(foundPairs.length){
+    55	    html+="<h3>Complementary Pairings</h3>";
+    56	    foundPairs.forEach(p=>{
+    57	      html+=`<p>${p.herbs.join(" + ")} - ${p.reason}</p>`;
+    58	    });
+    59	  }
+    60	
+    61	  if (html === "<h2>Recommended Herbs</h2>") {
+    62	    html += "<p>No direct matches found for your selected symptoms yet.</p>";
+    63	  }
+    64	
+    65	  document.getElementById("results").innerHTML = html;
+    66	});
+
+===== FILE: js/firebase.js =====
+     1	// Replace with your Firebase config
+     2	const firebaseConfig = {
+     3	  apiKey: "YOUR_API_KEY",
+     4	  authDomain: "YOUR_AUTH_DOMAIN",
+     5	  projectId: "YOUR_PROJECT_ID",
+     6	  storageBucket: "YOUR_BUCKET",
+     7	  messagingSenderId: "YOUR_ID",
+     8	  appId: "YOUR_APP_ID"
+     9	};
+    10	
+    11	firebase.initializeApp(firebaseConfig);
+    12	
+    13	const auth = firebase.auth();
+    14	const db = firebase.firestore();
+
+===== FILE: js/herbEngine.js =====
+     1	export async function runHerbEngine(intakeData) {
+     2	
+     3	  const response = await fetch("./data/herb.json");
+     4	  const herbs = await response.json();
+     5	
+     6	  const scores = intakeData.scores;
+     7	
+     8	  let results = herbs.map(herb => {
+     9	    let score = 0;
+    10	
+    11	    // Weighted scoring
+    12	    herb.supports.forEach(area => {
+    13	      if (area === "stress") score += scores.stressScore || 0;
+    14	      if (area === "energy") score += scores.energyScore || 0;
+    15	      if (area === "sleep") score += scores.sleepScore || 0;
+    16	      if (area === "digestion") score += scores.gutScore || 0;
+    17	    });
+    18	
+    19	    return {
+    20	      ...herb,
+    21	      score
+    22	    };
+    23	  });
+    24	
+    25	  // Remove contraindications
+    26	  results = results.filter(herb => {
+    27	    if (intakeData.pregnancy === "Pregnant" &&
+    28	        herb.contraindications.includes("pregnancy")) {
+    29	      return false;
+    30	    }
+    31	    return true;
+    32	  });
+    33	
+    34	  // Add synergy bonus
+    35	  results.forEach(herb => {
+    36	    herb.synergy.forEach(pair => {
+    37	      const pairedHerb = results.find(h => h.name === pair);
+    38	      if (pairedHerb && pairedHerb.score > 5) {
+    39	        herb.score += 2;
+    40	      }
+    41	    });
+    42	  });
+    43	
+    44	  // Sort highest first
+    45	  results.sort((a, b) => b.score - a.score);
+    46	
+    47	  const topHerbs = results.slice(0, 3);
+    48	
+    49	  const confidence = Math.min(
+    50	    95,
+    51	    Math.round((topHerbs[0].score / 40) * 100)
+    52	  );
+    53	
+    54	  return {
+    55	    topHerbs,
+    56	    confidence
+    57	  };
+    58	}
+
+===== FILE: js/intake.js =====
+     1	import { auth, db } from "./firebase.js";
+     2	import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+     3	import { runHerbEngine } from "./herbEngine.js";
+     4	
+     5	const steps = document.querySelectorAll(".step");
+     6	const nextBtns = document.querySelectorAll(".next-btn");
+     7	const backBtns = document.querySelectorAll(".back-btn");
+     8	const progressFill = document.getElementById("progressFill");
+     9	const form = document.getElementById("intakeForm");
+    10	
+    11	let currentStep = 0;
+    12	
+    13	// ------------------
+    14	// STEP NAVIGATION
+    15	// ------------------
+    16	function updateStep() {
+    17	  steps.forEach((step, index) => {
+    18	    step.classList.toggle("active", index === currentStep);
+    19	  });
+    20	
+    21	  progressFill.style.width =
+    22	    ((currentStep + 1) / steps.length) * 100 + "%";
+    23	}
+    24	
+    25	nextBtns.forEach(btn => {
+    26	  btn.addEventListener("click", () => {
+    27	    if (currentStep < steps.length - 1) {
+    28	      currentStep++;
+    29	      updateStep();
+    30	      window.scrollTo(0, 0);
+    31	    }
+    32	  });
+    33	});
+    34	
+    35	backBtns.forEach(btn => {
+    36	  btn.addEventListener("click", () => {
+    37	    if (currentStep > 0) {
+    38	      currentStep--;
+    39	      updateStep();
+    40	      window.scrollTo(0, 0);
+    41	    }
+    42	  });
+    43	});
+    44	
+    45	updateStep();
+    46	
+    47	// ------------------
+    48	// FORM SUBMISSION
+    49	// ------------------
+    50	form.addEventListener("submit", async (e) => {
+    51	  e.preventDefault();
+    52	
+    53	  const user = auth.currentUser;
+    54	  if (!user) {
+    55	    alert("Please log in to complete your assessment.");
+    56	    return;
+    57	  }
+    58	
+    59	  const formData = new FormData(form);
+    60	  const data = {};
+    61	
+    62	  formData.forEach((value, key) => {
+    63	    if (data[key]) {
+    64	      if (!Array.isArray(data[key])) {
+    65	        data[key] = [data[key]];
+    66	      }
+    67	      data[key].push(value);
+    68	    } else {
+    69	      data[key] = value;
+    70	    }
+    71	  });
+    72	
+    73	  // ------------------
+    74	  // SCORING SYSTEM
+    75	  // ------------------
+    76	
+    77	  const anxiety = Number(data.anxiety || 0);
+    78	  const stressLevel = Number(data.stresslevel || 0);
+    79	  const fatigue = Number(data.fatigue || 0);
+    80	  const bloating = Number(data.bloating || 0);
+    81	  const sleepDisturb = Number(data.sleepdisturb || 0);
+    82	
+    83	  data.scores = {
+    84	    stressScore: anxiety + stressLevel,
+    85	    energyScore: fatigue,
+    86	    gutScore: bloating,
+    87	    sleepScore: sleepDisturb
+    88	  };
+    89	
+    90	  // Run herb intelligence engine
+    91	  const engineResults = await runHerbEngine(data);
+    92	  data.recommendations = engineResults;
+    93	
+    94	  data.userId = user.uid;
+    95	  data.timestamp = serverTimestamp();
+    96	
+    97	  try {
+    98	    await addDoc(collection(db, "intakes"), data);
+    99	    window.location.href = "dashboard.html";
+   100	  } catch (error) {
+   101	    console.error("Error saving intake:", error);
+   102	    alert("Something went wrong saving your results.");
+   103	  }
+   104	});
+
+===== FILE: js/script.js =====
+     1	const header = document.getElementById("header");
+     2	
+     3	if (header) {
+     4	  window.addEventListener("scroll", () => {
+     5	    if (window.scrollY > 24) {
+     6	      header.classList.add("scrolled");
+     7	    } else {
+     8	      header.classList.remove("scrolled");
+     9	    }
+    10	  });
+    11	}
+
+===== FILE: readme.md =====
+     1	# Digital Apothecary
+     2	
+     3	A web application for tracking and managing herbal remedies, providing detailed information about various herbs, and user intakes.
+     4	
+     5	## Features
+     6	
+     7	- User authentication for secure access
+     8	- Dashboard for an overview of herb management
+     9	- Individual herb detail pages 
+    10	- Intake tracker for recorded herbal usages
+    11	
+    12	## Installation
+    13	
+    14	1. Clone the repository: 
+    15	   ```bash
+    16	   git clone https://github.com/yourusername/digital-apothecary.git
+
+===== FILE: style.css =====
+     1	/* --- Base Styles --- */
+     2	body {
+     3	    font-family: 'Georgia', serif;
+     4	    background-color: #fdf6f0;
+     5	    color: #4b4b3f;
+     6	    margin: 0;
+     7	    line-height: 1.6;
+     8	    scroll-behavior: smooth;
+     9	    /* smooth scrolling */
+    10	}
+    11	
+    12	a {
+    13	    text-decoration: none;
+    14	}
+    15	
+    16	/* --- Header --- */
+    17	header {
+    18	    background-color: #e7f0e7;
+    19	    display: flex;
+    20	    justify-content: space-between;
+    21	    align-items: center;
+    22	    padding: 1rem 2rem;
+    23	    position: sticky;
+    24	    top: 0;
+    25	    z-index: 100;
+    26	    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    27	    transition: background 0.3s;
+    28	}
+    29	
+    30	header.scrolled {
+    31	    background-color: #d4e3d4;
+    32	}
+    33	
+    34	header .logo {
+    35	    font-size: 1.8rem;
+    36	    font-weight: bold;
+    37	    color: #3a503a;
+    38	}
+    39	
+    40	nav a {
+    41	    margin-left: 1.5rem;
+    42	    color: #3a503a;
+    43	    font-weight: 500;
+    44	    transition: color 0.3s;
+    45	}
+    46	
+    47	nav a:hover {
+    48	    color: #6a8a6a;
+    49	}
+    50	
+    51	/* --- Hero Section --- */
+    52	.hero {
+    53	    background: url('images/herbal-bg.jpg') no-repeat center center/cover;
+    54	    color: #fff;
+    55	    text-align: center;
+    56	    padding: 6rem 2rem;
+    57	    position: relative;
+    58	}
+    59	
+    60	.hero h1 {
+    61	    font-size: 3rem;
+    62	    margin-bottom: 1rem;
+    63	    text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.5);
+    64	}
+    65	
+    66	.hero p {
+    67	    font-size: 1.2rem;
+    68	    margin-bottom: 2rem;
+    69	}
+    70	
+    71	.btn {
+    72	    background-color: #6a8a6a;
+    73	    color: #fff;
+    74	    padding: 0.75rem 1.5rem;
+    75	    border-radius: 5px;
+    76	    display: inline-block;
+    77	    transition: all 0.3s;
+    78	}
+    79	
+    80	.btn:hover {
+    81	    background-color: #527352;
+    82	    transform: translateY(-3px);
+    83	}
+    84	
+    85	/* --- Sections --- */
+    86	section {
+    87	    padding: 4rem 2rem;
+    88	    max-width: 1100px;
+    89	    margin: 0 auto;
+    90	}
+    91	
+    92	.about h2,
+    93	.featured-herbs h2,
+    94	.contact h2 {
+    95	    font-size: 2.2rem;
+    96	    margin-bottom: 1rem;
+    97	}
+    98	
+    99	/* --- Herb Grid --- */
+   100	.herb-grid {
+   101	    display: grid;
+   102	    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+   103	    gap: 2rem;
+   104	    margin-top: 2rem;
+   105	}
+   106	
+   107	.herb-card {
+   108	    background-color: #f0f5f0;
+   109	    padding: 1.5rem;
+   110	    border-radius: 10px;
+   111	    text-align: center;
+   112	    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+   113	    transition: transform 0.3s, box-shadow 0.3s;
+   114	}
+   115	
+   116	.herb-card:hover {
+   117	    transform: translateY(-5px);
+   118	    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+   119	}
+   120	
+   121	.herb-card img {
+   122	    width: 100%;
+   123	    height: 200px;
+   124	    object-fit: cover;
+   125	    border-radius: 8px;
+   126	}
+   127	
+   128	/* --- Contact Section --- */
+   129	.contact {
+   130	    text-align: center;
+   131	}
+   132	
+   133	/* --- Footer --- */
+   134	footer {
+   135	    text-align: center;
+   136	    background-color: #e7f0e7;
+   137	    padding: 2rem;
+   138	    color: #3a503a;
+   139	}
+   140	
+   141	.intake-body {
+   142	    background: linear-gradient(#f5f9f6, #eef5ef);
+   143	    font-family: 'Segoe UI', sans-serif;
+   144	}
+   145	
+   146	.intake-container {
+   147	    max-width: 700px;
+   148	    margin: auto;
+   149	    padding: 40px;
+   150	    background: white;
+   151	    border-radius: 16px;
+   152	    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+   153	}
+   154	
+   155	.intake-header {
+   156	    text-align: center;
+   157	    margin-bottom: 30px;
+   158	}
+   159	
+   160	.step {
+   161	    display: none;
+   162	    animation: fadeIn 0.5s ease;
+   163	}
+   164	
+   165	.step.active {
+   166	    display: block;
+   167	}
+   168	
+   169	.progress-bar {
+   170	    height: 8px;
+   171	    background: #e0ebe3;
+   172	    border-radius: 20px;
+   173	    margin-bottom: 30px;
+   174	}
+   175	
+   176	.progress-fill {
+   177	    height: 100%;
+   178	    background: #6f8f72;
+   179	    width: 0%;
+   180	    border-radius: 20px;
+   181	    transition: width 0.4s ease;
+   182	}
+   183	
+   184	button {
+   185	    background: #6f8f72;
+   186	    color: white;
+   187	    border: none;
+   188	    padding: 10px 18px;
+   189	    border-radius: 8px;
+   190	    cursor: pointer;
+   191	}
+   192	
+   193	button:hover {
+   194	    background: #5d7d60;
+   195	}
+   196	
+   197	.nav-buttons {
+   198	    display: flex;
+   199	    justify-content: space-between;
+   200	    margin-top: 20px;
+   201	}
+   202	
+   203	input[type="range"] {
+   204	    width: 100%;
+   205	    margin-bottom: 15px;
+   206	}
+   207	
+   208	@keyframes fadeIn {
+   209	    from {
+   210	        opacity: 0;
+   211	        transform: translateY(10px);
+   212	    }
+   213	
+   214	    to {
+   215	        opacity: 1;
+   216	        transform: translateY(0);
+   217	    }
+   218	}
+   219	
+   220	.herb-results {
+   221	    margin-top: 30px;
+   222	}
+   223	
+   224	.herb-card {
+   225	    background: #f4f8f5;
+   226	    padding: 20px;
+   227	    border-radius: 12px;
+   228	    margin-bottom: 15px;
+   229	    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+   230	}
+   231	
+   232	.herb-library {
+   233	    padding: 2rem;
+   234	    background-color: #f9f7f2; /* soft herbal background */
+   235	}
+   236	
+   237	.herb-library h2 {
+   238	    text-align: center;
+   239	    color: #4a5a2a;
+   240	    font-size: 2rem;
+   241	    margin-bottom: 1rem;
+   242	}
+   243	
+   244	.herb-list {
+   245	    list-style: none;
+   246	    padding: 0;
+   247	    display: grid;
+   248	    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+   249	    gap: 0.8rem;
+   250	}
+   251	
+   252	.herb-list li {
+   253	    background-color: #ffffff;
+   254	    border: 1px solid #d6d3c8;
+   255	    padding: 0.8rem 1rem;
+   256	    border-radius: 8px;
+   257	    text-align: center;
+   258	    transition: all 0.2s ease-in-out;
+   259	}
+   260	
+   261	.herb-list li a {
+   262	    text-decoration: none;
+   263	    color: #4a5a2a;
+   264	    font-weight: 500;
+   265	    display: block;
+   266	}
+   267	
+   268	.herb-list li:hover {
+   269	    background-color: #e8f0dc;
+   270	    transform: translateY(-3px);
+   271	    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+   272	}
+   273	
+   274	#herb-detail {
+   275	    padding: 2rem;
+   276	    background-color: #f0f5e6;
+   277	    border-radius: 8px;
+   278	    max-width: 600px;
+   279	    margin: 2rem auto;
+   280	    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+   281	}
+   282	
+   283	#herb-detail h2 {
+   284	    color: #3b4a1a;
+   285	    margin-bottom: 1rem;
+   286	}
+   287	
+   288	#herb-detail p {
+   289	    font-size: 1rem;
+   290	    line-height: 1.5;
+   291	    margin-bottom: 0.6rem;
+   292	    color: #333;
+   293	}
+   294	
+   295	#back-button {
+   296	    display: inline-block;
+   297	    margin-bottom: 1rem;
+   298	    background-color: #4a5a2a;
+   299	    color: #fff;
+   300	    border: none;
+   301	    padding: 0.5rem 1rem;
+   302	    border-radius: 6px;
+   303	    cursor: pointer;
+   304	    transition: background-color 0.2s ease-in-out;
+   305	}
+   306	
+   307	#back-button:hover {
+   308	    background-color: #6b7b3a;
+   309	}
+

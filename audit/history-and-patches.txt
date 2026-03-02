@@ -1,0 +1,3926 @@
+### COMMITS
+* 2c14848 (HEAD -> main, origin/main, origin/HEAD) implemented a bunch of changes from codex
+* f5627cd unsure
+* 3a70d0b cleaned it up and added readme
+* e7fb31a Alphabetized by name
+* a39fc39 added herbs
+* 2514992 feat: rebuilt intake.js with structured scoring system and expanded herb library to 100 commonly used healing herbs
+* c65d9bc feat: implemented weighted herb intelligence engine with synergy logic, contraindication filtering, ranking, and dashboard integration
+* 0007245 feat: upgraded intake to multi-step botanical assessment with sliders, scoring logic, and Firebase save integration
+* ac1dd69 commit message
+* 05c78e9 Add navigation links and CTA section for login and intake
+* 89c0f33 My first commit
+
+===== COMMIT: 89c0f33422c9c1b98b95c6e2344910e2f2890a90 =====
+commit 89c0f33422c9c1b98b95c6e2344910e2f2890a90
+Author:     Tasha <tashastephan@gmail.com>
+AuthorDate: Sun Mar 1 09:04:56 2026 -0700
+Commit:     Tasha <tashastephan@gmail.com>
+CommitDate: Sun Mar 1 09:04:56 2026 -0700
+
+    My first commit
+
+A	admin.html
+A	admin.js
+A	app.js
+A	auth.js
+A	dashboard.html
+A	dashboard.js
+A	data/herb.json
+A	firebase.js
+A	herb.html
+A	herbs.html
+A	index.html
+A	intake.html
+A	intake.js
+A	register.html
+A	style.css
+
+----- PATCH -----
+commit 89c0f33422c9c1b98b95c6e2344910e2f2890a90
+Author: Tasha <tashastephan@gmail.com>
+Date:   Sun Mar 1 09:04:56 2026 -0700
+
+    My first commit
+
+diff --git a/admin.html b/admin.html
+new file mode 100644
+index 0000000..f04f7a3
+--- /dev/null
++++ b/admin.html
+@@ -0,0 +1,24 @@
++<!-- admin.html -->
++<!DOCTYPE html>
++<html lang="en">
++<head>
++<meta charset="UTF-8">
++<meta name="viewport" content="width=device-width, initial-scale=1.0">
++<title>Admin Dashboard</title>
++<link rel="stylesheet" href="style.css">
++
++<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
++<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
++<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
++</head>
++<body>
++<header><h1>Admin Dashboard</h1></header>
++<div class="container">
++  <div id="adminResults"></div>
++</div>
++
++<script src="firebase.js"></script>
++<script src="auth.js"></script>
++<script src="admin.js"></script>
++</body>
++</html>
+\ No newline at end of file
+diff --git a/admin.js b/admin.js
+new file mode 100644
+index 0000000..1e5bfe6
+--- /dev/null
++++ b/admin.js
+@@ -0,0 +1,14 @@
++// admin.js
++auth.onAuthStateChanged(async user=>{
++  if(!user) return;
++  const doc = await db.collection("users").doc(user.uid).get();
++  if(doc.data().role!=="admin") window.location="intake.html";
++
++  const snapshot = await db.collection("intakes").get();
++  let html="<h2>All Intakes</h2>";
++  snapshot.forEach(doc=>{
++    const data = doc.data();
++    html+=`<p>User: ${data.userId} | Symptoms: ${data.symptoms.join(", ")}</p>`;
++  });
++  document.getElementById("adminResults").innerHTML=html;
++});
+\ No newline at end of file
+diff --git a/app.js b/app.js
+new file mode 100644
+index 0000000..b2ce3bc
+--- /dev/null
++++ b/app.js
+@@ -0,0 +1,97 @@
++// Herb Data
++const herbs = [
++    {
++        id: "lavender",
++        name: "Lavender",
++        category: "sleep",
++        use: "Calming, sleep support",
++        image: "https://images.unsplash.com/photo-1501004318641-b39e6451bec6",
++        description: "Lavender is commonly used to reduce anxiety and improve sleep quality."
++    },
++    {
++        id: "peppermint",
++        name: "Peppermint",
++        category: "digestion",
++        use: "Digestive aid",
++        image: "https://images.unsplash.com/photo-1506806732259-39c2d0268443",
++        description: "Peppermint helps relieve bloating and digestive discomfort."
++    },
++    {
++        id: "echinacea",
++        name: "Echinacea",
++        category: "immune",
++        use: "Immune support",
++        image: "https://images.unsplash.com/photo-1598887142487-ffab4a6c1a5e",
++        description: "Echinacea is often used to support the immune system."
++    },
++    {
++        id: "chamomile",
++        name: "Chamomile",
++        category: "sleep",
++        use: "Relaxation",
++        image: "https://images.unsplash.com/photo-1587049352846-4a222e784d38",
++        description: "Chamomile tea is traditionally used to promote relaxation and sleep."
++    }
++];
++
++// Elements
++const herbList = document.getElementById("herb-list");
++const searchInput = document.getElementById("search");
++const filterSelect = document.getElementById("filter");
++
++// Display herbs on library page
++function displayHerbs(filteredHerbs) {
++    herbList.innerHTML = "";
++    filteredHerbs.forEach(herb => {
++        herbList.innerHTML += `
++            <div class="card">
++                <img src="${herb.image}" alt="${herb.name}">
++                <h3>${herb.name}</h3>
++                <p>${herb.use}</p>
++                <a href="herb.html?id=${herb.id}" class="btn">Learn More</a>
++            </div>
++        `;
++    });
++}
++
++if (herbList) {
++    displayHerbs(herbs);
++
++    searchInput?.addEventListener("input", () => {
++        const searchValue = searchInput.value.toLowerCase();
++        const filtered = herbs.filter(herb =>
++            herb.name.toLowerCase().includes(searchValue)
++        );
++        displayHerbs(filtered);
++    });
++
++    filterSelect?.addEventListener("change", () => {
++        const value = filterSelect.value;
++        if (value === "all") {
++            displayHerbs(herbs);
++        } else {
++            displayHerbs(herbs.filter(herb => herb.category === value));
++        }
++    });
++}
++
++// Individual herb page
++const herbDetail = document.getElementById("herb-detail");
++
++if (herbDetail) {
++    const params = new URLSearchParams(window.location.search);
++    const id = params.get("id");
++    const herb = herbs.find(h => h.id === id);
++
++    if (herb) {
++        herbDetail.innerHTML = `
++            <img src="${herb.image}" class="detail-img">
++            <h1>${herb.name}</h1>
++            <p><strong>Category:</strong> ${herb.category}</p>
++            <p><strong>Primary Use:</strong> ${herb.use}</p>
++            <p>${herb.description}</p>
++        `;
++    } else {
++        herbDetail.innerHTML = "<p>Herb not found.</p>";
++    }
++}
+\ No newline at end of file
+diff --git a/auth.js b/auth.js
+new file mode 100644
+index 0000000..652ed6d
+--- /dev/null
++++ b/auth.js
+@@ -0,0 +1,32 @@
++// REGISTER
++const registerBtn = document.getElementById("registerBtn");
++if(registerBtn){
++  registerBtn.onclick = async () => {
++    const name = document.getElementById("name").value;
++    const email = document.getElementById("email").value;
++    const password = document.getElementById("password").value;
++    const role = document.getElementById("role").value;
++
++    const userCred = await auth.createUserWithEmailAndPassword(email,password);
++    await db.collection("users").doc(userCred.user.uid).set({ name,email,role });
++    window.location = "intake.html";
++  };
++}
++
++// LOGIN
++const loginBtn = document.getElementById("loginBtn");
++if(loginBtn){
++  loginBtn.onclick = async () => {
++    const email = document.getElementById("email").value;
++    const password = document.getElementById("password").value;
++
++    const userCred = await auth.signInWithEmailAndPassword(email,password);
++    const userDoc = await db.collection("users").doc(userCred.user.uid).get();
++
++    if(userDoc.data().role==="admin"){
++      window.location="admin.html";
++    } else {
++      window.location="intake.html";
++    }
++  };
++}
+\ No newline at end of file
+diff --git a/dashboard.html b/dashboard.html
+new file mode 100644
+index 0000000..4e45bb1
+--- /dev/null
++++ b/dashboard.html
+@@ -0,0 +1,24 @@
++<!DOCTYPE html>
++<html lang="en">
++<head>
++<meta charset="UTF-8">
++<meta name="viewport" content="width=device-width, initial-scale=1.0">
++<title>Dashboard</title>
++<link rel="stylesheet" href="style.css">
++
++<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
++<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
++<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
++</head>
++<body>
++<header><h1>Your Herbal Dashboard</h1></header>
++
++<div class="container">
++  <div id="results"></div>
++</div>
++
++<script src="firebase.js"></script>
++<script src="auth.js"></script>
++<script src="dashboard.js"></script>
++</body>
++</html>
+\ No newline at end of file
+diff --git a/dashboard.js b/dashboard.js
+new file mode 100644
+index 0000000..6965b08
+--- /dev/null
++++ b/dashboard.js
+@@ -0,0 +1,58 @@
++const herbDB = [
++  {name:"Ashwagandha",supports:["stress","tired","anxiety"]},
++  {name:"Rhodiola",supports:["stress","tired"]},
++  {name:"Chamomile",supports:["stress","digestive","anxiety"]},
++  {name:"Peppermint",supports:["digestive"]},
++  {name:"Lavender",supports:["stress","anxiety"]},
++  {name:"Echinacea",supports:["immune"]}
++];
++
++const synergyPairs = [
++  {herbs:["Ashwagandha","Rhodiola"],reason:"Adaptogen stack for stress + energy."},
++  {herbs:["Chamomile","Lavender"],reason:"Calming synergy."},
++  {herbs:["Peppermint","Ginger"],reason:"Digestive support pairing."}
++];
++
++auth.onAuthStateChanged(async user=>{
++  if(!user) return;
++
++  const snapshot = await db.collection("intakes")
++    .where("userId","==",user.uid)
++    .orderBy("createdAt","desc")
++    .limit(1)
++    .get();
++
++  if(snapshot.empty) return;
++
++  const symptoms = snapshot.docs[0].data().symptoms;
++
++  // AI Scoring
++  let scored = herbDB.map(h=>{
++    let score=0;
++    symptoms.forEach(s=>{ if(h.supports.includes(s)) score+=2; });
++    return {...h,score};
++  });
++
++  scored.sort((a,b)=>b.score-a.score);
++
++  // Synergy detection
++  let activeHerbs = scored.filter(h=>h.score>0).map(h=>h.name);
++  let foundPairs = synergyPairs.filter(pair => 
++    activeHerbs.includes(pair.herbs[0]) && activeHerbs.includes(pair.herbs[1])
++  );
++
++  // Display
++  let html="<h2>Recommended Herbs</h2>";
++  scored.filter(h=>h.score>0).forEach(h=>{
++    html+=`<p><strong>${h.name}</strong> (Score: ${h.score})</p>`;
++  });
++
++  if(foundPairs.length){
++    html+="<h3>Complementary Pairings</h3>";
++    foundPairs.forEach(p=>{
++      html+=`<p>${p.herbs.join(" + ")} - ${p.reason}</p>`;
++    });
++  }
++
++  document.getElementById("results").innerHTML = html;
++});
+\ No newline at end of file
+diff --git a/data/herb.json b/data/herb.json
+new file mode 100644
+index 0000000..0e54148
+--- /dev/null
++++ b/data/herb.json
+@@ -0,0 +1,35 @@
++[
++  {
++    "id":"h1",
++    "name":"Chamomile",
++    "latin":"Matricaria chamomilla",
++    "systems":["nervous","digestive"],
++    "actions":["nervine","carminative"],
++    "contraindications":["ragweed allergy"],
++    "drug_interactions":[],
++    "pregnancy":"safe",
++    "education":"Traditionally used for calming and digestive support."
++  },
++  {
++    "id":"h2",
++    "name":"St Johns Wort",
++    "latin":"Hypericum perforatum",
++    "systems":["nervous"],
++    "actions":["mood support"],
++    "contraindications":[],
++    "drug_interactions":["SSRI","SNRI","birth control"],
++    "pregnancy":"unsafe",
++    "education":"Traditionally used for mood balance."
++  },
++  {
++    "id":"h3",
++    "name":"Ginger",
++    "latin":"Zingiber officinale",
++    "systems":["digestive","circulatory"],
++    "actions":["anti-inflammatory","carminative"],
++    "contraindications":[],
++    "drug_interactions":["blood thinner"],
++    "pregnancy":"caution",
++    "education":"Traditionally used for digestion and circulation."
++  }
++]
+\ No newline at end of file
+diff --git a/firebase.js b/firebase.js
+new file mode 100644
+index 0000000..a39ea69
+--- /dev/null
++++ b/firebase.js
+@@ -0,0 +1,14 @@
++// Replace with your Firebase config
++const firebaseConfig = {
++  apiKey: "YOUR_API_KEY",
++  authDomain: "YOUR_AUTH_DOMAIN",
++  projectId: "YOUR_PROJECT_ID",
++  storageBucket: "YOUR_BUCKET",
++  messagingSenderId: "YOUR_ID",
++  appId: "YOUR_APP_ID"
++};
++
++firebase.initializeApp(firebaseConfig);
++
++const auth = firebase.auth();
++const db = firebase.firestore();
+\ No newline at end of file
+diff --git a/herb.html b/herb.html
+new file mode 100644
+index 0000000..e25afa4
+--- /dev/null
++++ b/herb.html
+@@ -0,0 +1,29 @@
++<!DOCTYPE html>
++<html lang="en">
++<head>
++<meta charset="UTF-8">
++<meta name="viewport" content="width=device-width, initial-scale=1.0">
++<title>Herb Details</title>
++<link rel="stylesheet" href="style.css">
++</head>
++<body>
++
++<header>
++    <div class="logo">Luxury Botanical</div>
++    <nav>
++        <a href="index.html">Home</a>
++        <a href="herbs.html">Herbs</a>
++    </nav>
++</header>
++
++<section class="container">
++    <div id="herb-detail"></div>
++</section>
++
++<footer>
++    <p>© 2026 Luxury Botanical Apothecary</p>
++</footer>
++
++<script src="app.js"></script>
++</body>
++</html>
+\ No newline at end of file
+diff --git a/herbs.html b/herbs.html
+new file mode 100644
+index 0000000..b2fb9c9
+--- /dev/null
++++ b/herbs.html
+@@ -0,0 +1,16 @@
++<section class="container">
++    <link rel="stylesheet" href="style.css">
++    <h1>Herb Library</h1>
++
++    <div class="controls">
++        <input type="text" id="search" placeholder="Search herbs...">
++        <select id="filter">
++            <option value="all">All Categories</option>
++            <option value="sleep">Sleep</option>
++            <option value="digestion">Digestion</option>
++            <option value="immune">Immune</option>
++        </select>
++    </div>
++
++    <div id="herb-list" class="grid"></div>
++</section>
+\ No newline at end of file
+diff --git a/index.html b/index.html
+new file mode 100644
+index 0000000..342aa89
+--- /dev/null
++++ b/index.html
+@@ -0,0 +1,69 @@
++<!DOCTYPE html>
++<html lang="en">
++
++<head>
++    <meta charset="UTF-8">
++    <meta name="viewport" content="width=device-width, initial-scale=1.0">
++    <title>Luxury Botanical Apothecary</title>
++    <link rel="stylesheet" href="style.css">
++</head>
++
++<body>
++
++    <header id="header">
++        <div class="logo">Luxury Botanical</div>
++        <nav>
++            <a href="#hero">Home</a>
++            <a href="#about">About</a>
++            <a href="#herbs">Herbs</a>
++            <a href="#contact">Contact</a>
++        </nav>
++    </header>
++
++    <section class="hero" id="hero">
++        <h1>Modern Herbal Wisdom</h1>
++        <p>Discover common medicinal herbs found in the United States.</p>
++        <a href="#herbs" class="btn">Explore Herbs</a>
++    </section>
++
++    <section class="about" id="about">
++        <h2>Welcome to Luxury Botanical</h2>
++        <p>We bring centuries-old herbal knowledge into modern wellness. From calming teas to natural remedies, explore
++            our carefully curated collection of plants and herbs.</p>
++    </section>
++
++    <section class="featured-herbs" id="herbs">
++        <h2>Featured Herbs</h2>
++        <div class="herb-grid">
++            <div class="herb-card">
++                <img src="images/lavender.jpg" alt="Lavender">
++                <h3>Lavender</h3>
++                <p>Calming and soothing, perfect for relaxation and sleep.</p>
++            </div>
++            <div class="herb-card">
++                <img src="images/echinacea.jpg" alt="Echinacea">
++                <h3>Echinacea</h3>
++                <p>Supports immune health naturally and effectively.</p>
++            </div>
++            <div class="herb-card">
++                <img src="images/mint.jpg" alt="Peppermint">
++                <h3>Peppermint</h3>
++                <p>Refreshing and invigorating, aids digestion and focus.</p>
++            </div>
++        </div>
++    </section>
++
++    <section class="contact" id="contact">
++        <h2>Contact Us</h2>
++        <p>Have questions or need guidance on herbal remedies? Reach out, and we’ll help you find the perfect herb.</p>
++        <a href="mailto:info@luxurybotanical.com" class="btn">Email Us</a>
++    </section>
++
++    <footer>
++        <p>© 2026 Luxury Botanical Apothecary | Crafted with care</p>
++    </footer>
++
++    <script src="script.js"></script>
++</body>
++
++</html>
+\ No newline at end of file
+diff --git a/intake.html b/intake.html
+new file mode 100644
+index 0000000..5faec94
+--- /dev/null
++++ b/intake.html
+@@ -0,0 +1,32 @@
++<!DOCTYPE html>
++<html lang="en">
++<head>
++<meta charset="UTF-8">
++<meta name="viewport" content="width=device-width, initial-scale=1.0">
++<title>Symptom Intake</title>
++<link rel="stylesheet" href="style.css">
++
++<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
++<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
++<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
++</head>
++<body>
++<header><h1>Symptom Intake</h1></header>
++
++<div class="card">
++  <h2>How are you feeling?</h2>
++
++  <label><input type="checkbox" value="stress"> Stress</label><br>
++  <label><input type="checkbox" value="tired"> Fatigue</label><br>
++  <label><input type="checkbox" value="digestive"> Digestive Issues</label><br>
++  <label><input type="checkbox" value="anxiety"> Anxiety</label><br>
++  <label><input type="checkbox" value="immune"> Immune Support</label><br>
++
++  <button class="btn" id="submitIntake">Submit</button>
++</div>
++
++<script src="firebase.js"></script>
++<script src="auth.js"></script>
++<script src="intake.js"></script>
++</body>
++</html>
+\ No newline at end of file
+diff --git a/intake.js b/intake.js
+new file mode 100644
+index 0000000..33f6683
+--- /dev/null
++++ b/intake.js
+@@ -0,0 +1,15 @@
++const submitBtn = document.getElementById("submitIntake");
++
++submitBtn.onclick = async () => {
++  const selected = Array.from(
++    document.querySelectorAll("input[type=checkbox]:checked")
++  ).map(cb=>cb.value);
++
++  await db.collection("intakes").add({
++    userId: auth.currentUser.uid,
++    symptoms: selected,
++    createdAt: new Date()
++  });
++
++  window.location="dashboard.html";
++};
+\ No newline at end of file
+diff --git a/register.html b/register.html
+new file mode 100644
+index 0000000..a9d3df7
+--- /dev/null
++++ b/register.html
+@@ -0,0 +1,29 @@
++<!DOCTYPE html>
++<html>
++<head>
++  <title>Register</title>
++  <link rel="stylesheet" href="style.css">
++  
++
++  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
++  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
++  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
++</head>
++<body>
++
++<div class="card">
++  <h2>Create Account</h2>
++  <input id="name" type="text" placeholder="Full Name">
++  <input id="email" type="email" placeholder="Email">
++  <input id="password" type="password" placeholder="Password">
++  <select id="role">
++    <option value="user">User</option>
++    <option value="admin">Admin</option>
++  </select>
++  <button class="btn" id="registerBtn">Register</button>
++</div>
++
++<script src="firebase.js"></script>
++<script src="auth.js"></script>
++</body>
++</html>
+\ No newline at end of file
+diff --git a/style.css b/style.css
+new file mode 100644
+index 0000000..67a6dd1
+--- /dev/null
++++ b/style.css
+@@ -0,0 +1,123 @@
++/* --- Base Styles --- */
++body {
++    font-family: 'Georgia', serif;
++    background-color: #fdf6f0;
++    color: #4b4b3f;
++    margin: 0;
++    line-height: 1.6;
++    scroll-behavior: smooth; /* smooth scrolling */
++}
++
++a { text-decoration: none; }
++
++/* --- Header --- */
++header {
++    background-color: #e7f0e7;
++    display: flex;
++    justify-content: space-between;
++    align-items: center;
++    padding: 1rem 2rem;
++    position: sticky;
++    top: 0;
++    z-index: 100;
++    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
++    transition: background 0.3s;
++}
++
++header.scrolled { background-color: #d4e3d4; }
++
++header .logo {
++    font-size: 1.8rem;
++    font-weight: bold;
++    color: #3a503a;
++}
++
++nav a {
++    margin-left: 1.5rem;
++    color: #3a503a;
++    font-weight: 500;
++    transition: color 0.3s;
++}
++
++nav a:hover {
++    color: #6a8a6a;
++}
++
++/* --- Hero Section --- */
++.hero {
++    background: url('images/herbal-bg.jpg') no-repeat center center/cover;
++    color: #fff;
++    text-align: center;
++    padding: 6rem 2rem;
++    position: relative;
++}
++
++.hero h1 {
++    font-size: 3rem;
++    margin-bottom: 1rem;
++    text-shadow: 1px 1px 6px rgba(0,0,0,0.5);
++}
++
++.hero p { font-size: 1.2rem; margin-bottom: 2rem; }
++
++.btn {
++    background-color: #6a8a6a;
++    color: #fff;
++    padding: 0.75rem 1.5rem;
++    border-radius: 5px;
++    display: inline-block;
++    transition: all 0.3s;
++}
++
++.btn:hover {
++    background-color: #527352;
++    transform: translateY(-3px);
++}
++
++/* --- Sections --- */
++section { padding: 4rem 2rem; max-width: 1100px; margin: 0 auto; }
++.about h2, .featured-herbs h2, .contact h2 { font-size: 2.2rem; margin-bottom: 1rem; }
++
++/* --- Herb Grid --- */
++.herb-grid {
++    display: grid;
++    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
++    gap: 2rem;
++    margin-top: 2rem;
++}
++
++.herb-card {
++    background-color: #f0f5f0;
++    padding: 1.5rem;
++    border-radius: 10px;
++    text-align: center;
++    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
++    transition: transform 0.3s, box-shadow 0.3s;
++}
++
++.herb-card:hover {
++    transform: translateY(-5px);
++    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
++}
++
++.herb-card img {
++    width: 100%;
++    height: 200px;
++    object-fit: cover;
++    border-radius: 8px;
++}
++
++/* --- Contact Section --- */
++.contact { text-align: center; }
++
++/* --- Footer --- */
++footer {
++    text-align: center;
++    background-color: #e7f0e7;
++    padding: 2rem;
++    color: #3a503a;
++}
++
++/* --- Animations --- */
++section { opacity: 0; transform: translateY(30px); transition: all 0.8s ease; }
++section.visible { opacity: 1; transform: translateY(0); }
+\ No newline at end of file
+
+===== COMMIT: 05c78e9f0d50d8e6e16f07ab3ccc34c90d2c0a8f =====
+commit 05c78e9f0d50d8e6e16f07ab3ccc34c90d2c0a8f
+Author:     Tasha <tashastephan@gmail.com>
+AuthorDate: Sun Mar 1 09:47:31 2026 -0700
+Commit:     Tasha <tashastephan@gmail.com>
+CommitDate: Sun Mar 1 09:47:31 2026 -0700
+
+    Add navigation links and CTA section for login and intake
+
+M	index.html
+
+----- PATCH -----
+commit 05c78e9f0d50d8e6e16f07ab3ccc34c90d2c0a8f
+Author: Tasha <tashastephan@gmail.com>
+Date:   Sun Mar 1 09:47:31 2026 -0700
+
+    Add navigation links and CTA section for login and intake
+
+diff --git a/index.html b/index.html
+index 342aa89..63a4b69 100644
+--- a/index.html
++++ b/index.html
+@@ -13,8 +13,9 @@
+     <header id="header">
+         <div class="logo">Luxury Botanical</div>
+         <nav>
+-            <a href="#hero">Home</a>
+-            <a href="#about">About</a>
++            <a href="index.html">Home</a>
++            <a href="register.html">Login</a>
++            <a href="intake.html">Intake Form</a>
+             <a href="#herbs">Herbs</a>
+             <a href="#contact">Contact</a>
+         </nav>
+@@ -53,9 +54,18 @@
+         </div>
+     </section>
+ 
++    <section class="cta" id="cta">
++        <h2>Get Started With Us</h2>
++        <p>Join our community to access personalized herbal recommendations and track your wellness journey.</p>
++        <div class="cta-buttons">
++            <a href="register.html" class="btn">Create Account</a>
++            <a href="intake.html" class="btn">Take Intake Form</a>
++        </div>
++    </section>
++
+     <section class="contact" id="contact">
+         <h2>Contact Us</h2>
+-        <p>Have questions or need guidance on herbal remedies? Reach out, and we’ll help you find the perfect herb.</p>
++        <p>Have questions or need guidance on herbal remedies? Reach out, and we'll help you find the perfect herb.</p>
+         <a href="mailto:info@luxurybotanical.com" class="btn">Email Us</a>
+     </section>
+ 
+
+===== COMMIT: ac1dd696a8215a8b689dd4e5dca206580e83c602 =====
+commit ac1dd696a8215a8b689dd4e5dca206580e83c602
+Author:     Tasha <tashastephan@gmail.com>
+AuthorDate: Sun Mar 1 09:57:40 2026 -0700
+Commit:     Tasha <tashastephan@gmail.com>
+CommitDate: Sun Mar 1 09:57:40 2026 -0700
+
+    commit message
+
+M	admin.html
+M	dashboard.html
+M	intake.html
+M	style.css
+
+----- PATCH -----
+commit ac1dd696a8215a8b689dd4e5dca206580e83c602
+Author: Tasha <tashastephan@gmail.com>
+Date:   Sun Mar 1 09:57:40 2026 -0700
+
+    commit message
+
+diff --git a/admin.html b/admin.html
+index f04f7a3..e0f71ec 100644
+--- a/admin.html
++++ b/admin.html
+@@ -5,7 +5,7 @@
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Admin Dashboard</title>
+-<link rel="stylesheet" href="style.css">
++<link rel="stylesheet" href="styles.css">
+ 
+ <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+ <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
+diff --git a/dashboard.html b/dashboard.html
+index 4e45bb1..13ae560 100644
+--- a/dashboard.html
++++ b/dashboard.html
+@@ -4,7 +4,7 @@
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Dashboard</title>
+-<link rel="stylesheet" href="style.css">
++<link rel="stylesheet" href="styles.css">
+ 
+ <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+ <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
+diff --git a/intake.html b/intake.html
+index 5faec94..8361ec1 100644
+--- a/intake.html
++++ b/intake.html
+@@ -1,32 +1,24 @@
+ <!DOCTYPE html>
+-<html lang="en">
++<html>
+ <head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+-<title>Symptom Intake</title>
+-<link rel="stylesheet" href="style.css">
+-
+-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
+-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
++<title>Comprehensive Intake</title>
++<link rel="stylesheet" href="styles.css">
+ </head>
+ <body>
+-<header><h1>Symptom Intake</h1></header>
++
++<header><h1>Comprehensive Health Intake</h1></header>
+ 
+ <div class="card">
+-  <h2>How are you feeling?</h2>
+ 
+-  <label><input type="checkbox" value="stress"> Stress</label><br>
+-  <label><input type="checkbox" value="tired"> Fatigue</label><br>
+-  <label><input type="checkbox" value="digestive"> Digestive Issues</label><br>
+-  <label><input type="checkbox" value="anxiety"> Anxiety</label><br>
+-  <label><input type="checkbox" value="immune"> Immune Support</label><br>
++<div id="stepContainer"></div>
++
++<button class="btn" id="nextBtn">Next</button>
+ 
+-  <button class="btn" id="submitIntake">Submit</button>
+ </div>
+ 
+ <script src="firebase.js"></script>
+-<script src="auth.js"></script>
+ <script src="intake.js"></script>
+ </body>
+-</html>
+\ No newline at end of file
++</html>
+diff --git a/style.css b/style.css
+index 67a6dd1..84741e7 100644
+--- a/style.css
++++ b/style.css
+@@ -119,5 +119,4 @@ footer {
+ }
+ 
+ /* --- Animations --- */
+-section { opacity: 0; transform: translateY(30px); transition: all 0.8s ease; }
+-section.visible { opacity: 1; transform: translateY(0); }
+\ No newline at end of file
++
+
+===== COMMIT: 0007245078acc90e0ee5d6a06ba4293f1b2f53a6 =====
+commit 0007245078acc90e0ee5d6a06ba4293f1b2f53a6
+Author:     Tasha <tashastephan@gmail.com>
+AuthorDate: Sun Mar 1 11:31:25 2026 -0700
+Commit:     Tasha <tashastephan@gmail.com>
+CommitDate: Sun Mar 1 11:31:25 2026 -0700
+
+    feat: upgraded intake to multi-step botanical assessment with sliders, scoring logic, and Firebase save integration
+
+M	admin.html
+M	dashboard.html
+M	herbs.html
+M	intake.html
+M	intake.js
+M	register.html
+A	script.js
+M	style.css
+
+----- PATCH -----
+commit 0007245078acc90e0ee5d6a06ba4293f1b2f53a6
+Author: Tasha <tashastephan@gmail.com>
+Date:   Sun Mar 1 11:31:25 2026 -0700
+
+    feat: upgraded intake to multi-step botanical assessment with sliders, scoring logic, and Firebase save integration
+
+diff --git a/admin.html b/admin.html
+index e0f71ec..ace8c82 100644
+--- a/admin.html
++++ b/admin.html
+@@ -1,24 +1,29 @@
+ <!-- admin.html -->
+ <!DOCTYPE html>
+ <html lang="en">
++
+ <head>
+-<meta charset="UTF-8">
+-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+-<title>Admin Dashboard</title>
+-<link rel="stylesheet" href="styles.css">
++  <meta charset="UTF-8">
++  <meta name="viewport" content="width=device-width, initial-scale=1.0">
++  <title>Admin Dashboard</title>
++  <link rel="stylesheet" href="style.css">
+ 
+-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
+-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
++  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
++  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
++  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
+ </head>
++
+ <body>
+-<header><h1>Admin Dashboard</h1></header>
+-<div class="container">
+-  <div id="adminResults"></div>
+-</div>
++  <header>
++    <h1>Admin Dashboard</h1>
++  </header>
++  <div class="container">
++    <div id="adminResults"></div>
++  </div>
+ 
+-<script src="firebase.js"></script>
+-<script src="auth.js"></script>
+-<script src="admin.js"></script>
++  <script src="firebase.js"></script>
++  <script src="auth.js"></script>
++  <script src="admin.js"></script>
+ </body>
++
+ </html>
+\ No newline at end of file
+diff --git a/dashboard.html b/dashboard.html
+index 13ae560..4e45bb1 100644
+--- a/dashboard.html
++++ b/dashboard.html
+@@ -4,7 +4,7 @@
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Dashboard</title>
+-<link rel="stylesheet" href="styles.css">
++<link rel="stylesheet" href="style.css">
+ 
+ <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+ <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
+diff --git a/herbs.html b/herbs.html
+index b2fb9c9..3a59e91 100644
+--- a/herbs.html
++++ b/herbs.html
+@@ -1,3 +1,49 @@
++<!DOCTYPE html>
++<html lang="en">
++<head>
++<meta charset="UTF-8">
++<meta name="viewport" content="width=device-width, initial-scale=1.0">
++<title>Dashboard</title>
++<link rel="stylesheet" href="style.css">
++
++<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
++<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
++<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
++</head>
++<body>
++<header><h1>Your Herbal Dashboard</h1></header>
++
++<div class="container">
++  <div id="results"></div>
++</div>
++
++<script src="firebase.js"></script>
++<script src="auth.js"></script>
++<script src="dashboard.js"></script>
++</body>
++</html>
++herbs.html
++herbs.html
+++22
++-2
++
++<!DOCTYPE html>
++<html lang="en">
++<head>
++<meta charset="UTF-8">
++<meta name="viewport" content="width=device-width, initial-scale=1.0">
++<title>Herb Library</title>
++<link rel="stylesheet" href="style.css">
++</head>
++<body>
++<header>
++    <div class="logo">Luxury Botanical</div>
++    <nav>
++        <a href="index.html">Home</a>
++        <a href="herbs.html">Herbs</a>
++    </nav>
++</header>
++
+ <section class="container">
+     <link rel="stylesheet" href="style.css">
+     <h1>Herb Library</h1>
+@@ -13,4 +59,9 @@
+     </div>
+ 
+     <div id="herb-list" class="grid"></div>
+-</section>
+\ No newline at end of file
++</section>
++</section>
++
++<script src="app.js"></script>
++</body>
++</html>
+\ No newline at end of file
+diff --git a/intake.html b/intake.html
+index 8361ec1..4981fd9 100644
+--- a/intake.html
++++ b/intake.html
+@@ -1,24 +1,126 @@
+ <!DOCTYPE html>
+-<html>
++<html lang="en">
+ <head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+-<title>Comprehensive Intake</title>
+-<link rel="stylesheet" href="styles.css">
++<title>Your Wellness Intake</title>
++<link rel="stylesheet" href="style.css">
++<script type="module" src="intake.js" defer></script>
+ </head>
+-<body>
+ 
+-<header><h1>Comprehensive Health Intake</h1></header>
++<body class="intake-body">
+ 
+-<div class="card">
++<div class="intake-container">
+ 
+-<div id="stepContainer"></div>
++  <div class="intake-header">
++    <h1>🌿 Your Botanical Wellness Assessment</h1>
++    <p>Thoughtful questions help us craft deeply personalized herbal support.</p>
++  </div>
+ 
+-<button class="btn" id="nextBtn">Next</button>
++  <div class="progress-bar">
++    <div class="progress-fill" id="progressFill"></div>
++  </div>
+ 
++  <form id="intakeForm">
++
++  <!-- STEP 1 -->
++  <section class="step active">
++    <h2>🌱 Foundational Profile</h2>
++
++    <label>Age Range</label>
++    <select name="age">
++      <option>18–25</option>
++      <option>26–35</option>
++      <option>36–45</option>
++      <option>46–55</option>
++      <option>56+</option>
++    </select>
++
++    <label>Biological Sex</label>
++    <select name="sex">
++      <option>Female</option>
++      <option>Male</option>
++      <option>Other</option>
++    </select>
++
++    <label>Are you pregnant or breastfeeding?</label>
++    <select name="pregnancy">
++      <option>No</option>
++      <option>Pregnant</option>
++      <option>Breastfeeding</option>
++    </select>
++
++    <button type="button" class="next-btn">Next</button>
++  </section>
++
++  <!-- STEP 2 -->
++  <section class="step">
++    <h2>🌿 Your Primary Goals</h2>
++
++    <label><input type="checkbox" name="goals" value="energy"> Restore Energy</label>
++    <label><input type="checkbox" name="goals" value="stress"> Calm Stress</label>
++    <label><input type="checkbox" name="goals" value="sleep"> Improve Sleep</label>
++    <label><input type="checkbox" name="goals" value="hormones"> Balance Hormones</label>
++    <label><input type="checkbox" name="goals" value="digestion"> Improve Digestion</label>
++    <label><input type="checkbox" name="goals" value="focus"> Sharpen Focus</label>
++
++    <div class="nav-buttons">
++      <button type="button" class="back-btn">Back</button>
++      <button type="button" class="next-btn">Next</button>
++    </div>
++  </section>
++
++  <!-- STEP 3 -->
++  <section class="step">
++    <h2>🌾 Symptom Mapping</h2>
++
++    <label>Afternoon Fatigue</label>
++    <input type="range" min="0" max="5" name="fatigue">
++
++    <label>Anxiety / Tension</label>
++    <input type="range" min="0" max="5" name="anxiety">
++
++    <label>Brain Fog</label>
++    <input type="range" min="0" max="5" name="brainfog">
++
++    <label>Bloating</label>
++    <input type="range" min="0" max="5" name="bloating">
++
++    <label>Sleep Disturbance</label>
++    <input type="range" min="0" max="5" name="sleepdisturb">
++
++    <div class="nav-buttons">
++      <button type="button" class="back-btn">Back</button>
++      <button type="button" class="next-btn">Next</button>
++    </div>
++  </section>
++
++  <!-- STEP 4 -->
++  <section class="step">
++    <h2>🌬 Lifestyle Landscape</h2>
++
++    <label>Stress Level (1–10)</label>
++    <input type="range" min="1" max="10" name="stresslevel">
++
++    <label>Hours of Sleep</label>
++    <input type="number" name="sleephours">
++
++    <label>Caffeine per Day</label>
++    <select name="caffeine">
++      <option>None</option>
++      <option>1 cup</option>
++      <option>2–3 cups</option>
++      <option>4+ cups</option>
++    </select>
++
++    <div class="nav-buttons">
++      <button type="button" class="back-btn">Back</button>
++      <button type="submit">Complete Assessment</button>
++    </div>
++  </section>
++
++  </form>
+ </div>
+ 
+-<script src="firebase.js"></script>
+-<script src="intake.js"></script>
+ </body>
+-</html>
++</html>
+\ No newline at end of file
+diff --git a/intake.js b/intake.js
+index 33f6683..0c8bb6e 100644
+--- a/intake.js
++++ b/intake.js
+@@ -1,15 +1,79 @@
+-const submitBtn = document.getElementById("submitIntake");
++import { auth, db } from "./firebase.js";
++import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+ 
+-submitBtn.onclick = async () => {
+-  const selected = Array.from(
+-    document.querySelectorAll("input[type=checkbox]:checked")
+-  ).map(cb=>cb.value);
++const steps = document.querySelectorAll(".step");
++const nextBtns = document.querySelectorAll(".next-btn");
++const backBtns = document.querySelectorAll(".back-btn");
++const progressFill = document.getElementById("progressFill");
+ 
+-  await db.collection("intakes").add({
+-    userId: auth.currentUser.uid,
+-    symptoms: selected,
+-    createdAt: new Date()
++let currentStep = 0;
++
++function updateStep() {
++  steps.forEach((step, index) => {
++    step.classList.toggle("active", index === currentStep);
++  });
++
++  progressFill.style.width = ((currentStep + 1) / steps.length) * 100 + "%";
++}
++
++nextBtns.forEach(btn => {
++  btn.addEventListener("click", () => {
++    if (currentStep < steps.length - 1) {
++      currentStep++;
++      updateStep();
++    }
++  });
++});
++
++backBtns.forEach(btn => {
++  btn.addEventListener("click", () => {
++    if (currentStep > 0) {
++      currentStep--;
++      updateStep();
++    }
++  });
++});
++
++updateStep();
++
++document.getElementById("intakeForm").addEventListener("submit", async (e) => {
++  e.preventDefault();
++
++  const user = auth.currentUser;
++  if (!user) {
++    alert("You must be logged in.");
++    return;
++  }
++
++  const formData = new FormData(e.target);
++  const data = {};
++
++  formData.forEach((value, key) => {
++    if (data[key]) {
++      if (!Array.isArray(data[key])) {
++        data[key] = [data[key]];
++      }
++      data[key].push(value);
++    } else {
++      data[key] = value;
++    }
+   });
+ 
+-  window.location="dashboard.html";
+-};
+\ No newline at end of file
++  data.timestamp = serverTimestamp();
++  data.userId = user.uid;
++
++  // 🌿 Basic scoring logic
++  data.scores = {
++    stressScore: Number(data.anxiety || 0) + Number(data.stresslevel || 0),
++    gutScore: Number(data.bloating || 0),
++    energyScore: Number(data.fatigue || 0),
++    sleepScore: Number(data.sleepdisturb || 0)
++  };
++
++  try {
++    await addDoc(collection(db, "intakes"), data);
++    window.location.href = "dashboard.html";
++  } catch (error) {
++    console.error("Error saving intake:", error);
++  }
++});
+\ No newline at end of file
+diff --git a/register.html b/register.html
+index a9d3df7..698656f 100644
+--- a/register.html
++++ b/register.html
+@@ -1,29 +1,147 @@
+ <!DOCTYPE html>
+-<html>
++<html lang="en">
++
+ <head>
+-  <title>Register</title>
++  <meta charset="UTF-8">
++  <meta name="viewport" content="width=device-width, initial-scale=1.0">
++  <title>Login - Luxury Botanical Apothecary</title>
+   <link rel="stylesheet" href="style.css">
+-  
++  <style>
++    .login-container {
++      max-width: 400px;
++      margin: 4rem auto;
++      padding: 2rem;
++      background-color: #f0f5f0;
++      border-radius: 10px;
++      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
++    }
++
++    .login-container h1 {
++      text-align: center;
++      color: #3a503a;
++      margin-bottom: 2rem;
++    }
++
++    .form-group {
++      margin-bottom: 1.5rem;
++    }
++
++    .form-group label {
++      display: block;
++      margin-bottom: 0.5rem;
++      color: #3a503a;
++      font-weight: 500;
++    }
++
++    .form-group input {
++      width: 100%;
++      padding: 0.75rem;
++      border: 1px solid #d4e3d4;
++      border-radius: 5px;
++      font-size: 1rem;
++      box-sizing: border-box;
++      transition: border-color 0.3s;
++    }
++
++    .form-group input:focus {
++      outline: none;
++      border-color: #6a8a6a;
++      box-shadow: 0 0 5px rgba(106, 138, 106, 0.3);
++    }
++
++    .login-btn {
++      background-color: #6a8a6a;
++      color: #fff;
++      padding: 0.75rem 1.5rem;
++      border: none;
++      border-radius: 5px;
++      font-size: 1rem;
++      width: 100%;
++      cursor: pointer;
++      transition: all 0.3s;
++      font-weight: 600;
++    }
++
++    .login-btn:hover {
++      background-color: #527352;
++      transform: translateY(-3px);
++    }
++
++    .signup-link {
++      text-align: center;
++      margin-top: 1.5rem;
++      color: #4b4b3f;
++    }
++
++    .signup-link a {
++      color: #6a8a6a;
++      text-decoration: none;
++      font-weight: 600;
++      transition: color 0.3s;
++    }
++
++    .signup-link a:hover {
++      color: #527352;
++    }
+ 
+-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
+-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
++    .forgot-password {
++      text-align: right;
++      margin-bottom: 1rem;
++    }
++
++    .forgot-password a {
++      color: #6a8a6a;
++      text-decoration: none;
++      font-size: 0.9rem;
++      transition: color 0.3s;
++    }
++
++    .forgot-password a:hover {
++      color: #527352;
++    }
++  </style>
+ </head>
++
+ <body>
+ 
+-<div class="card">
+-  <h2>Create Account</h2>
+-  <input id="name" type="text" placeholder="Full Name">
+-  <input id="email" type="email" placeholder="Email">
+-  <input id="password" type="password" placeholder="Password">
+-  <select id="role">
+-    <option value="user">User</option>
+-    <option value="admin">Admin</option>
+-  </select>
+-  <button class="btn" id="registerBtn">Register</button>
+-</div>
+-
+-<script src="firebase.js"></script>
+-<script src="auth.js"></script>
++  <header id="header">
++    <div class="logo">Luxury Botanical</div>
++    <nav>
++      <a href="index.html">Home</a>
++      <a href="register.html">Login</a>
++      <a href="intake.html">Intake Form</a>
++      <a href="index.html#herbs">Herbs</a>
++      <a href="index.html#contact">Contact</a>
++    </nav>
++  </header>
++
++  <div class="login-container">
++    <h1>Login</h1>
++
++    <form id="loginForm">
++      <div class="form-group">
++        <label for="email">Email Address</label>
++        <input type="email" id="email" name="email" placeholder="Enter your email" required>
++      </div>
++
++      <div class="form-group">
++        <label for="password">Password</label>
++        <input type="password" id="password" name="password" placeholder="Enter your password" required>
++      </div>
++
++      <div class="forgot-password">
++        <a href="#forgot">Forgot password?</a>
++      </div>
++
++      <button type="submit" class="login-btn">Login</button>
++    </form>
++
++    <div class="signup-link">
++      Don't have an account? <a href="#signup">Create one here</a>
++    </div>
++  </div>
++
++  <script src="auth.js"></script>
+ </body>
++
+ </html>
+\ No newline at end of file
+diff --git a/script.js b/script.js
+new file mode 100644
+index 0000000..3775a66
+--- /dev/null
++++ b/script.js
+@@ -0,0 +1,11 @@
++const header = document.getElementById("header");
++
++if (header) {
++    window.addEventListener("scroll", () => {
++        if (window.scrollY > 24) {
++            header.classList.add("scrolled");
++        } else {
++            header.classList.remove("scrolled");
++        }
++    });
++}
+\ No newline at end of file
+diff --git a/style.css b/style.css
+index 84741e7..2a00b66 100644
+--- a/style.css
++++ b/style.css
+@@ -117,6 +117,74 @@ footer {
+     padding: 2rem;
+     color: #3a503a;
+ }
++.intake-body {
++  background: linear-gradient(#f5f9f6, #eef5ef);
++  font-family: 'Segoe UI', sans-serif;
++}
++
++.intake-container {
++  max-width: 700px;
++  margin: auto;
++  padding: 40px;
++  background: white;
++  border-radius: 16px;
++  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
++}
+ 
+-/* --- Animations --- */
++.intake-header {
++  text-align: center;
++  margin-bottom: 30px;
++}
++
++.step {
++  display: none;
++  animation: fadeIn 0.5s ease;
++}
+ 
++.step.active {
++  display: block;
++}
++
++.progress-bar {
++  height: 8px;
++  background: #e0ebe3;
++  border-radius: 20px;
++  margin-bottom: 30px;
++}
++
++.progress-fill {
++  height: 100%;
++  background: #6f8f72;
++  width: 0%;
++  border-radius: 20px;
++  transition: width 0.4s ease;
++}
++
++button {
++  background: #6f8f72;
++  color: white;
++  border: none;
++  padding: 10px 18px;
++  border-radius: 8px;
++  cursor: pointer;
++}
++
++button:hover {
++  background: #5d7d60;
++}
++
++.nav-buttons {
++  display: flex;
++  justify-content: space-between;
++  margin-top: 20px;
++}
++
++input[type="range"] {
++  width: 100%;
++  margin-bottom: 15px;
++}
++
++@keyframes fadeIn {
++  from { opacity: 0; transform: translateY(10px); }
++  to { opacity: 1; transform: translateY(0); }
++}
+
+===== COMMIT: c65d9bc20a691c52846027c10021606651f49f06 =====
+commit c65d9bc20a691c52846027c10021606651f49f06
+Author:     Tasha <tashastephan@gmail.com>
+AuthorDate: Sun Mar 1 11:38:40 2026 -0700
+Commit:     Tasha <tashastephan@gmail.com>
+CommitDate: Sun Mar 1 11:38:40 2026 -0700
+
+    feat: implemented weighted herb intelligence engine with synergy logic, contraindication filtering, ranking, and dashboard integration
+
+M	dashboard.js
+M	data/herb.json
+A	herbEngine.js
+M	intake.js
+M	style.css
+
+----- PATCH -----
+commit c65d9bc20a691c52846027c10021606651f49f06
+Author: Tasha <tashastephan@gmail.com>
+Date:   Sun Mar 1 11:38:40 2026 -0700
+
+    feat: implemented weighted herb intelligence engine with synergy logic, contraindication filtering, ranking, and dashboard integration
+
+diff --git a/dashboard.js b/dashboard.js
+index 6965b08..214d119 100644
+--- a/dashboard.js
++++ b/dashboard.js
+@@ -1,58 +1,49 @@
+-const herbDB = [
+-  {name:"Ashwagandha",supports:["stress","tired","anxiety"]},
+-  {name:"Rhodiola",supports:["stress","tired"]},
+-  {name:"Chamomile",supports:["stress","digestive","anxiety"]},
+-  {name:"Peppermint",supports:["digestive"]},
+-  {name:"Lavender",supports:["stress","anxiety"]},
+-  {name:"Echinacea",supports:["immune"]}
+-];
+-
+-const synergyPairs = [
+-  {herbs:["Ashwagandha","Rhodiola"],reason:"Adaptogen stack for stress + energy."},
+-  {herbs:["Chamomile","Lavender"],reason:"Calming synergy."},
+-  {herbs:["Peppermint","Ginger"],reason:"Digestive support pairing."}
+-];
+-
+-auth.onAuthStateChanged(async user=>{
+-  if(!user) return;
+-
+-  const snapshot = await db.collection("intakes")
+-    .where("userId","==",user.uid)
+-    .orderBy("createdAt","desc")
+-    .limit(1)
+-    .get();
+-
+-  if(snapshot.empty) return;
+-
+-  const symptoms = snapshot.docs[0].data().symptoms;
+-
+-  // AI Scoring
+-  let scored = herbDB.map(h=>{
+-    let score=0;
+-    symptoms.forEach(s=>{ if(h.supports.includes(s)) score+=2; });
+-    return {...h,score};
+-  });
++import { auth, db } from "./firebase.js";
++import { collection, query, where, getDocs, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
++
++const container = document.getElementById("dashboardContent");
+ 
+-  scored.sort((a,b)=>b.score-a.score);
++auth.onAuthStateChanged(async user => {
++  if (!user) {
++    window.location.href = "index.html";
++    return;
++  }
+ 
+-  // Synergy detection
+-  let activeHerbs = scored.filter(h=>h.score>0).map(h=>h.name);
+-  let foundPairs = synergyPairs.filter(pair => 
+-    activeHerbs.includes(pair.herbs[0]) && activeHerbs.includes(pair.herbs[1])
++  const q = query(
++    collection(db, "intakes"),
++    where("userId", "==", user.uid),
++    orderBy("timestamp", "desc"),
++    limit(1)
+   );
+ 
+-  // Display
+-  let html="<h2>Recommended Herbs</h2>";
+-  scored.filter(h=>h.score>0).forEach(h=>{
+-    html+=`<p><strong>${h.name}</strong> (Score: ${h.score})</p>`;
+-  });
++  const snapshot = await getDocs(q);
+ 
+-  if(foundPairs.length){
+-    html+="<h3>Complementary Pairings</h3>";
+-    foundPairs.forEach(p=>{
+-      html+=`<p>${p.herbs.join(" + ")} - ${p.reason}</p>`;
+-    });
++  if (snapshot.empty) {
++    container.innerHTML = "<p>No intake found.</p>";
++    return;
+   }
+ 
+-  document.getElementById("results").innerHTML = html;
+-});
+\ No newline at end of file
++  const data = snapshot.docs[0].data();
++  const herbs = data.recommendations.topHerbs;
++  const confidence = data.recommendations.confidence;
++
++  let html = `
++    <h2>🌿 Your Personalized Herbal Protocol</h2>
++    <p>Confidence Level: <strong>${confidence}%</strong></p>
++    <div class="herb-results">
++  `;
++
++  herbs.forEach(herb => {
++    html += `
++      <div class="herb-card">
++        <h3>${herb.name}</h3>
++        <p>Match Score: ${herb.score}</p>
++        <p>Supports: ${herb.supports.join(", ")}</p>
++      </div>
++    `;
++  });
++
++  html += "</div>";
++
++  container.innerHTML = html;
++}); 
+\ No newline at end of file
+diff --git a/data/herb.json b/data/herb.json
+index 0e54148..81b666b 100644
+--- a/data/herb.json
++++ b/data/herb.json
+@@ -1,35 +1,37 @@
+ [
+   {
+-    "id":"h1",
+-    "name":"Chamomile",
+-    "latin":"Matricaria chamomilla",
+-    "systems":["nervous","digestive"],
+-    "actions":["nervine","carminative"],
+-    "contraindications":["ragweed allergy"],
+-    "drug_interactions":[],
+-    "pregnancy":"safe",
+-    "education":"Traditionally used for calming and digestive support."
++    "name": "Ashwagandha",
++    "categories": ["adaptogen", "nervine"],
++    "supports": ["stress", "energy", "sleep"],
++    "contraindications": ["pregnancy"],
++    "synergy": ["Rhodiola", "Holy Basil"]
+   },
+   {
+-    "id":"h2",
+-    "name":"St Johns Wort",
+-    "latin":"Hypericum perforatum",
+-    "systems":["nervous"],
+-    "actions":["mood support"],
+-    "contraindications":[],
+-    "drug_interactions":["SSRI","SNRI","birth control"],
+-    "pregnancy":"unsafe",
+-    "education":"Traditionally used for mood balance."
++    "name": "Rhodiola",
++    "categories": ["adaptogen", "cognitive"],
++    "supports": ["energy", "focus", "stress"],
++    "contraindications": ["high_anxiety"],
++    "synergy": ["Ashwagandha"]
+   },
+   {
+-    "id":"h3",
+-    "name":"Ginger",
+-    "latin":"Zingiber officinale",
+-    "systems":["digestive","circulatory"],
+-    "actions":["anti-inflammatory","carminative"],
+-    "contraindications":[],
+-    "drug_interactions":["blood thinner"],
+-    "pregnancy":"caution",
+-    "education":"Traditionally used for digestion and circulation."
++    "name": "Holy Basil",
++    "categories": ["adaptogen", "nervine"],
++    "supports": ["stress", "anxiety", "inflammation"],
++    "contraindications": [],
++    "synergy": ["Ashwagandha"]
++  },
++  {
++    "name": "Chamomile",
++    "categories": ["nervine"],
++    "supports": ["sleep", "anxiety", "digestion"],
++    "contraindications": [],
++    "synergy": ["Lemon Balm"]
++  },
++  {
++    "name": "Ginger",
++    "categories": ["carminative"],
++    "supports": ["digestion", "bloating", "inflammation"],
++    "contraindications": [],
++    "synergy": ["Turmeric"]
+   }
+ ]
+\ No newline at end of file
+diff --git a/herbEngine.js b/herbEngine.js
+new file mode 100644
+index 0000000..4cd0f6a
+--- /dev/null
++++ b/herbEngine.js
+@@ -0,0 +1,58 @@
++export async function runHerbEngine(intakeData) {
++
++  const response = await fetch("./data/herb.json");
++  const herbs = await response.json();
++
++  const scores = intakeData.scores;
++
++  let results = herbs.map(herb => {
++    let score = 0;
++
++    // Weighted scoring
++    herb.supports.forEach(area => {
++      if (area === "stress") score += scores.stressScore || 0;
++      if (area === "energy") score += scores.energyScore || 0;
++      if (area === "sleep") score += scores.sleepScore || 0;
++      if (area === "digestion") score += scores.gutScore || 0;
++    });
++
++    return {
++      ...herb,
++      score
++    };
++  });
++
++  // Remove contraindications
++  results = results.filter(herb => {
++    if (intakeData.pregnancy === "Pregnant" &&
++        herb.contraindications.includes("pregnancy")) {
++      return false;
++    }
++    return true;
++  });
++
++  // Add synergy bonus
++  results.forEach(herb => {
++    herb.synergy.forEach(pair => {
++      const pairedHerb = results.find(h => h.name === pair);
++      if (pairedHerb && pairedHerb.score > 5) {
++        herb.score += 2;
++      }
++    });
++  });
++
++  // Sort highest first
++  results.sort((a, b) => b.score - a.score);
++
++  const topHerbs = results.slice(0, 3);
++
++  const confidence = Math.min(
++    95,
++    Math.round((topHerbs[0].score / 40) * 100)
++  );
++
++  return {
++    topHerbs,
++    confidence
++  };
++}
+\ No newline at end of file
+diff --git a/intake.js b/intake.js
+index 0c8bb6e..3c50012 100644
+--- a/intake.js
++++ b/intake.js
+@@ -1,4 +1,5 @@
+ import { auth, db } from "./firebase.js";
++import { runHerbEngine } from "./herbEngine.js";
+ import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+ 
+ const steps = document.querySelectorAll(".step");
+diff --git a/style.css b/style.css
+index 2a00b66..16be37d 100644
+--- a/style.css
++++ b/style.css
+@@ -5,10 +5,13 @@ body {
+     color: #4b4b3f;
+     margin: 0;
+     line-height: 1.6;
+-    scroll-behavior: smooth; /* smooth scrolling */
++    scroll-behavior: smooth;
++    /* smooth scrolling */
+ }
+ 
+-a { text-decoration: none; }
++a {
++    text-decoration: none;
++}
+ 
+ /* --- Header --- */
+ header {
+@@ -20,11 +23,13 @@ header {
+     position: sticky;
+     top: 0;
+     z-index: 100;
+-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
++    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+     transition: background 0.3s;
+ }
+ 
+-header.scrolled { background-color: #d4e3d4; }
++header.scrolled {
++    background-color: #d4e3d4;
++}
+ 
+ header .logo {
+     font-size: 1.8rem;
+@@ -55,10 +60,13 @@ nav a:hover {
+ .hero h1 {
+     font-size: 3rem;
+     margin-bottom: 1rem;
+-    text-shadow: 1px 1px 6px rgba(0,0,0,0.5);
++    text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.5);
+ }
+ 
+-.hero p { font-size: 1.2rem; margin-bottom: 2rem; }
++.hero p {
++    font-size: 1.2rem;
++    margin-bottom: 2rem;
++}
+ 
+ .btn {
+     background-color: #6a8a6a;
+@@ -75,8 +83,18 @@ nav a:hover {
+ }
+ 
+ /* --- Sections --- */
+-section { padding: 4rem 2rem; max-width: 1100px; margin: 0 auto; }
+-.about h2, .featured-herbs h2, .contact h2 { font-size: 2.2rem; margin-bottom: 1rem; }
++section {
++    padding: 4rem 2rem;
++    max-width: 1100px;
++    margin: 0 auto;
++}
++
++.about h2,
++.featured-herbs h2,
++.contact h2 {
++    font-size: 2.2rem;
++    margin-bottom: 1rem;
++}
+ 
+ /* --- Herb Grid --- */
+ .herb-grid {
+@@ -91,13 +109,13 @@ section { padding: 4rem 2rem; max-width: 1100px; margin: 0 auto; }
+     padding: 1.5rem;
+     border-radius: 10px;
+     text-align: center;
+-    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
++    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+     transition: transform 0.3s, box-shadow 0.3s;
+ }
+ 
+ .herb-card:hover {
+     transform: translateY(-5px);
+-    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
++    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+ }
+ 
+ .herb-card img {
+@@ -108,7 +126,9 @@ section { padding: 4rem 2rem; max-width: 1100px; margin: 0 auto; }
+ }
+ 
+ /* --- Contact Section --- */
+-.contact { text-align: center; }
++.contact {
++    text-align: center;
++}
+ 
+ /* --- Footer --- */
+ footer {
+@@ -117,74 +137,94 @@ footer {
+     padding: 2rem;
+     color: #3a503a;
+ }
++
+ .intake-body {
+-  background: linear-gradient(#f5f9f6, #eef5ef);
+-  font-family: 'Segoe UI', sans-serif;
++    background: linear-gradient(#f5f9f6, #eef5ef);
++    font-family: 'Segoe UI', sans-serif;
+ }
+ 
+ .intake-container {
+-  max-width: 700px;
+-  margin: auto;
+-  padding: 40px;
+-  background: white;
+-  border-radius: 16px;
+-  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
++    max-width: 700px;
++    margin: auto;
++    padding: 40px;
++    background: white;
++    border-radius: 16px;
++    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+ }
+ 
+ .intake-header {
+-  text-align: center;
+-  margin-bottom: 30px;
++    text-align: center;
++    margin-bottom: 30px;
+ }
+ 
+ .step {
+-  display: none;
+-  animation: fadeIn 0.5s ease;
++    display: none;
++    animation: fadeIn 0.5s ease;
+ }
+ 
+ .step.active {
+-  display: block;
++    display: block;
+ }
+ 
+ .progress-bar {
+-  height: 8px;
+-  background: #e0ebe3;
+-  border-radius: 20px;
+-  margin-bottom: 30px;
++    height: 8px;
++    background: #e0ebe3;
++    border-radius: 20px;
++    margin-bottom: 30px;
+ }
+ 
+ .progress-fill {
+-  height: 100%;
+-  background: #6f8f72;
+-  width: 0%;
+-  border-radius: 20px;
+-  transition: width 0.4s ease;
++    height: 100%;
++    background: #6f8f72;
++    width: 0%;
++    border-radius: 20px;
++    transition: width 0.4s ease;
+ }
+ 
+ button {
+-  background: #6f8f72;
+-  color: white;
+-  border: none;
+-  padding: 10px 18px;
+-  border-radius: 8px;
+-  cursor: pointer;
++    background: #6f8f72;
++    color: white;
++    border: none;
++    padding: 10px 18px;
++    border-radius: 8px;
++    cursor: pointer;
+ }
+ 
+ button:hover {
+-  background: #5d7d60;
++    background: #5d7d60;
+ }
+ 
+ .nav-buttons {
+-  display: flex;
+-  justify-content: space-between;
+-  margin-top: 20px;
++    display: flex;
++    justify-content: space-between;
++    margin-top: 20px;
+ }
+ 
+ input[type="range"] {
+-  width: 100%;
+-  margin-bottom: 15px;
++    width: 100%;
++    margin-bottom: 15px;
+ }
+ 
+ @keyframes fadeIn {
+-  from { opacity: 0; transform: translateY(10px); }
+-  to { opacity: 1; transform: translateY(0); }
++    from {
++        opacity: 0;
++        transform: translateY(10px);
++    }
++
++    to {
++        opacity: 1;
++        transform: translateY(0);
++    }
++}
++
++.herb-results {
++    margin-top: 30px;
+ }
++
++.herb-card {
++    background: #f4f8f5;
++    padding: 20px;
++    border-radius: 12px;
++    margin-bottom: 15px;
++    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
++}
+\ No newline at end of file
+
+===== COMMIT: 25149921371d22a24cf89ae8bba49f514dcc66b3 =====
+commit 25149921371d22a24cf89ae8bba49f514dcc66b3
+Author:     Tasha <tashastephan@gmail.com>
+AuthorDate: Sun Mar 1 11:41:04 2026 -0700
+Commit:     Tasha <tashastephan@gmail.com>
+CommitDate: Sun Mar 1 11:41:04 2026 -0700
+
+    feat: rebuilt intake.js with structured scoring system and expanded herb library to 100 commonly used healing herbs
+
+M	intake.js
+
+----- PATCH -----
+commit 25149921371d22a24cf89ae8bba49f514dcc66b3
+Author: Tasha <tashastephan@gmail.com>
+Date:   Sun Mar 1 11:41:04 2026 -0700
+
+    feat: rebuilt intake.js with structured scoring system and expanded herb library to 100 commonly used healing herbs
+
+diff --git a/intake.js b/intake.js
+index 3c50012..8d9d484 100644
+--- a/intake.js
++++ b/intake.js
+@@ -1,20 +1,25 @@
+ import { auth, db } from "./firebase.js";
+-import { runHerbEngine } from "./herbEngine.js";
+ import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
++import { runHerbEngine } from "./herbEngine.js";
+ 
+ const steps = document.querySelectorAll(".step");
+ const nextBtns = document.querySelectorAll(".next-btn");
+ const backBtns = document.querySelectorAll(".back-btn");
+ const progressFill = document.getElementById("progressFill");
++const form = document.getElementById("intakeForm");
+ 
+ let currentStep = 0;
+ 
++// ------------------
++// STEP NAVIGATION
++// ------------------
+ function updateStep() {
+   steps.forEach((step, index) => {
+     step.classList.toggle("active", index === currentStep);
+   });
+ 
+-  progressFill.style.width = ((currentStep + 1) / steps.length) * 100 + "%";
++  progressFill.style.width =
++    ((currentStep + 1) / steps.length) * 100 + "%";
+ }
+ 
+ nextBtns.forEach(btn => {
+@@ -22,6 +27,7 @@ nextBtns.forEach(btn => {
+     if (currentStep < steps.length - 1) {
+       currentStep++;
+       updateStep();
++      window.scrollTo(0, 0);
+     }
+   });
+ });
+@@ -31,22 +37,26 @@ backBtns.forEach(btn => {
+     if (currentStep > 0) {
+       currentStep--;
+       updateStep();
++      window.scrollTo(0, 0);
+     }
+   });
+ });
+ 
+ updateStep();
+ 
+-document.getElementById("intakeForm").addEventListener("submit", async (e) => {
++// ------------------
++// FORM SUBMISSION
++// ------------------
++form.addEventListener("submit", async (e) => {
+   e.preventDefault();
+ 
+   const user = auth.currentUser;
+   if (!user) {
+-    alert("You must be logged in.");
++    alert("Please log in to complete your assessment.");
+     return;
+   }
+ 
+-  const formData = new FormData(e.target);
++  const formData = new FormData(form);
+   const data = {};
+ 
+   formData.forEach((value, key) => {
+@@ -60,21 +70,35 @@ document.getElementById("intakeForm").addEventListener("submit", async (e) => {
+     }
+   });
+ 
+-  data.timestamp = serverTimestamp();
+-  data.userId = user.uid;
++  // ------------------
++  // SCORING SYSTEM
++  // ------------------
++
++  const anxiety = Number(data.anxiety || 0);
++  const stressLevel = Number(data.stresslevel || 0);
++  const fatigue = Number(data.fatigue || 0);
++  const bloating = Number(data.bloating || 0);
++  const sleepDisturb = Number(data.sleepdisturb || 0);
+ 
+-  // 🌿 Basic scoring logic
+   data.scores = {
+-    stressScore: Number(data.anxiety || 0) + Number(data.stresslevel || 0),
+-    gutScore: Number(data.bloating || 0),
+-    energyScore: Number(data.fatigue || 0),
+-    sleepScore: Number(data.sleepdisturb || 0)
++    stressScore: anxiety + stressLevel,
++    energyScore: fatigue,
++    gutScore: bloating,
++    sleepScore: sleepDisturb
+   };
+ 
++  // Run herb intelligence engine
++  const engineResults = await runHerbEngine(data);
++  data.recommendations = engineResults;
++
++  data.userId = user.uid;
++  data.timestamp = serverTimestamp();
++
+   try {
+     await addDoc(collection(db, "intakes"), data);
+     window.location.href = "dashboard.html";
+   } catch (error) {
+     console.error("Error saving intake:", error);
++    alert("Something went wrong saving your results.");
+   }
+ });
+\ No newline at end of file
+
+===== COMMIT: a39fc39d2961ce28b2b92c25a48630ae54838968 =====
+commit a39fc39d2961ce28b2b92c25a48630ae54838968
+Author:     Tasha <tashastephan@gmail.com>
+AuthorDate: Sun Mar 1 11:53:20 2026 -0700
+Commit:     Tasha <tashastephan@gmail.com>
+CommitDate: Sun Mar 1 11:53:20 2026 -0700
+
+    added herbs
+
+M	data/herb.json
+
+----- PATCH -----
+commit a39fc39d2961ce28b2b92c25a48630ae54838968
+Author: Tasha <tashastephan@gmail.com>
+Date:   Sun Mar 1 11:53:20 2026 -0700
+
+    added herbs
+
+diff --git a/data/herb.json b/data/herb.json
+index 81b666b..a7ae35f 100644
+--- a/data/herb.json
++++ b/data/herb.json
+@@ -1,37 +1,86 @@
+ [
+-  {
+-    "name": "Ashwagandha",
+-    "categories": ["adaptogen", "nervine"],
+-    "supports": ["stress", "energy", "sleep"],
+-    "contraindications": ["pregnancy"],
+-    "synergy": ["Rhodiola", "Holy Basil"]
+-  },
+-  {
+-    "name": "Rhodiola",
+-    "categories": ["adaptogen", "cognitive"],
+-    "supports": ["energy", "focus", "stress"],
+-    "contraindications": ["high_anxiety"],
+-    "synergy": ["Ashwagandha"]
+-  },
+-  {
+-    "name": "Holy Basil",
+-    "categories": ["adaptogen", "nervine"],
+-    "supports": ["stress", "anxiety", "inflammation"],
+-    "contraindications": [],
+-    "synergy": ["Ashwagandha"]
+-  },
+-  {
+-    "name": "Chamomile",
+-    "categories": ["nervine"],
+-    "supports": ["sleep", "anxiety", "digestion"],
+-    "contraindications": [],
+-    "synergy": ["Lemon Balm"]
+-  },
+-  {
+-    "name": "Ginger",
+-    "categories": ["carminative"],
+-    "supports": ["digestion", "bloating", "inflammation"],
+-    "contraindications": [],
+-    "synergy": ["Turmeric"]
+-  }
++  {"name":"Ashwagandha","categories":["adaptogen","nervine"],"supports":["stress","energy","sleep"],"contraindications":["pregnancy"],"synergy":["Rhodiola","Holy Basil"]},
++  {"name":"Rhodiola","categories":["adaptogen","cognitive"],"supports":["energy","focus","stress"],"contraindications":["high_anxiety"],"synergy":["Ashwagandha"]},
++  {"name":"Holy Basil","categories":["adaptogen","nervine"],"supports":["stress","anxiety","inflammation"],"contraindications":[],"synergy":["Ashwagandha"]},
++  {"name":"Chamomile","categories":["nervine"],"supports":["sleep","anxiety","digestion"],"contraindications":[],"synergy":["Lemon Balm"]},
++  {"name":"Ginger","categories":["carminative"],"supports":["digestion","bloating","inflammation"],"contraindications":[],"synergy":["Turmeric"]},
++  {"name":"Turmeric","categories":["anti-inflammatory","liver"],"supports":["inflammation","joint health","digestion"],"contraindications":["gallstones"],"synergy":["Ginger","Black Pepper"]},
++  {"name":"Lemon Balm","categories":["nervine","antiviral"],"supports":["anxiety","sleep","mood"],"contraindications":[],"synergy":["Chamomile"]},
++  {"name":"Peppermint","categories":["carminative","digestive"],"supports":["digestion","bloating","headaches"],"contraindications":["GERD"],"synergy":["Ginger"]},
++  {"name":"Milk Thistle","categories":["liver","detox"],"supports":["liver health","detoxification"],"contraindications":["allergy_to_silymarin"],"synergy":["Dandelion"]},
++  {"name":"Dandelion","categories":["diuretic","liver"],"supports":["liver health","detox","digestion"],"contraindications":["gallstones"],"synergy":["Milk Thistle"]},
++  {"name":"Valerian","categories":["nervine","sedative"],"supports":["sleep","anxiety"],"contraindications":["pregnancy","liver_disease"],"synergy":["Chamomile","Lemon Balm"]},
++  {"name":"St. John's Wort","categories":["antidepressant","nervine"],"supports":["mood","anxiety"],"contraindications":["SSRIs","pregnancy","photosensitivity"],"synergy":["Lemon Balm"]},
++  {"name":"Ginkgo Biloba","categories":["cognitive","circulatory"],"supports":["memory","circulation","focus"],"contraindications":["blood_thinners"],"synergy":["Gotu Kola"]},
++  {"name":"Gotu Kola","categories":["cognitive","circulatory"],"supports":["memory","circulation","skin healing"],"contraindications":["liver_disease"],"synergy":["Ginkgo Biloba"]},
++  {"name":"Sage","categories":["digestive","antimicrobial"],"supports":["digestion","cognitive","oral_health"],"contraindications":["pregnancy"],"synergy":["Rosemary"]},
++  {"name":"Rosemary","categories":["cognitive","digestive"],"supports":["memory","digestion","circulation"],"contraindications":["pregnancy"],"synergy":["Sage"]},
++  {"name":"Thyme","categories":["antimicrobial","respiratory"],"supports":["respiratory_health","immune_support"],"contraindications":[],"synergy":["Oregano"]},
++  {"name":"Oregano","categories":["antimicrobial","digestive"],"supports":["immune_support","digestion"],"contraindications":[],"synergy":["Thyme"]},
++  {"name":"Lavender","categories":["nervine","antimicrobial"],"supports":["sleep","anxiety","relaxation"],"contraindications":[],"synergy":["Chamomile","Lemon Balm"]},
++  {"name":"Echinacea","categories":["immune","antimicrobial"],"supports":["immune_support","infection"],"contraindications":["autoimmune_conditions"],"synergy":["Goldenseal"]},
++  {"name":"Goldenseal","categories":["immune","antimicrobial"],"supports":["infection","digestion"],"contraindications":["pregnancy","high_blood_pressure"],"synergy":["Echinacea"]},
++  {"name":"Fennel","categories":["carminative","digestive"],"supports":["digestion","bloating","lactation_support"],"contraindications":["pregnancy"],"synergy":["Anise"]},
++  {"name":"Anise","categories":["carminative","digestive"],"supports":["digestion","bloating"],"contraindications":["pregnancy"],"synergy":["Fennel"]},
++  {"name":"Licorice Root","categories":["adaptogen","digestive"],"supports":["stress","digestion","adrenal_support"],"contraindications":["high_blood_pressure"],"synergy":["Ashwagandha"]},
++  {"name":"Cinnamon","categories":["digestive","circulatory"],"supports":["blood_sugar","digestion","circulation"],"contraindications":["liver_disease"],"synergy":["Ginger"]},
++  {"name":"Cayenne","categories":["circulatory","digestive"],"supports":["circulation","digestion","pain"],"contraindications":["ulcers"],"synergy":["Ginger","Turmeric"]},
++  {"name":"Nettle","categories":["diuretic","nutrient-rich"],"supports":["allergies","detoxification","iron_support"],"contraindications":["kidney_disease"],"synergy":["Dandelion"]},
++  {"name":"Hawthorn","categories":["cardiovascular"],"supports":["heart_health","circulation"],"contraindications":["hypotension"],"synergy":["Ginkgo Biloba"]},
++  {"name":"Yarrow","categories":["circulatory","anti-inflammatory"],"supports":["wound_healing","circulation","fever"],"contraindications":["pregnancy"],"synergy":["Chamomile"]},
++  {"name":"Marshmallow Root","categories":["mucilaginous","digestive"],"supports":["soothe_throat","digestion"],"contraindications":[],"synergy":["Slippery Elm"]},
++  {"name":"Slippery Elm","categories":["mucilaginous","digestive"],"supports":["soothe_throat","digestion"],"contraindications":[],"synergy":["Marshmallow Root"]},
++  {"name":"Coriander","categories":["digestive","carminative"],"supports":["digestion","detoxification"],"contraindications":[],"synergy":["Fennel"]},
++  {"name":"Cardamom","categories":["digestive","carminative"],"supports":["digestion","bloating"],"contraindications":[],"synergy":["Ginger"]},
++  {"name":"Bay Leaf","categories":["digestive","antimicrobial"],"supports":["digestion","antioxidant_support"],"contraindications":[],"synergy":["Thyme","Rosemary"]},
++  {"name":"Burdock Root","categories":["detox","liver"],"supports":["liver_health","skin_health"],"contraindications":[],"synergy":["Dandelion"]},
++  {"name":"Black Cohosh","categories":["hormonal","nervine"],"supports":["menopause_symptoms"],"contraindications":["pregnancy","liver_disease"],"synergy":["Red Clover"]},
++  {"name":"Red Clover","categories":["hormonal","blood"],"supports":["menopause_support","circulation"],"contraindications":["hormone_sensitive_cancers"],"synergy":["Black Cohosh"]},
++  {"name":"Hibiscus","categories":["cardiovascular","immune"],"supports":["blood_pressure","immune_support"],"contraindications":["pregnancy"],"synergy":["Hawthorn"]},
++  {"name":"Ginseng","categories":["adaptogen","energy"],"supports":["energy","stress","immune_support"],"contraindications":["high_blood_pressure"],"synergy":["Ashwagandha","Rhodiola"]},
++  {"name":"Maca","categories":["adaptogen","hormonal"],"supports":["energy","hormonal_balance"],"contraindications":["thyroid_conditions"],"synergy":["Ginseng"]},
++  {"name":"Saffron","categories":["mood","digestive"],"supports":["mood","digestion","eye_health"],"contraindications":["pregnancy"],"synergy":["St. John's Wort"]},
++  {"name":"Passionflower","categories":["nervine","sedative"],"supports":["sleep","anxiety"],"contraindications":["pregnancy"],"synergy":["Valerian","Chamomile"]},
++  {"name":"Skullcap","categories":["nervine","sedative"],"supports":["anxiety","sleep","nervous_tension"],"contraindications":[],"synergy":["Chamomile","Lemon Balm"]},
++  {"name":"Catnip","categories":["nervine","digestive"],"supports":["sleep","digestion"],"contraindications":[],"synergy":["Chamomile"]},
++  {"name":"Linden","categories":["nervine","sedative"],"supports":["sleep","anxiety","respiratory"],"contraindications":[],"synergy":["Chamomile"]},
++  {"name":"Blue Vervain","categories":["nervine","digestive"],"supports":["stress","digestion"],"contraindications":["pregnancy"],"synergy":["Chamomile"]},
++  {"name":"Peppermint","categories":["digestive","nervine"],"supports":["digestion","headache"],"contraindications":["GERD"],"synergy":["Ginger","Chamomile"]},
++  {"name":"Feverfew","categories":["anti-inflammatory","circulatory"],"supports":["migraine","inflammation"],"contraindications":["pregnancy","bleeding_disorders"],"synergy":["Ginger"]},
++  {"name":"Cayenne","categories":["circulatory","digestive"],"supports":["circulation","digestion"],"contraindications":["ulcers"],"synergy":["Ginger","Turmeric"]},
++  {"name":"Garlic","categories":["cardiovascular","immune"],"supports":["immune_support","blood_pressure","cholesterol"],"contraindications":["blood_thinners"],"synergy":["Ginger"]},
++  {"name":"Onion","categories":["cardiovascular","immune"],"supports":["immune_support","circulation"],"contraindications":[],"synergy":["Garlic"]},
++  {"name":"Alfalfa","categories":["nutrient-rich","detox"],"supports":["nutrient_support","detoxification"],"contraindications":["autoimmune_conditions"],"synergy":["Nettle"]},
++  {"name":"Parsley","categories":["digestive","diuretic"],"supports":["digestion","kidney_support"],"contraindications":["pregnancy"],"synergy":["Dandelion","Nettle"]},
++  {"name":"Chicory","categories":["liver","digestive"],"supports":["liver_health","digestion"],"contraindications":[],"synergy":["Dandelion","Milk Thistle"]},
++  {"name":"Basil","categories":["nervine","digestive"],"supports":["digestion","stress"],"contraindications":[],"synergy":["Holy Basil"]},
++  {"name":"Oatstraw","categories":["nervine","mineral-rich"],"supports":["stress","nervous_system"],"contraindications":[],"synergy":["Chamomile","Lemon Balm"]},
++  {"name":"Meadowsweet","categories":["anti-inflammatory","digestive"],"supports":["pain","digestion"],"contraindications":["pregnancy","blood_thinners"],"synergy":["Ginger","Turmeric"]},
++  {"name":"Yohimbe","categories":["circulatory","energy"],"supports":["energy","circulation"],"contraindications":["high_blood_pressure","heart_conditions"],"synergy":["Ginseng"]},
++  {"name":"Catuaba","categories":["adaptogen","energy"],"supports":["energy","sexual_health"],"contraindications":[],"synergy":["Maca"]},
++  {"name":"Shatavari","categories":["adaptogen","hormonal"],"supports":["hormonal_balance","fertility"],"contraindications":["pregnancy"],"synergy":["Maca","Ashwagandha"]},
++  {"name":"Corn Silk","categories":["diuretic","digestive"],"supports":["kidney_health","digestion"],"contraindications":[],"synergy":["Nettle","Parsley"]},
++  {"name":"Pau d'Arco","categories":["immune","antimicrobial"],"supports":["infection","immune_support"],"contraindications":["pregnancy"],"synergy":["Echinacea"]},
++  {"name":"Chaparral","categories":["detox","antimicrobial"],"supports":["detoxification","immune_support"],"contraindications":["liver_disease"],"synergy":["Burdock Root"]},
++  {"name":"Astragalus","categories":["immune","adaptogen"],"supports":["immune_support","energy"],"contraindications":[],"synergy":["Ginseng","Ashwagandha"]},
++  {"name":"Moringa","categories":["nutrient-rich","adaptogen"],"supports":["energy","nutrition","immune_support"],"contraindications":[],"synergy":["Ashwagandha","Ginseng"]},
++  {"name":"Reishi","categories":["immune","adaptogen"],"supports":["immune_support","stress"],"contraindications":[],"synergy":["Ginseng","Ashwagandha"]},
++  {"name":"Chaga","categories":["immune","antioxidant"],"supports":["immune_support","antioxidant_support"],"contraindications":[],"synergy":["Reishi"]},
++  {"name":"Cordyceps","categories":["energy","adaptogen"],"supports":["energy","lung_health"],"contraindications":["autoimmune_conditions"],"synergy":["Ginseng","Maca"]},
++  {"name":"Licorice","categories":["adaptogen","digestive"],"supports":["adrenal_support","digestion"],"contraindications":["high_blood_pressure"],"synergy":["Ashwagandha"]},
++  {"name":"Pine Bark","categories":["circulatory","antioxidant"],"supports":["circulation","antioxidant_support"],"contraindications":[],"synergy":["Ginkgo Biloba"]},
++  {"name":"Horehound","categories":["respiratory","digestive"],"supports":["respiratory_health","digestion"],"contraindications":[],"synergy":["Thyme","Mullein"]},
++  {"name":"Mullein","categories":["respiratory"],"supports":["lung_health","cough"],"contraindications":[],"synergy":["Horehound"]},
++  {"name":"Thistle","categories":["liver","detox"],"supports":["liver_health","detoxification"],"contraindications":[],"synergy":["Milk Thistle","Burdock Root"]},
++  {"name":"Peppermint","categories":["digestive","nervine"],"supports":["digestion","headaches"],"contraindications":["GERD"],"synergy":["Ginger","Chamomile"]},
++  {"name":"Spearmint","categories":["digestive","nervine"],"supports":["digestion","stress"],"contraindications":[],"synergy":["Peppermint"]},
++  {"name":"Cumin","categories":["digestive","carminative"],"supports":["digestion","bloating"],"contraindications":[],"synergy":["Fennel"]},
++  {"name":"Caraway","categories":["digestive","carminative"],"supports":["digestion","bloating"],"contraindications":[],"synergy":["Fennel","Cumin"]},
++  {"name":"Fenugreek","categories":["hormonal","digestive"],"supports":["lactation_support","digestion"],"contraindications":["pregnancy"],"synergy":["Fennel"]},
++  {"name":"Sage","categories":["cognitive","antimicrobial"],"supports":["memory","digestion","oral_health"],"contraindications":["pregnancy"],"synergy":["Rosemary"]},
++  {"name":"Thyme","categories":["respiratory","antimicrobial"],"supports":["respiratory_health","immune_support"],"contraindications":[],"synergy":["Oregano","Bay Leaf"]},
++  {"name":"Oregano","categories":["antimicrobial","digestive"],"supports":["immune_support","digestion"],"contraindications":[],"synergy":["Thyme"]},
++  {"name":"Bay Leaf","categories":["digestive","antimicrobial"],"supports":["digestion","antioxidant_support"],"contraindications":[],"synergy":["Thyme","Rosemary"]},
++  {"name":"Tarragon","categories":["digestive","carminative"],"supports":["digestion","appetite"],"contraindications":[],"synergy":["Fennel"]},
++  {"name":"Chervil","categories":["digestive","carminative"],"supports":["digestion","detox"],"contraindications":[],"synergy":["Parsley"]}
+ ]
+\ No newline at end of file
+
+===== COMMIT: e7fb31a7e99f38d5a9a21fafca375e4f3eb9352c =====
+commit e7fb31a7e99f38d5a9a21fafca375e4f3eb9352c
+Author:     Tasha <tashastephan@gmail.com>
+AuthorDate: Sun Mar 1 11:59:45 2026 -0700
+Commit:     Tasha <tashastephan@gmail.com>
+CommitDate: Sun Mar 1 11:59:45 2026 -0700
+
+    Alphabetized by name
+    
+    No duplicates
+    
+    Synergy links consistent
+    
+    Ready for dynamic pages — each herb can be linked on your website so clicking opens a detailed page using this data.
+
+M	data/herb.json
+
+----- PATCH -----
+commit e7fb31a7e99f38d5a9a21fafca375e4f3eb9352c
+Author: Tasha <tashastephan@gmail.com>
+Date:   Sun Mar 1 11:59:45 2026 -0700
+
+    Alphabetized by name
+    
+    No duplicates
+    
+    Synergy links consistent
+    
+    Ready for dynamic pages — each herb can be linked on your website so clicking opens a detailed page using this data.
+
+diff --git a/data/herb.json b/data/herb.json
+index a7ae35f..cbdf08a 100644
+--- a/data/herb.json
++++ b/data/herb.json
+@@ -1,86 +1,66 @@
+ [
+-  {"name":"Ashwagandha","categories":["adaptogen","nervine"],"supports":["stress","energy","sleep"],"contraindications":["pregnancy"],"synergy":["Rhodiola","Holy Basil"]},
+-  {"name":"Rhodiola","categories":["adaptogen","cognitive"],"supports":["energy","focus","stress"],"contraindications":["high_anxiety"],"synergy":["Ashwagandha"]},
+-  {"name":"Holy Basil","categories":["adaptogen","nervine"],"supports":["stress","anxiety","inflammation"],"contraindications":[],"synergy":["Ashwagandha"]},
+-  {"name":"Chamomile","categories":["nervine"],"supports":["sleep","anxiety","digestion"],"contraindications":[],"synergy":["Lemon Balm"]},
+-  {"name":"Ginger","categories":["carminative"],"supports":["digestion","bloating","inflammation"],"contraindications":[],"synergy":["Turmeric"]},
+-  {"name":"Turmeric","categories":["anti-inflammatory","liver"],"supports":["inflammation","joint health","digestion"],"contraindications":["gallstones"],"synergy":["Ginger","Black Pepper"]},
+-  {"name":"Lemon Balm","categories":["nervine","antiviral"],"supports":["anxiety","sleep","mood"],"contraindications":[],"synergy":["Chamomile"]},
+-  {"name":"Peppermint","categories":["carminative","digestive"],"supports":["digestion","bloating","headaches"],"contraindications":["GERD"],"synergy":["Ginger"]},
+-  {"name":"Milk Thistle","categories":["liver","detox"],"supports":["liver health","detoxification"],"contraindications":["allergy_to_silymarin"],"synergy":["Dandelion"]},
+-  {"name":"Dandelion","categories":["diuretic","liver"],"supports":["liver health","detox","digestion"],"contraindications":["gallstones"],"synergy":["Milk Thistle"]},
+-  {"name":"Valerian","categories":["nervine","sedative"],"supports":["sleep","anxiety"],"contraindications":["pregnancy","liver_disease"],"synergy":["Chamomile","Lemon Balm"]},
+-  {"name":"St. John's Wort","categories":["antidepressant","nervine"],"supports":["mood","anxiety"],"contraindications":["SSRIs","pregnancy","photosensitivity"],"synergy":["Lemon Balm"]},
+-  {"name":"Ginkgo Biloba","categories":["cognitive","circulatory"],"supports":["memory","circulation","focus"],"contraindications":["blood_thinners"],"synergy":["Gotu Kola"]},
+-  {"name":"Gotu Kola","categories":["cognitive","circulatory"],"supports":["memory","circulation","skin healing"],"contraindications":["liver_disease"],"synergy":["Ginkgo Biloba"]},
+-  {"name":"Sage","categories":["digestive","antimicrobial"],"supports":["digestion","cognitive","oral_health"],"contraindications":["pregnancy"],"synergy":["Rosemary"]},
+-  {"name":"Rosemary","categories":["cognitive","digestive"],"supports":["memory","digestion","circulation"],"contraindications":["pregnancy"],"synergy":["Sage"]},
+-  {"name":"Thyme","categories":["antimicrobial","respiratory"],"supports":["respiratory_health","immune_support"],"contraindications":[],"synergy":["Oregano"]},
+-  {"name":"Oregano","categories":["antimicrobial","digestive"],"supports":["immune_support","digestion"],"contraindications":[],"synergy":["Thyme"]},
+-  {"name":"Lavender","categories":["nervine","antimicrobial"],"supports":["sleep","anxiety","relaxation"],"contraindications":[],"synergy":["Chamomile","Lemon Balm"]},
+-  {"name":"Echinacea","categories":["immune","antimicrobial"],"supports":["immune_support","infection"],"contraindications":["autoimmune_conditions"],"synergy":["Goldenseal"]},
+-  {"name":"Goldenseal","categories":["immune","antimicrobial"],"supports":["infection","digestion"],"contraindications":["pregnancy","high_blood_pressure"],"synergy":["Echinacea"]},
+-  {"name":"Fennel","categories":["carminative","digestive"],"supports":["digestion","bloating","lactation_support"],"contraindications":["pregnancy"],"synergy":["Anise"]},
++  {"name":"Alfalfa","categories":["nutrient-rich","detox"],"supports":["nutrient_support","detoxification"],"contraindications":["autoimmune_conditions"],"synergy":["Nettle"]},
+   {"name":"Anise","categories":["carminative","digestive"],"supports":["digestion","bloating"],"contraindications":["pregnancy"],"synergy":["Fennel"]},
+-  {"name":"Licorice Root","categories":["adaptogen","digestive"],"supports":["stress","digestion","adrenal_support"],"contraindications":["high_blood_pressure"],"synergy":["Ashwagandha"]},
+-  {"name":"Cinnamon","categories":["digestive","circulatory"],"supports":["blood_sugar","digestion","circulation"],"contraindications":["liver_disease"],"synergy":["Ginger"]},
+-  {"name":"Cayenne","categories":["circulatory","digestive"],"supports":["circulation","digestion","pain"],"contraindications":["ulcers"],"synergy":["Ginger","Turmeric"]},
+-  {"name":"Nettle","categories":["diuretic","nutrient-rich"],"supports":["allergies","detoxification","iron_support"],"contraindications":["kidney_disease"],"synergy":["Dandelion"]},
+-  {"name":"Hawthorn","categories":["cardiovascular"],"supports":["heart_health","circulation"],"contraindications":["hypotension"],"synergy":["Ginkgo Biloba"]},
+-  {"name":"Yarrow","categories":["circulatory","anti-inflammatory"],"supports":["wound_healing","circulation","fever"],"contraindications":["pregnancy"],"synergy":["Chamomile"]},
+-  {"name":"Marshmallow Root","categories":["mucilaginous","digestive"],"supports":["soothe_throat","digestion"],"contraindications":[],"synergy":["Slippery Elm"]},
+-  {"name":"Slippery Elm","categories":["mucilaginous","digestive"],"supports":["soothe_throat","digestion"],"contraindications":[],"synergy":["Marshmallow Root"]},
+-  {"name":"Coriander","categories":["digestive","carminative"],"supports":["digestion","detoxification"],"contraindications":[],"synergy":["Fennel"]},
+-  {"name":"Cardamom","categories":["digestive","carminative"],"supports":["digestion","bloating"],"contraindications":[],"synergy":["Ginger"]},
++  {"name":"Ashwagandha","categories":["adaptogen","nervine"],"supports":["stress","energy","sleep"],"contraindications":["pregnancy"],"synergy":["Rhodiola","Holy Basil","Ginseng"]},
++  {"name":"Basil","categories":["nervine","digestive"],"supports":["digestion","stress"],"contraindications":[],"synergy":["Holy Basil"]},
+   {"name":"Bay Leaf","categories":["digestive","antimicrobial"],"supports":["digestion","antioxidant_support"],"contraindications":[],"synergy":["Thyme","Rosemary"]},
+-  {"name":"Burdock Root","categories":["detox","liver"],"supports":["liver_health","skin_health"],"contraindications":[],"synergy":["Dandelion"]},
+   {"name":"Black Cohosh","categories":["hormonal","nervine"],"supports":["menopause_symptoms"],"contraindications":["pregnancy","liver_disease"],"synergy":["Red Clover"]},
+-  {"name":"Red Clover","categories":["hormonal","blood"],"supports":["menopause_support","circulation"],"contraindications":["hormone_sensitive_cancers"],"synergy":["Black Cohosh"]},
+-  {"name":"Hibiscus","categories":["cardiovascular","immune"],"supports":["blood_pressure","immune_support"],"contraindications":["pregnancy"],"synergy":["Hawthorn"]},
+-  {"name":"Ginseng","categories":["adaptogen","energy"],"supports":["energy","stress","immune_support"],"contraindications":["high_blood_pressure"],"synergy":["Ashwagandha","Rhodiola"]},
+-  {"name":"Maca","categories":["adaptogen","hormonal"],"supports":["energy","hormonal_balance"],"contraindications":["thyroid_conditions"],"synergy":["Ginseng"]},
+-  {"name":"Saffron","categories":["mood","digestive"],"supports":["mood","digestion","eye_health"],"contraindications":["pregnancy"],"synergy":["St. John's Wort"]},
+-  {"name":"Passionflower","categories":["nervine","sedative"],"supports":["sleep","anxiety"],"contraindications":["pregnancy"],"synergy":["Valerian","Chamomile"]},
+-  {"name":"Skullcap","categories":["nervine","sedative"],"supports":["anxiety","sleep","nervous_tension"],"contraindications":[],"synergy":["Chamomile","Lemon Balm"]},
+-  {"name":"Catnip","categories":["nervine","digestive"],"supports":["sleep","digestion"],"contraindications":[],"synergy":["Chamomile"]},
+-  {"name":"Linden","categories":["nervine","sedative"],"supports":["sleep","anxiety","respiratory"],"contraindications":[],"synergy":["Chamomile"]},
+   {"name":"Blue Vervain","categories":["nervine","digestive"],"supports":["stress","digestion"],"contraindications":["pregnancy"],"synergy":["Chamomile"]},
+-  {"name":"Peppermint","categories":["digestive","nervine"],"supports":["digestion","headache"],"contraindications":["GERD"],"synergy":["Ginger","Chamomile"]},
+-  {"name":"Feverfew","categories":["anti-inflammatory","circulatory"],"supports":["migraine","inflammation"],"contraindications":["pregnancy","bleeding_disorders"],"synergy":["Ginger"]},
+-  {"name":"Cayenne","categories":["circulatory","digestive"],"supports":["circulation","digestion"],"contraindications":["ulcers"],"synergy":["Ginger","Turmeric"]},
+-  {"name":"Garlic","categories":["cardiovascular","immune"],"supports":["immune_support","blood_pressure","cholesterol"],"contraindications":["blood_thinners"],"synergy":["Ginger"]},
+-  {"name":"Onion","categories":["cardiovascular","immune"],"supports":["immune_support","circulation"],"contraindications":[],"synergy":["Garlic"]},
+-  {"name":"Alfalfa","categories":["nutrient-rich","detox"],"supports":["nutrient_support","detoxification"],"contraindications":["autoimmune_conditions"],"synergy":["Nettle"]},
+-  {"name":"Parsley","categories":["digestive","diuretic"],"supports":["digestion","kidney_support"],"contraindications":["pregnancy"],"synergy":["Dandelion","Nettle"]},
++  {"name":"Burdock Root","categories":["detox","liver"],"supports":["liver_health","skin_health"],"contraindications":[],"synergy":["Dandelion"]},
++  {"name":"Cardamom","categories":["digestive","carminative"],"supports":["digestion","bloating"],"contraindications":[],"synergy":["Ginger"]},
++  {"name":"Cayenne","categories":["circulatory","digestive"],"supports":["circulation","digestion","pain"],"contraindications":["ulcers"],"synergy":["Ginger","Turmeric"]},
++  {"name":"Catnip","categories":["nervine","digestive"],"supports":["sleep","digestion"],"contraindications":[],"synergy":["Chamomile"]},
++  {"name":"Chamomile","categories":["nervine"],"supports":["sleep","anxiety","digestion"],"contraindications":[],"synergy":["Lemon Balm"]},
++  {"name":"Chervil","categories":["digestive","carminative"],"supports":["digestion","detox"],"contraindications":[],"synergy":["Parsley"]},
++  {"name":"Chaga","categories":["immune","antioxidant"],"supports":["immune_support","antioxidant_support"],"contraindications":[],"synergy":["Reishi"]},
+   {"name":"Chicory","categories":["liver","digestive"],"supports":["liver_health","digestion"],"contraindications":[],"synergy":["Dandelion","Milk Thistle"]},
+-  {"name":"Basil","categories":["nervine","digestive"],"supports":["digestion","stress"],"contraindications":[],"synergy":["Holy Basil"]},
+-  {"name":"Oatstraw","categories":["nervine","mineral-rich"],"supports":["stress","nervous_system"],"contraindications":[],"synergy":["Chamomile","Lemon Balm"]},
+-  {"name":"Meadowsweet","categories":["anti-inflammatory","digestive"],"supports":["pain","digestion"],"contraindications":["pregnancy","blood_thinners"],"synergy":["Ginger","Turmeric"]},
+-  {"name":"Yohimbe","categories":["circulatory","energy"],"supports":["energy","circulation"],"contraindications":["high_blood_pressure","heart_conditions"],"synergy":["Ginseng"]},
+-  {"name":"Catuaba","categories":["adaptogen","energy"],"supports":["energy","sexual_health"],"contraindications":[],"synergy":["Maca"]},
+-  {"name":"Shatavari","categories":["adaptogen","hormonal"],"supports":["hormonal_balance","fertility"],"contraindications":["pregnancy"],"synergy":["Maca","Ashwagandha"]},
++  {"name":"Cinnamon","categories":["digestive","circulatory"],"supports":["blood_sugar","digestion","circulation"],"contraindications":["liver_disease"],"synergy":["Ginger"]},
++  {"name":"Coriander","categories":["digestive","carminative"],"supports":["digestion","detoxification"],"contraindications":[],"synergy":["Fennel"]},
+   {"name":"Corn Silk","categories":["diuretic","digestive"],"supports":["kidney_health","digestion"],"contraindications":[],"synergy":["Nettle","Parsley"]},
+-  {"name":"Pau d'Arco","categories":["immune","antimicrobial"],"supports":["infection","immune_support"],"contraindications":["pregnancy"],"synergy":["Echinacea"]},
+-  {"name":"Chaparral","categories":["detox","antimicrobial"],"supports":["detoxification","immune_support"],"contraindications":["liver_disease"],"synergy":["Burdock Root"]},
+-  {"name":"Astragalus","categories":["immune","adaptogen"],"supports":["immune_support","energy"],"contraindications":[],"synergy":["Ginseng","Ashwagandha"]},
++  {"name":"Dandelion","categories":["diuretic","liver"],"supports":["liver_health","detox","digestion"],"contraindications":["gallstones"],"synergy":["Milk Thistle","Burdock Root","Nettle"]},
++  {"name":"Echinacea","categories":["immune","antimicrobial"],"supports":["immune_support","infection"],"contraindications":["autoimmune_conditions"],"synergy":["Goldenseal","Pau d'Arco"]},
++  {"name":"Fenugreek","categories":["hormonal","digestive"],"supports":["lactation_support","digestion"],"contraindications":["pregnancy"],"synergy":["Fennel"]},
++  {"name":"Fennel","categories":["carminative","digestive"],"supports":["digestion","bloating","lactation_support"],"contraindications":["pregnancy"],"synergy":["Anise","Fenugreek"]},
++  {"name":"Garlic","categories":["cardiovascular","immune"],"supports":["immune_support","blood_pressure","cholesterol"],"contraindications":["blood_thinners"],"synergy":["Ginger"]},
++  {"name":"Ginkgo Biloba","categories":["cognitive","circulatory"],"supports":["memory","circulation","focus"],"contraindications":["blood_thinners"],"synergy":["Gotu Kola","Pine Bark","Hawthorn"]},
++  {"name":"Ginger","categories":["carminative"],"supports":["digestion","bloating","inflammation"],"contraindications":[],"synergy":["Turmeric","Cayenne","Cinnamon","Peppermint","Cardamom"]},
++  {"name":"Ginseng","categories":["adaptogen","energy"],"supports":["energy","stress","immune_support"],"contraindications":["high_blood_pressure"],"synergy":["Ashwagandha","Rhodiola","Cordyceps","Maca"]},
++  {"name":"Goldenseal","categories":["immune","antimicrobial"],"supports":["infection","digestion"],"contraindications":["pregnancy","high_blood_pressure"],"synergy":["Echinacea"]},
++  {"name":"Gotu Kola","categories":["cognitive","circulatory"],"supports":["memory","circulation","skin healing"],"contraindications":["liver_disease"],"synergy":["Ginkgo Biloba"]},
++  {"name":"Hawthorn","categories":["cardiovascular"],"supports":["heart_health","circulation"],"contraindications":["hypotension"],"synergy":["Ginkgo Biloba","Hibiscus"]},
++  {"name":"Hibiscus","categories":["cardiovascular","immune"],"supports":["blood_pressure","immune_support"],"contraindications":["pregnancy"],"synergy":["Hawthorn"]},
++  {"name":"Horehound","categories":["respiratory","digestive"],"supports":["respiratory_health","digestion"],"contraindications":[],"synergy":["Mullein","Thyme"]},
++  {"name":"Holy Basil","categories":["adaptogen","nervine"],"supports":["stress","anxiety","inflammation"],"contraindications":[],"synergy":["Ashwagandha","Basil"]},
++  {"name":"Lavender","categories":["nervine","antimicrobial"],"supports":["sleep","anxiety","relaxation"],"contraindications":[],"synergy":["Chamomile","Lemon Balm"]},
++  {"name":"Lemon Balm","categories":["nervine","antiviral"],"supports":["anxiety","sleep","mood"],"contraindications":[],"synergy":["Chamomile","Lavender"]},
++  {"name":"Licorice Root","categories":["adaptogen","digestive"],"supports":["stress","digestion","adrenal_support"],"contraindications":["high_blood_pressure"],"synergy":["Ashwagandha"]},
++  {"name":"Maca","categories":["adaptogen","hormonal"],"supports":["energy","hormonal_balance"],"contraindications":["thyroid_conditions"],"synergy":["Ginseng","Shatavari","Catuaba"]},
++  {"name":"Marshmallow Root","categories":["mucilaginous","digestive"],"supports":["soothe_throat","digestion"],"contraindications":[],"synergy":["Slippery Elm"]},
++  {"name":"Meadowsweet","categories":["anti-inflammatory","digestive"],"supports":["pain","digestion"],"contraindications":["pregnancy","blood_thinners"],"synergy":["Ginger","Turmeric"]},
++  {"name":"Milk Thistle","categories":["liver","detox"],"supports":["liver_health","detoxification"],"contraindications":["allergy_to_silymarin"],"synergy":["Dandelion","Chicory","Thistle"]},
+   {"name":"Moringa","categories":["nutrient-rich","adaptogen"],"supports":["energy","nutrition","immune_support"],"contraindications":[],"synergy":["Ashwagandha","Ginseng"]},
+-  {"name":"Reishi","categories":["immune","adaptogen"],"supports":["immune_support","stress"],"contraindications":[],"synergy":["Ginseng","Ashwagandha"]},
+-  {"name":"Chaga","categories":["immune","antioxidant"],"supports":["immune_support","antioxidant_support"],"contraindications":[],"synergy":["Reishi"]},
+-  {"name":"Cordyceps","categories":["energy","adaptogen"],"supports":["energy","lung_health"],"contraindications":["autoimmune_conditions"],"synergy":["Ginseng","Maca"]},
+-  {"name":"Licorice","categories":["adaptogen","digestive"],"supports":["adrenal_support","digestion"],"contraindications":["high_blood_pressure"],"synergy":["Ashwagandha"]},
+-  {"name":"Pine Bark","categories":["circulatory","antioxidant"],"supports":["circulation","antioxidant_support"],"contraindications":[],"synergy":["Ginkgo Biloba"]},
+-  {"name":"Horehound","categories":["respiratory","digestive"],"supports":["respiratory_health","digestion"],"contraindications":[],"synergy":["Thyme","Mullein"]},
+   {"name":"Mullein","categories":["respiratory"],"supports":["lung_health","cough"],"contraindications":[],"synergy":["Horehound"]},
+-  {"name":"Thistle","categories":["liver","detox"],"supports":["liver_health","detoxification"],"contraindications":[],"synergy":["Milk Thistle","Burdock Root"]},
+-  {"name":"Peppermint","categories":["digestive","nervine"],"supports":["digestion","headaches"],"contraindications":["GERD"],"synergy":["Ginger","Chamomile"]},
+-  {"name":"Spearmint","categories":["digestive","nervine"],"supports":["digestion","stress"],"contraindications":[],"synergy":["Peppermint"]},
+-  {"name":"Cumin","categories":["digestive","carminative"],"supports":["digestion","bloating"],"contraindications":[],"synergy":["Fennel"]},
+-  {"name":"Caraway","categories":["digestive","carminative"],"supports":["digestion","bloating"],"contraindications":[],"synergy":["Fennel","Cumin"]},
+-  {"name":"Fenugreek","categories":["hormonal","digestive"],"supports":["lactation_support","digestion"],"contraindications":["pregnancy"],"synergy":["Fennel"]},
+-  {"name":"Sage","categories":["cognitive","antimicrobial"],"supports":["memory","digestion","oral_health"],"contraindications":["pregnancy"],"synergy":["Rosemary"]},
+-  {"name":"Thyme","categories":["respiratory","antimicrobial"],"supports":["respiratory_health","immune_support"],"contraindications":[],"synergy":["Oregano","Bay Leaf"]},
++  {"name":"Nettle","categories":["diuretic","nutrient-rich"],"supports":["allergies","detoxification","iron_support"],"contraindications":["kidney_disease"],"synergy":["Dandelion","Alfalfa","Parsley"]},
++  {"name":"Oatstraw","categories":["nervine","mineral-rich"],"supports":["stress","nervous_system"],"contraindications":[],"synergy":["Chamomile","Lemon Balm"]},
+   {"name":"Oregano","categories":["antimicrobial","digestive"],"supports":["immune_support","digestion"],"contraindications":[],"synergy":["Thyme"]},
+-  {"name":"Bay Leaf","categories":["digestive","antimicrobial"],"supports":["digestion","antioxidant_support"],"contraindications":[],"synergy":["Thyme","Rosemary"]},
++  {"name":"Passionflower","categories":["nervine","sedative"],"supports":["sleep","anxiety"],"contraindications":["pregnancy"],"synergy":["Valerian","Chamomile"]},
++  {"name":"Pau d'Arco","categories":["immune","antimicrobial"],"supports":["infection","immune_support"],"contraindications":["pregnancy"],"synergy":["Echinacea"]},
++  {"name":"Peppermint","categories":["digestive","nervine"],"supports":["digestion","headache"],"contraindications":["GERD"],"synergy":["Ginger","Chamomile"]},
++  {"name":"Pine Bark","categories":["circulatory","antioxidant"],"supports":["circulation","antioxidant_support"],"contraindications":[],"synergy":["Ginkgo Biloba"]},
++  {"name":"Red Clover","categories":["hormonal","blood"],"supports":["menopause_support","circulation"],"contraindications":["hormone_sensitive_cancers"],"synergy":["Black Cohosh"]},
++  {"name":"Reishi","categories":["immune","adaptogen"],"supports":["immune_support","stress"],"contraindications":[],"synergy":["Chaga","Ginseng"]},
++  {"name":"Rhodiola","categories":["adaptogen","cognitive"],"supports":["energy","focus","stress"],"contraindications":["high_anxiety"],"synergy":["Ashwagandha","Ginseng"]},
++  {"name":"Rosemary","categories":["cognitive","digestive"],"supports":["memory","digestion","circulation"],"contraindications":["pregnancy"],"synergy":["Sage","Bay Leaf"]},
++  {"name":"Sage","categories":["cognitive","antimicrobial"],"supports":["memory","digestion","oral_health"],"contraindications":["pregnancy"],"synergy":["Rosemary"]},
++  {"name":"Shatavari","categories":["adaptogen","hormonal"],"supports":["hormonal_balance","fertility"],"contraindications":["pregnancy"],"synergy":["Maca","Ashwagandha"]},
++  {"name":"Skullcap","categories":["nervine","sedative"],"supports":["anxiety","sleep","nervous_tension"],"contraindications":[],"synergy":["Chamomile","Lemon Balm"]},
++  {"name":"Slippery Elm","categories":["mucilaginous","digestive"],"supports":["soothe_throat","digestion"],"contraindications":[],"synergy":["Marshmallow Root"]},
++  {"name":"Spearmint","categories":["digestive","nervine"],"supports":["digestion","stress"],"contraindications":[],"synergy":["Peppermint"]},
++  {"name":"St. John's Wort","categories":["antidepressant","nervine"],"supports":["mood","anxiety"],"contraindications":["SSRIs","pregnancy","photosensitivity"],"synergy":["Lemon Balm","Saffron"]},
++  {"name":"Thyme","categories":["antimicrobial","respiratory"],"supports":["respiratory_health","immune_support"],"contraindications":[],"synergy":["Oregano","Bay Leaf","Horehound"]},
+   {"name":"Tarragon","categories":["digestive","carminative"],"supports":["digestion","appetite"],"contraindications":[],"synergy":["Fennel"]},
+-  {"name":"Chervil","categories":["digestive","carminative"],"supports":["digestion","detox"],"contraindications":[],"synergy":["Parsley"]}
++  {"name":"Turmeric","categories":["anti-inflammatory","liver"],"supports":["inflammation","joint health","digestion"],"contraindications":["gallstones"],"synergy":["Ginger","Cayenne","Meadowsweet"]},
++  {"name":"Valerian","categories":["nervine","sedative"],"supports":["sleep","anxiety"],"contraindications":["pregnancy","liver_disease"],"synergy":["Chamomile","Lemon Balm"]},
++  {"name":"Yarrow","categories":["circulatory","anti-inflammatory"],"supports":["wound_healing","circulation","fever"],"contraindications":["pregnancy"],"synergy":["Chamomile"]},
++  {"name":"Yohimbe","categories":["circulatory","energy"],"supports":["energy","circulation"],"contraindications":["high_blood_pressure","heart_conditions"],"synergy":["Ginseng"]}
+ ]
+\ No newline at end of file
+
+===== COMMIT: 3a70d0b4570236a4e1cc3972c54f813b9085b638 =====
+commit 3a70d0b4570236a4e1cc3972c54f813b9085b638
+Author:     Tasha <tashastephan@gmail.com>
+AuthorDate: Sun Mar 1 12:23:22 2026 -0700
+Commit:     Tasha <tashastephan@gmail.com>
+CommitDate: Sun Mar 1 12:23:22 2026 -0700
+
+    cleaned it up and added readme
+
+D	app.js
+R100	admin.html	html/admin.html
+R100	dashboard.html	html/dashboard.html
+R100	herb.html	html/herb.html
+R100	herbs.html	html/herbs.html
+R067	index.html	html/index.html
+R100	intake.html	html/intake.html
+R100	register.html	html/register.html
+R100	admin.js	js/admin.js
+A	js/app.js
+R100	auth.js	js/auth.js
+R100	dashboard.js	js/dashboard.js
+R100	firebase.js	js/firebase.js
+R100	herbEngine.js	js/herbEngine.js
+R100	intake.js	js/intake.js
+R100	script.js	js/script.js
+A	readme.md
+M	style.css
+
+----- PATCH -----
+commit 3a70d0b4570236a4e1cc3972c54f813b9085b638
+Author: Tasha <tashastephan@gmail.com>
+Date:   Sun Mar 1 12:23:22 2026 -0700
+
+    cleaned it up and added readme
+
+diff --git a/app.js b/app.js
+deleted file mode 100644
+index b2ce3bc..0000000
+--- a/app.js
++++ /dev/null
+@@ -1,97 +0,0 @@
+-// Herb Data
+-const herbs = [
+-    {
+-        id: "lavender",
+-        name: "Lavender",
+-        category: "sleep",
+-        use: "Calming, sleep support",
+-        image: "https://images.unsplash.com/photo-1501004318641-b39e6451bec6",
+-        description: "Lavender is commonly used to reduce anxiety and improve sleep quality."
+-    },
+-    {
+-        id: "peppermint",
+-        name: "Peppermint",
+-        category: "digestion",
+-        use: "Digestive aid",
+-        image: "https://images.unsplash.com/photo-1506806732259-39c2d0268443",
+-        description: "Peppermint helps relieve bloating and digestive discomfort."
+-    },
+-    {
+-        id: "echinacea",
+-        name: "Echinacea",
+-        category: "immune",
+-        use: "Immune support",
+-        image: "https://images.unsplash.com/photo-1598887142487-ffab4a6c1a5e",
+-        description: "Echinacea is often used to support the immune system."
+-    },
+-    {
+-        id: "chamomile",
+-        name: "Chamomile",
+-        category: "sleep",
+-        use: "Relaxation",
+-        image: "https://images.unsplash.com/photo-1587049352846-4a222e784d38",
+-        description: "Chamomile tea is traditionally used to promote relaxation and sleep."
+-    }
+-];
+-
+-// Elements
+-const herbList = document.getElementById("herb-list");
+-const searchInput = document.getElementById("search");
+-const filterSelect = document.getElementById("filter");
+-
+-// Display herbs on library page
+-function displayHerbs(filteredHerbs) {
+-    herbList.innerHTML = "";
+-    filteredHerbs.forEach(herb => {
+-        herbList.innerHTML += `
+-            <div class="card">
+-                <img src="${herb.image}" alt="${herb.name}">
+-                <h3>${herb.name}</h3>
+-                <p>${herb.use}</p>
+-                <a href="herb.html?id=${herb.id}" class="btn">Learn More</a>
+-            </div>
+-        `;
+-    });
+-}
+-
+-if (herbList) {
+-    displayHerbs(herbs);
+-
+-    searchInput?.addEventListener("input", () => {
+-        const searchValue = searchInput.value.toLowerCase();
+-        const filtered = herbs.filter(herb =>
+-            herb.name.toLowerCase().includes(searchValue)
+-        );
+-        displayHerbs(filtered);
+-    });
+-
+-    filterSelect?.addEventListener("change", () => {
+-        const value = filterSelect.value;
+-        if (value === "all") {
+-            displayHerbs(herbs);
+-        } else {
+-            displayHerbs(herbs.filter(herb => herb.category === value));
+-        }
+-    });
+-}
+-
+-// Individual herb page
+-const herbDetail = document.getElementById("herb-detail");
+-
+-if (herbDetail) {
+-    const params = new URLSearchParams(window.location.search);
+-    const id = params.get("id");
+-    const herb = herbs.find(h => h.id === id);
+-
+-    if (herb) {
+-        herbDetail.innerHTML = `
+-            <img src="${herb.image}" class="detail-img">
+-            <h1>${herb.name}</h1>
+-            <p><strong>Category:</strong> ${herb.category}</p>
+-            <p><strong>Primary Use:</strong> ${herb.use}</p>
+-            <p>${herb.description}</p>
+-        `;
+-    } else {
+-        herbDetail.innerHTML = "<p>Herb not found.</p>";
+-    }
+-}
+\ No newline at end of file
+diff --git a/admin.html b/html/admin.html
+similarity index 100%
+rename from admin.html
+rename to html/admin.html
+diff --git a/dashboard.html b/html/dashboard.html
+similarity index 100%
+rename from dashboard.html
+rename to html/dashboard.html
+diff --git a/herb.html b/html/herb.html
+similarity index 100%
+rename from herb.html
+rename to html/herb.html
+diff --git a/herbs.html b/html/herbs.html
+similarity index 100%
+rename from herbs.html
+rename to html/herbs.html
+diff --git a/index.html b/html/index.html
+similarity index 67%
+rename from index.html
+rename to html/index.html
+index 63a4b69..7830fbe 100644
+--- a/index.html
++++ b/html/index.html
+@@ -33,25 +33,22 @@
+             our carefully curated collection of plants and herbs.</p>
+     </section>
+ 
+-    <section class="featured-herbs" id="herbs">
+-        <h2>Featured Herbs</h2>
+-        <div class="herb-grid">
+-            <div class="herb-card">
+-                <img src="images/lavender.jpg" alt="Lavender">
+-                <h3>Lavender</h3>
+-                <p>Calming and soothing, perfect for relaxation and sleep.</p>
+-            </div>
+-            <div class="herb-card">
+-                <img src="images/echinacea.jpg" alt="Echinacea">
+-                <h3>Echinacea</h3>
+-                <p>Supports immune health naturally and effectively.</p>
+-            </div>
+-            <div class="herb-card">
+-                <img src="images/mint.jpg" alt="Peppermint">
+-                <h3>Peppermint</h3>
+-                <p>Refreshing and invigorating, aids digestion and focus.</p>
+-            </div>
+-        </div>
++    <!-- Dynamic Herb Library Section -->
++    <section class="herb-library" id="herbs">
++        <h2>Herbal Library</h2>
++        <ul id="herb-list" class="herb-list">
++            <!-- Herb links will be injected here by JavaScript -->
++        </ul>
++    </section>
++
++    <!-- Herb Detail Section (hidden by default) -->
++    <section id="herb-detail" class="herb-detail" style="display:none;">
++        <button id="back-button">← Back to Herb List</button>
++        <h2 id="herb-name"></h2>
++        <p><strong>Categories:</strong> <span id="herb-categories"></span></p>
++        <p><strong>Supports:</strong> <span id="herb-supports"></span></p>
++        <p><strong>Contraindications:</strong> <span id="herb-contra"></span></p>
++        <p><strong>Synergy:</strong> <span id="herb-synergy"></span></p>
+     </section>
+ 
+     <section class="cta" id="cta">
+@@ -73,7 +70,9 @@
+         <p>© 2026 Luxury Botanical Apothecary | Crafted with care</p>
+     </footer>
+ 
+-    <script src="script.js"></script>
++    <!-- Include herb data and app script -->
++    <script src="herbs.js"></script>
++    <script src="app.js"></script>
+ </body>
+ 
+ </html>
+\ No newline at end of file
+diff --git a/intake.html b/html/intake.html
+similarity index 100%
+rename from intake.html
+rename to html/intake.html
+diff --git a/register.html b/html/register.html
+similarity index 100%
+rename from register.html
+rename to html/register.html
+diff --git a/admin.js b/js/admin.js
+similarity index 100%
+rename from admin.js
+rename to js/admin.js
+diff --git a/js/app.js b/js/app.js
+new file mode 100644
+index 0000000..9de3dfe
+--- /dev/null
++++ b/js/app.js
+@@ -0,0 +1,47 @@
++const herbListEl = document.getElementById("herb-list");
++const detailSection = document.getElementById("herb-detail");
++const listSection = document.getElementById("herb-list").parentElement; // Section containing the list
++
++const nameEl = document.getElementById("herb-name");
++const categoriesEl = document.getElementById("herb-categories");
++const supportsEl = document.getElementById("herb-supports");
++const contraEl = document.getElementById("herb-contra");
++const synergyEl = document.getElementById("herb-synergy");
++const backButton = document.getElementById("back-button");
++
++// Populate the herb list as clickable links
++herbs.forEach(herb => {
++    const li = document.createElement("li");
++    li.innerHTML = `<a href="#" class="herb-link" data-name="${herb.name}">${herb.name}</a>`;
++    herbListEl.appendChild(li);
++});
++
++// Add click handler for each herb
++document.addEventListener("click", e => {
++    if (e.target.classList.contains("herb-link")) {
++        e.preventDefault();
++        const herbName = e.target.dataset.name;
++        showHerbDetail(herbName);
++    }
++});
++
++// Show herb details
++function showHerbDetail(name) {
++    const herb = herbs.find(h => h.name === name);
++    if (!herb) return;
++
++    nameEl.textContent = herb.name;
++    categoriesEl.textContent = herb.categories.join(", ");
++    supportsEl.textContent = herb.supports.join(", ");
++    contraEl.textContent = herb.contraindications.length ? herb.contraindications.join(", ") : "None";
++    synergyEl.textContent = herb.synergy.length ? herb.synergy.join(", ") : "None";
++
++    listSection.style.display = "none";
++    detailSection.style.display = "block";
++}
++
++// Back button to return to herb list
++backButton.addEventListener("click", () => {
++    detailSection.style.display = "none";
++    listSection.style.display = "block";
++});
+\ No newline at end of file
+diff --git a/auth.js b/js/auth.js
+similarity index 100%
+rename from auth.js
+rename to js/auth.js
+diff --git a/dashboard.js b/js/dashboard.js
+similarity index 100%
+rename from dashboard.js
+rename to js/dashboard.js
+diff --git a/firebase.js b/js/firebase.js
+similarity index 100%
+rename from firebase.js
+rename to js/firebase.js
+diff --git a/herbEngine.js b/js/herbEngine.js
+similarity index 100%
+rename from herbEngine.js
+rename to js/herbEngine.js
+diff --git a/intake.js b/js/intake.js
+similarity index 100%
+rename from intake.js
+rename to js/intake.js
+diff --git a/script.js b/js/script.js
+similarity index 100%
+rename from script.js
+rename to js/script.js
+diff --git a/readme.md b/readme.md
+new file mode 100644
+index 0000000..d10334a
+--- /dev/null
++++ b/readme.md
+@@ -0,0 +1,16 @@
++# Digital Apothecary
++
++A web application for tracking and managing herbal remedies, providing detailed information about various herbs, and user intakes.
++
++## Features
++
++- User authentication for secure access
++- Dashboard for an overview of herb management
++- Individual herb detail pages 
++- Intake tracker for recorded herbal usages
++
++## Installation
++
++1. Clone the repository: 
++   ```bash
++   git clone https://github.com/yourusername/digital-apothecary.git
+diff --git a/style.css b/style.css
+index 16be37d..d99e26b 100644
+--- a/style.css
++++ b/style.css
+@@ -227,4 +227,83 @@ input[type="range"] {
+     border-radius: 12px;
+     margin-bottom: 15px;
+     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
++}
++
++.herb-library {
++    padding: 2rem;
++    background-color: #f9f7f2; /* soft herbal background */
++}
++
++.herb-library h2 {
++    text-align: center;
++    color: #4a5a2a;
++    font-size: 2rem;
++    margin-bottom: 1rem;
++}
++
++.herb-list {
++    list-style: none;
++    padding: 0;
++    display: grid;
++    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
++    gap: 0.8rem;
++}
++
++.herb-list li {
++    background-color: #ffffff;
++    border: 1px solid #d6d3c8;
++    padding: 0.8rem 1rem;
++    border-radius: 8px;
++    text-align: center;
++    transition: all 0.2s ease-in-out;
++}
++
++.herb-list li a {
++    text-decoration: none;
++    color: #4a5a2a;
++    font-weight: 500;
++    display: block;
++}
++
++.herb-list li:hover {
++    background-color: #e8f0dc;
++    transform: translateY(-3px);
++    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
++}
++
++#herb-detail {
++    padding: 2rem;
++    background-color: #f0f5e6;
++    border-radius: 8px;
++    max-width: 600px;
++    margin: 2rem auto;
++    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
++}
++
++#herb-detail h2 {
++    color: #3b4a1a;
++    margin-bottom: 1rem;
++}
++
++#herb-detail p {
++    font-size: 1rem;
++    line-height: 1.5;
++    margin-bottom: 0.6rem;
++    color: #333;
++}
++
++#back-button {
++    display: inline-block;
++    margin-bottom: 1rem;
++    background-color: #4a5a2a;
++    color: #fff;
++    border: none;
++    padding: 0.5rem 1rem;
++    border-radius: 6px;
++    cursor: pointer;
++    transition: background-color 0.2s ease-in-out;
++}
++
++#back-button:hover {
++    background-color: #6b7b3a;
+ }
+\ No newline at end of file
+
+===== COMMIT: f5627cd7d0e35bca43f19f298d0487a0b02020a7 =====
+commit f5627cd7d0e35bca43f19f298d0487a0b02020a7
+Author:     Tasha <tashastephan@gmail.com>
+AuthorDate: Sun Mar 1 13:09:18 2026 -0700
+Commit:     Tasha <tashastephan@gmail.com>
+CommitDate: Sun Mar 1 13:09:18 2026 -0700
+
+    unsure
+
+M	html/admin.html
+M	html/dashboard.html
+
+----- PATCH -----
+commit f5627cd7d0e35bca43f19f298d0487a0b02020a7
+Author: Tasha <tashastephan@gmail.com>
+Date:   Sun Mar 1 13:09:18 2026 -0700
+
+    unsure
+
+diff --git a/html/admin.html b/html/admin.html
+index ace8c82..922815d 100644
+--- a/html/admin.html
++++ b/html/admin.html
+@@ -8,9 +8,9 @@
+   <title>Admin Dashboard</title>
+   <link rel="stylesheet" href="style.css">
+ 
+-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
+-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
++ <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
++<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
++<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+ </head>
+ 
+ <body>
+diff --git a/html/dashboard.html b/html/dashboard.html
+index 4e45bb1..bfe2a0c 100644
+--- a/html/dashboard.html
++++ b/html/dashboard.html
+@@ -6,9 +6,9 @@
+ <title>Dashboard</title>
+ <link rel="stylesheet" href="style.css">
+ 
+-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
+-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
++<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
++<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
++<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script> 
+ </head>
+ <body>
+ <header><h1>Your Herbal Dashboard</h1></header>
+
+===== COMMIT: 2c14848557a26eb580fa1132180cfa865a5dd05c =====
+commit 2c14848557a26eb580fa1132180cfa865a5dd05c
+Author:     Tasha <tashastephan@gmail.com>
+AuthorDate: Sun Mar 1 14:01:21 2026 -0700
+Commit:     Tasha <tashastephan@gmail.com>
+CommitDate: Sun Mar 1 14:01:21 2026 -0700
+
+    implemented a bunch of changes from codex
+
+M	html/dashboard.html
+M	html/herbs.html
+M	html/intake.html
+M	html/register.html
+M	js/admin.js
+M	js/auth.js
+M	js/dashboard.js
+M	js/script.js
+M	style.css
+
+----- PATCH -----
+commit 2c14848557a26eb580fa1132180cfa865a5dd05c
+Author: Tasha <tashastephan@gmail.com>
+Date:   Sun Mar 1 14:01:21 2026 -0700
+
+    implemented a bunch of changes from codex
+
+diff --git a/html/dashboard.html b/html/dashboard.html
+index bfe2a0c..fa98ca0 100644
+--- a/html/dashboard.html
++++ b/html/dashboard.html
+@@ -6,9 +6,10 @@
+ <title>Dashboard</title>
+ <link rel="stylesheet" href="style.css">
+ 
++
+ <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+ <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script> 
++<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+ </head>
+ <body>
+ <header><h1>Your Herbal Dashboard</h1></header>
+diff --git a/html/herbs.html b/html/herbs.html
+index 3a59e91..812efda 100644
+--- a/html/herbs.html
++++ b/html/herbs.html
+@@ -1,67 +1,37 @@
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+-<meta charset="UTF-8">
+-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+-<title>Dashboard</title>
+-<link rel="stylesheet" href="style.css">
+-
+-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
+-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
+-</head>
+-<body>
+-<header><h1>Your Herbal Dashboard</h1></header>
+-
+-<div class="container">
+-  <div id="results"></div>
+-</div>
+-
+-<script src="firebase.js"></script>
+-<script src="auth.js"></script>
+-<script src="dashboard.js"></script>
+-</body>
+-</html>
+-herbs.html
+-herbs.html
+-+22
+--2
+-
+-<!DOCTYPE html>
+-<html lang="en">
+-<head>
+-<meta charset="UTF-8">
+-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+-<title>Herb Library</title>
+-<link rel="stylesheet" href="style.css">
++  <meta charset="UTF-8">
++  <meta name="viewport" content="width=device-width, initial-scale=1.0">
++  <title>Herb Library</title>
++  <link rel="stylesheet" href="style.css">
+ </head>
+ <body>
+-<header>
++  <header>
+     <div class="logo">Luxury Botanical</div>
+     <nav>
+-        <a href="index.html">Home</a>
+-        <a href="herbs.html">Herbs</a>
++      <a href="index.html">Home</a>
++      <a href="herbs.html">Herbs</a>
+     </nav>
+-</header>
++  </header>
+ 
+-<section class="container">
+-    <link rel="stylesheet" href="style.css">
++  <section class="container">
+     <h1>Herb Library</h1>
+ 
+     <div class="controls">
+-        <input type="text" id="search" placeholder="Search herbs...">
+-        <select id="filter">
+-            <option value="all">All Categories</option>
+-            <option value="sleep">Sleep</option>
+-            <option value="digestion">Digestion</option>
+-            <option value="immune">Immune</option>
+-        </select>
++        
++      <input type="text" id="search" placeholder="Search herbs...">
++      <select id="filter">
++        <option value="all">All Categories</option>
++        <option value="sleep">Sleep</option>
++        <option value="digestion">Digestion</option>
++        <option value="immune">Immune</option>
++      </select>
+     </div>
+ 
+     <div id="herb-list" class="grid"></div>
+-</section>
+-</section>
++  </section>
+ 
+-<script src="app.js"></script>
++  <script src="app.js"></script>
+ </body>
+ </html>
+\ No newline at end of file
+diff --git a/html/intake.html b/html/intake.html
+index 4981fd9..946eef7 100644
+--- a/html/intake.html
++++ b/html/intake.html
+@@ -3,124 +3,35 @@
+ <head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+-<title>Your Wellness Intake</title>
++<title>Comprehensive Intake</title>
+ <link rel="stylesheet" href="style.css">
+-<script type="module" src="intake.js" defer></script>
+-</head>
+-
+-<body class="intake-body">
+-
+-<div class="intake-container">
+-
+-  <div class="intake-header">
+-    <h1>🌿 Your Botanical Wellness Assessment</h1>
+-    <p>Thoughtful questions help us craft deeply personalized herbal support.</p>
+-  </div>
+-
+-  <div class="progress-bar">
+-    <div class="progress-fill" id="progressFill"></div>
+-  </div>
+-
+-  <form id="intakeForm">
+-
+-  <!-- STEP 1 -->
+-  <section class="step active">
+-    <h2>🌱 Foundational Profile</h2>
+-
+-    <label>Age Range</label>
+-    <select name="age">
+-      <option>18–25</option>
+-      <option>26–35</option>
+-      <option>36–45</option>
+-      <option>46–55</option>
+-      <option>56+</option>
+-    </select>
+-
+-    <label>Biological Sex</label>
+-    <select name="sex">
+-      <option>Female</option>
+-      <option>Male</option>
+-      <option>Other</option>
+-    </select>
+-
+-    <label>Are you pregnant or breastfeeding?</label>
+-    <select name="pregnancy">
+-      <option>No</option>
+-      <option>Pregnant</option>
+-      <option>Breastfeeding</option>
+-    </select>
+ 
+-    <button type="button" class="next-btn">Next</button>
+-  </section>
+-
+-  <!-- STEP 2 -->
+-  <section class="step">
+-    <h2>🌿 Your Primary Goals</h2>
+-
+-    <label><input type="checkbox" name="goals" value="energy"> Restore Energy</label>
+-    <label><input type="checkbox" name="goals" value="stress"> Calm Stress</label>
+-    <label><input type="checkbox" name="goals" value="sleep"> Improve Sleep</label>
+-    <label><input type="checkbox" name="goals" value="hormones"> Balance Hormones</label>
+-    <label><input type="checkbox" name="goals" value="digestion"> Improve Digestion</label>
+-    <label><input type="checkbox" name="goals" value="focus"> Sharpen Focus</label>
+-
+-    <div class="nav-buttons">
+-      <button type="button" class="back-btn">Back</button>
+-      <button type="button" class="next-btn">Next</button>
+-    </div>
+-  </section>
+-
+-  <!-- STEP 3 -->
+-  <section class="step">
+-    <h2>🌾 Symptom Mapping</h2>
+-
+-    <label>Afternoon Fatigue</label>
+-    <input type="range" min="0" max="5" name="fatigue">
+-
+-    <label>Anxiety / Tension</label>
+-    <input type="range" min="0" max="5" name="anxiety">
+-
+-    <label>Brain Fog</label>
+-    <input type="range" min="0" max="5" name="brainfog">
+-
+-    <label>Bloating</label>
+-    <input type="range" min="0" max="5" name="bloating">
+-
+-    <label>Sleep Disturbance</label>
+-    <input type="range" min="0" max="5" name="sleepdisturb">
+-
+-    <div class="nav-buttons">
+-      <button type="button" class="back-btn">Back</button>
+-      <button type="button" class="next-btn">Next</button>
+-    </div>
+-  </section>
++<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
++<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
++<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
++</head>
++<body>
+ 
+-  <!-- STEP 4 -->
+-  <section class="step">
+-    <h2>🌬 Lifestyle Landscape</h2>
++<header><h1>Comprehensive Health Intake</h1></header>
+ 
+-    <label>Stress Level (1–10)</label>
+-    <input type="range" min="1" max="10" name="stresslevel">
+ 
+-    <label>Hours of Sleep</label>
+-    <input type="number" name="sleephours">
++<section class="container">
++  <div class="card">
++    <h2>Select Current Symptoms</h2>
+ 
+-    <label>Caffeine per Day</label>
+-    <select name="caffeine">
+-      <option>None</option>
+-      <option>1 cup</option>
+-      <option>2–3 cups</option>
+-      <option>4+ cups</option>
+-    </select>
++    <label><input type="checkbox" value="stress"> Stress</label><br>
++    <label><input type="checkbox" value="tired"> Low energy / tiredness</label><br>
++    <label><input type="checkbox" value="anxiety"> Anxiety</label><br>
++    <label><input type="checkbox" value="digestive"> Digestive discomfort</label><br>
++    <label><input type="checkbox" value="immune"> Immune support</label><br><br>
+ 
+-    <div class="nav-buttons">
+-      <button type="button" class="back-btn">Back</button>
+-      <button type="submit">Complete Assessment</button>
+-    </div>
+-  </section>
+ 
+-  </form>
+-</div>
++    <button class="btn" id="submitIntake">Submit Intake</button>
++  </div>
++</section>
+ 
++<script src="firebase.js"></script>
++<script src="auth.js"></script>
++<script src="intake.js"></script>
+ </body>
+ </html>
+\ No newline at end of file
+diff --git a/html/register.html b/html/register.html
+index 698656f..15a557c 100644
+--- a/html/register.html
++++ b/html/register.html
+@@ -1,146 +1,49 @@
+ <!DOCTYPE html>
+ <html lang="en">
+-
+ <head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+-  <title>Login - Luxury Botanical Apothecary</title>
++  <title>Account Access</title>
+   <link rel="stylesheet" href="style.css">
+-  <style>
+-    .login-container {
+-      max-width: 400px;
+-      margin: 4rem auto;
+-      padding: 2rem;
+-      background-color: #f0f5f0;
+-      border-radius: 10px;
+-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+-    }
+-
+-    .login-container h1 {
+-      text-align: center;
+-      color: #3a503a;
+-      margin-bottom: 2rem;
+-    }
+-
+-    .form-group {
+-      margin-bottom: 1.5rem;
+-    }
+-
+-    .form-group label {
+-      display: block;
+-      margin-bottom: 0.5rem;
+-      color: #3a503a;
+-      font-weight: 500;
+-    }
+-
+-    .form-group input {
+-      width: 100%;
+-      padding: 0.75rem;
+-      border: 1px solid #d4e3d4;
+-      border-radius: 5px;
+-      font-size: 1rem;
+-      box-sizing: border-box;
+-      transition: border-color 0.3s;
+-    }
+-
+-    .form-group input:focus {
+-      outline: none;
+-      border-color: #6a8a6a;
+-      box-shadow: 0 0 5px rgba(106, 138, 106, 0.3);
+-    }
+-
+-    .login-btn {
+-      background-color: #6a8a6a;
+-      color: #fff;
+-      padding: 0.75rem 1.5rem;
+-      border: none;
+-      border-radius: 5px;
+-      font-size: 1rem;
+-      width: 100%;
+-      cursor: pointer;
+-      transition: all 0.3s;
+-      font-weight: 600;
+-    }
+-
+-    .login-btn:hover {
+-      background-color: #527352;
+-      transform: translateY(-3px);
+-    }
+-
+-    .signup-link {
+-      text-align: center;
+-      margin-top: 1.5rem;
+-      color: #4b4b3f;
+-    }
+-
+-    .signup-link a {
+-      color: #6a8a6a;
+-      text-decoration: none;
+-      font-weight: 600;
+-      transition: color 0.3s;
+-    }
++  
+ 
+-    .signup-link a:hover {
+-      color: #527352;
+-    }
+-
+-    .forgot-password {
+-      text-align: right;
+-      margin-bottom: 1rem;
+-    }
+-
+-    .forgot-password a {
+-      color: #6a8a6a;
+-      text-decoration: none;
+-      font-size: 0.9rem;
+-      transition: color 0.3s;
+-    }
+-
+-    .forgot-password a:hover {
+-      color: #527352;
+-    }
+-  </style>
++  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
++  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
++  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+ </head>
+-
+ <body>
+-
+-  <header id="header">
++  <header>
+     <div class="logo">Luxury Botanical</div>
+     <nav>
+       <a href="index.html">Home</a>
+-      <a href="register.html">Login</a>
+-      <a href="intake.html">Intake Form</a>
+-      <a href="index.html#herbs">Herbs</a>
+-      <a href="index.html#contact">Contact</a>
++      <a href="herbs.html">Herbs</a>
+     </nav>
+   </header>
+ 
+-  <div class="login-container">
+-    <h1>Login</h1>
+ 
+-    <form id="loginForm">
+-      <div class="form-group">
+-        <label for="email">Email Address</label>
+-        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+-      </div>
+-
+-      <div class="form-group">
+-        <label for="password">Password</label>
+-        <input type="password" id="password" name="password" placeholder="Enter your password" required>
+-      </div>
+-
+-      <div class="forgot-password">
+-        <a href="#forgot">Forgot password?</a>
+-      </div>
+-
+-      <button type="submit" class="login-btn">Login</button>
+-    </form>
++  <section class="container auth-layout">
++    <div class="card auth-card">
++      <h2>Create Account</h2>
++      <input id="registerName" type="text" placeholder="Full Name">
++      <input id="registerEmail" type="email" placeholder="Email">
++      <input id="registerPassword" type="password" placeholder="Password">
++      <select id="registerRole">
++        <option value="user">User</option>
++        <option value="admin">Admin</option>
++      </select>
++      <button class="btn" id="registerBtn" type="button">Register</button>
++    </div>
+ 
+-    <div class="signup-link">
+-      Don't have an account? <a href="#signup">Create one here</a>
++    
++    <div class="card auth-card">
++      <h2>Login</h2>
++      <input id="loginEmail" type="email" placeholder="Email">
++      <input id="loginPassword" type="password" placeholder="Password">
++      <button class="btn" id="loginBtn" type="button">Login</button>
+     </div>
+-  </div>
++  </section>
+ 
++  <script src="firebase.js"></script>
+   <script src="auth.js"></script>
+ </body>
+ 
+diff --git a/js/admin.js b/js/admin.js
+index 1e5bfe6..13767b2 100644
+--- a/js/admin.js
++++ b/js/admin.js
+@@ -1,14 +1,21 @@
+ // admin.js
+ auth.onAuthStateChanged(async user=>{
+-  if(!user) return;
++  if(!user){
++    window.location = "register.html";
++    return;
++  }
++
+   const doc = await db.collection("users").doc(user.uid).get();
+-  if(doc.data().role!=="admin") window.location="intake.html";
++  if(doc.data()?.role!=="admin") {
++    window.location="intake.html";
++    return;
++  }
+ 
+   const snapshot = await db.collection("intakes").get();
+   let html="<h2>All Intakes</h2>";
+   snapshot.forEach(doc=>{
+     const data = doc.data();
+-    html+=`<p>User: ${data.userId} | Symptoms: ${data.symptoms.join(", ")}</p>`;
++    html+=`<p>User: ${data.userId} | Symptoms: ${(data.symptoms || []).join(", ")}</p>`;
+   });
+   document.getElementById("adminResults").innerHTML=html;
+ });
+\ No newline at end of file
+diff --git a/js/auth.js b/js/auth.js
+index 652ed6d..62d5e3e 100644
+--- a/js/auth.js
++++ b/js/auth.js
+@@ -1,32 +1,38 @@
+ // REGISTER
+ const registerBtn = document.getElementById("registerBtn");
+-if(registerBtn){
++if (registerBtn) {
+   registerBtn.onclick = async () => {
+-    const name = document.getElementById("name").value;
+-    const email = document.getElementById("email").value;
+-    const password = document.getElementById("password").value;
+-    const role = document.getElementById("role").value;
++    
++    const name = document.getElementById("registerName")?.value?.trim();
++    const email = document.getElementById("registerEmail")?.value?.trim();
++    const password = document.getElementById("registerPassword")?.value;
++    const role = document.getElementById("registerRole")?.value || "user";
+ 
+-    const userCred = await auth.createUserWithEmailAndPassword(email,password);
+-    await db.collection("users").doc(userCred.user.uid).set({ name,email,role });
++    
++    if (!name || !email || !password) return;
++
++    const userCred = await auth.createUserWithEmailAndPassword(email, password);
++    await db.collection("users").doc(userCred.user.uid).set({ name, email, role });
+     window.location = "intake.html";
+   };
+ }
+ 
+ // LOGIN
+ const loginBtn = document.getElementById("loginBtn");
+-if(loginBtn){
++if (loginBtn)
+   loginBtn.onclick = async () => {
+-    const email = document.getElementById("email").value;
+-    const password = document.getElementById("password").value;
++    
++    const email = document.getElementById("loginEmail")?.value?.trim();
++    const password = document.getElementById("loginPassword")?.value;
++
++    if (!email || !password) return;
+ 
+-    const userCred = await auth.signInWithEmailAndPassword(email,password);
++    const userCred = await auth.signInWithEmailAndPassword(email, password);
+     const userDoc = await db.collection("users").doc(userCred.user.uid).get();
+ 
+-    if(userDoc.data().role==="admin"){
+-      window.location="admin.html";
++     if (userDoc.data()?.role === "admin") {
++      window.location = "admin.html";
+     } else {
+-      window.location="intake.html";
++      window.location = "intake.html";
+     }
+   };
+-}
+\ No newline at end of file
+diff --git a/js/dashboard.js b/js/dashboard.js
+index 214d119..25e37fc 100644
+--- a/js/dashboard.js
++++ b/js/dashboard.js
+@@ -1,49 +1,66 @@
+-import { auth, db } from "./firebase.js";
+-import { collection, query, where, getDocs, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
++const herbDB = [
++  {name:"Ashwagandha",supports:["stress","tired","anxiety"]},
++  {name:"Rhodiola",supports:["stress","tired"]},
++  {name:"Chamomile",supports:["stress","digestive","anxiety"]},
++  {name:"Peppermint",supports:["digestive"]},
++  {name:"Lavender",supports:["stress","anxiety"]},
++  {name:"Echinacea",supports:["immune"]}
++];
+ 
+-const container = document.getElementById("dashboardContent");
++const synergyPairs = [
++  {herbs:["Ashwagandha","Rhodiola"],reason:"Adaptogen stack for stress + energy."},
++  {herbs:["Chamomile","Lavender"],reason:"Calming synergy."},
++  {herbs:["Peppermint","Ginger"],reason:"Digestive support pairing."}
++];
+ 
+-auth.onAuthStateChanged(async user => {
+-  if (!user) {
+-    window.location.href = "index.html";
++auth.onAuthStateChanged(async user=>{
++  if(!user){
++    window.location = "register.html";
+     return;
+   }
+ 
+-  const q = query(
+-    collection(db, "intakes"),
+-    where("userId", "==", user.uid),
+-    orderBy("timestamp", "desc"),
+-    limit(1)
+-  );
+-
+-  const snapshot = await getDocs(q);
++  const snapshot = await db.collection("intakes")
++    .where("userId","==",user.uid)
++    .orderBy("createdAt","desc")
++    .limit(1)
++    .get();
+ 
+-  if (snapshot.empty) {
+-    container.innerHTML = "<p>No intake found.</p>";
++  if(snapshot.empty){
++    document.getElementById("results").innerHTML = "<p>No intake found yet. Please complete the intake form first.</p>";
+     return;
+   }
+ 
+-  const data = snapshot.docs[0].data();
+-  const herbs = data.recommendations.topHerbs;
+-  const confidence = data.recommendations.confidence;
+-
+-  let html = `
+-    <h2>🌿 Your Personalized Herbal Protocol</h2>
+-    <p>Confidence Level: <strong>${confidence}%</strong></p>
+-    <div class="herb-results">
+-  `;
+-
+-  herbs.forEach(herb => {
+-    html += `
+-      <div class="herb-card">
+-        <h3>${herb.name}</h3>
+-        <p>Match Score: ${herb.score}</p>
+-        <p>Supports: ${herb.supports.join(", ")}</p>
+-      </div>
+-    `;
++  const symptoms = snapshot.docs[0].data().symptoms;
++
++  let scored = herbDB.map(h=>{
++    let score=0;
++    symptoms.forEach(s=>{ if(h.supports.includes(s)) score+=2; });
++    return {...h,score};
+   });
+ 
+-  html += "</div>";
++  scored.sort((a,b)=>b.score-a.score);
++
++   
++  const activeHerbs = scored.filter(h=>h.score>0).map(h=>h.name);
++  const foundPairs = synergyPairs.filter(pair => 
++    activeHerbs.includes(pair.herbs[0]) && activeHerbs.includes(pair.herbs[1])
++  );
++
++  let html="<h2>Recommended Herbs</h2>";
++  scored.filter(h=>h.score>0).forEach(h=>{
++    html+=`<p><strong>${h.name}</strong> (Score: ${h.score})</p>`;
++  });
++
++  if(foundPairs.length){
++    html+="<h3>Complementary Pairings</h3>";
++    foundPairs.forEach(p=>{
++      html+=`<p>${p.herbs.join(" + ")} - ${p.reason}</p>`;
++    });
++  }
++
++  if (html === "<h2>Recommended Herbs</h2>") {
++    html += "<p>No direct matches found for your selected symptoms yet.</p>";
++  }
+ 
+-  container.innerHTML = html;
+-}); 
+\ No newline at end of file
++  document.getElementById("results").innerHTML = html;
++});
+\ No newline at end of file
+diff --git a/js/script.js b/js/script.js
+index 3775a66..6647b27 100644
+--- a/js/script.js
++++ b/js/script.js
+@@ -1,11 +1,11 @@
+ const header = document.getElementById("header");
+ 
+ if (header) {
+-    window.addEventListener("scroll", () => {
+-        if (window.scrollY > 24) {
+-            header.classList.add("scrolled");
+-        } else {
+-            header.classList.remove("scrolled");
+-        }
+-    });
++  window.addEventListener("scroll", () => {
++    if (window.scrollY > 24) {
++      header.classList.add("scrolled");
++    } else {
++      header.classList.remove("scrolled");
++    }
++  });
+ }
+\ No newline at end of file
+diff --git a/style.css b/style.css
+index d99e26b..34c4035 100644
+--- a/style.css
++++ b/style.css
+@@ -138,172 +138,59 @@ footer {
+     color: #3a503a;
+ }
+ 
+-.intake-body {
+-    background: linear-gradient(#f5f9f6, #eef5ef);
+-    font-family: 'Segoe UI', sans-serif;
+-}
+-
+-.intake-container {
+-    max-width: 700px;
+-    margin: auto;
+-    padding: 40px;
+-    background: white;
+-    border-radius: 16px;
+-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+-}
+-
+-.intake-header {
+-    text-align: center;
+-    margin-bottom: 30px;
+-}
+-
+-.step {
+-    display: none;
+-    animation: fadeIn 0.5s ease;
+-}
+-
+-.step.active {
+-    display: block;
+-}
+-
+-.progress-bar {
+-    height: 8px;
+-    background: #e0ebe3;
+-    border-radius: 20px;
+-    margin-bottom: 30px;
+-}
+-
+-.progress-fill {
+-    height: 100%;
+-    background: #6f8f72;
+-    width: 0%;
+-    border-radius: 20px;
+-    transition: width 0.4s ease;
++/* --- Utility Layouts --- */
++.container {
++    max-width: 1100px;
++    margin: 0 auto;
+ }
+ 
+-button {
+-    background: #6f8f72;
+-    color: white;
+-    border: none;
+-    padding: 10px 18px;
+-    border-radius: 8px;
+-    cursor: pointer;
++.card {
++    background: #fff;
++    padding: 1.25rem;
++    border-radius: 10px;
++    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+ }
+ 
+-button:hover {
+-    background: #5d7d60;
++.grid {
++    display: grid;
++    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
++    gap: 1rem;
+ }
+ 
+-.nav-buttons {
++.controls {
+     display: flex;
+-    justify-content: space-between;
+-    margin-top: 20px;
+-}
+-
+-input[type="range"] {
+-    width: 100%;
+-    margin-bottom: 15px;
+-}
+-
+-@keyframes fadeIn {
+-    from {
+-        opacity: 0;
+-        transform: translateY(10px);
+-    }
+-
+-    to {
+-        opacity: 1;
+-        transform: translateY(0);
+-    }
+-}
+-
+-.herb-results {
+-    margin-top: 30px;
+-}
+-
+-.herb-card {
+-    background: #f4f8f5;
+-    padding: 20px;
+-    border-radius: 12px;
+-    margin-bottom: 15px;
+-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+-}
+-
+-.herb-library {
+-    padding: 2rem;
+-    background-color: #f9f7f2; /* soft herbal background */
+-}
+-
+-.herb-library h2 {
+-    text-align: center;
+-    color: #4a5a2a;
+-    font-size: 2rem;
++    gap: 0.75rem;
+     margin-bottom: 1rem;
+ }
+ 
+-.herb-list {
+-    list-style: none;
+-    padding: 0;
+-    display: grid;
+-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+-    gap: 0.8rem;
+-}
+-
+-.herb-list li {
+-    background-color: #ffffff;
+-    border: 1px solid #d6d3c8;
+-    padding: 0.8rem 1rem;
+-    border-radius: 8px;
+-    text-align: center;
+-    transition: all 0.2s ease-in-out;
+-}
+-
+-.herb-list li a {
+-    text-decoration: none;
+-    color: #4a5a2a;
+-    font-weight: 500;
+-    display: block;
+-}
+-
+-.herb-list li:hover {
+-    background-color: #e8f0dc;
+-    transform: translateY(-3px);
+-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
++input,
++select,
++button {
++    font: inherit;
+ }
+ 
+-#herb-detail {
+-    padding: 2rem;
+-    background-color: #f0f5e6;
+-    border-radius: 8px;
+-    max-width: 600px;
+-    margin: 2rem auto;
+-    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
++input,
++select {
++    padding: 0.6rem;
++    border: 1px solid #d8d8d8;
++    border-radius: 6px;
+ }
+ 
+-#herb-detail h2 {
+-    color: #3b4a1a;
+-    margin-bottom: 1rem;
++.auth-layout {
++    display: grid;
++    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
++    gap: 1rem;
+ }
+ 
+-#herb-detail p {
+-    font-size: 1rem;
+-    line-height: 1.5;
+-    margin-bottom: 0.6rem;
+-    color: #333;
++.auth-card {
++    display: flex;
++    flex-direction: column;
++    gap: 0.75rem;
+ }
+ 
+-#back-button {
+-    display: inline-block;
++.detail-img {
++    width: 100%;
++    max-width: 520px;
++    border-radius: 10px;
+     margin-bottom: 1rem;
+-    background-color: #4a5a2a;
+-    color: #fff;
+-    border: none;
+-    padding: 0.5rem 1rem;
+-    border-radius: 6px;
+-    cursor: pointer;
+-    transition: background-color 0.2s ease-in-out;
+-}
+-
+-#back-button:hover {
+-    background-color: #6b7b3a;
+ }
+\ No newline at end of file
+

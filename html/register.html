@@ -1,6 +1,8 @@
 <!DOCTYPE html>
+<html>
 <html lang="en">
 <head>
+  <title>Register</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Account Access</title>
@@ -12,13 +14,16 @@
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 </head>
 <body>
-  <header>
-    <div class="logo">Luxury Botanical</div>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="herbs.html">Herbs</a>
-    </nav>
-  </header>
+  <header id="header">
+        <div class="logo">Luxury Botanical</div>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="register.html">Login</a>
+            <a href="intake.html">Intake Form</a>
+            <a href="#herbs">Herbs</a>
+            <a href="#contact">Contact</a>
+        </nav>
+    </header>
 
 
   <section class="container auth-layout">
@@ -43,8 +48,11 @@
     </div>
   </section>
 
+  <section class="container">
+    <p id="authMessage" class="status-message" aria-live="polite"></p>
+  </section>
+
   <script src="firebase.js"></script>
   <script src="auth.js"></script>
 </body>
-
 </html>
