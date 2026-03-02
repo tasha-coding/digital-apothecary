@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Herb Library</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Herb Library</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header id="header">
+    <header id="header">
         <div class="logo">Luxury Botanical</div>
         <nav>
             <a href="index.html">Home</a>
@@ -18,23 +18,20 @@
         </nav>
     </header>
 
-  <section class="container">
-    <h1>Herb Library</h1>
+    <section class="container">
+        <h1>Herb Library</h1>
+        <div class="controls">
+            <input type="text" id="search" placeholder="Search herbs...">
+            <select id="filter">
+                <option value="all">All Categories</option>
+                <option value="sleep">Sleep</option>
+                <option value="digestion">Digestion</option>
+                <option value="immune">Immune</option>
+            </select>
+        </div>
+        <div id="herb-list" class="grid"></div>
+    </section>
 
-    <div class="controls">
-        
-      <input type="text" id="search" placeholder="Search herbs...">
-      <select id="filter">
-        <option value="all">All Categories</option>
-        <option value="sleep">Sleep</option>
-        <option value="digestion">Digestion</option>
-        <option value="immune">Immune</option>
-      </select>
-    </div>
-
-    <div id="herb-list" class="grid"></div>
-  </section>
-
-  <script src="app.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>

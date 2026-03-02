@@ -4,22 +4,22 @@ function setAuthMessage(message, isError = false) {
   el.textContent = message;
   el.classList.toggle("error", isError);
 }
+
 // REGISTER
 const registerBtn = document.getElementById("registerBtn");
 if (registerBtn) {
   registerBtn.onclick = async () => {
-    
     const name = document.getElementById("registerName")?.value?.trim();
     const email = document.getElementById("registerEmail")?.value?.trim();
     const password = document.getElementById("registerPassword")?.value;
     const role = document.getElementById("registerRole")?.value || "user";
 
-    
-if (!name || !email || !password) {
+    if (!name || !email || !password) {
       setAuthMessage("Please complete all registration fields.", true);
       return;
     }
-     try {
+    
+    try {
       setAuthMessage("Creating account...");
       const userCred = await auth.createUserWithEmailAndPassword(email, password);
       await db.collection("users").doc(userCred.user.uid).set({ name, email, role });
@@ -32,19 +32,15 @@ if (!name || !email || !password) {
 
 // LOGIN
 const loginBtn = document.getElementById("loginBtn");
-iif (loginBtn) 
+if (loginBtn) {
   loginBtn.onclick = async () => {
-    
-     const email = document.getElementById("loginEmail")?.value?.trim();
+    const email = document.getElementById("loginEmail")?.value?.trim();
     const password = document.getElementById("loginPassword")?.value;
 
     if (!email || !password) {
       setAuthMessage("Please enter both email and password.", true);
       return;
     }
-
-
-    if (!email || !password) return;
 
     try {
       setAuthMessage("Signing in...");
@@ -60,3 +56,4 @@ iif (loginBtn)
       setAuthMessage(error.message || "Login failed.", true);
     }
   }
+}

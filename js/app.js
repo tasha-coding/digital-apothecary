@@ -1,6 +1,6 @@
 const herbListEl = document.getElementById("herb-list");
 const detailSection = document.getElementById("herb-detail");
-const listSection = document.getElementById("herb-list").parentElement;
+const listSection = herbListEl.parentElement;
 
 const nameEl = document.getElementById("herb-name");
 const categoriesEl = document.getElementById("herb-categories");
@@ -44,4 +44,3 @@ backButton.addEventListener("click", () => {
     detailSection.style.display = "none";
     listSection.style.display = "block";
 });
-

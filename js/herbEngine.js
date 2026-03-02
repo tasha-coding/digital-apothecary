@@ -1,5 +1,4 @@
 export async function runHerbEngine(intakeData) {
-
   const response = await fetch("./data/herb.json");
   const herbs = await response.json();
 
@@ -24,11 +23,8 @@ export async function runHerbEngine(intakeData) {
 
   // Remove contraindications
   results = results.filter(herb => {
-    if (intakeData.pregnancy === "Pregnant" &&
-        herb.contraindications.includes("pregnancy")) {
-      return false;
-    }
-    return true;
+    const isPregnant = intakeData.pregnancy === "Pregnant";
+    return !(isPregnant && herb.contraindications.includes("pregnancy"));
   });
 
   // Add synergy bonus
@@ -46,10 +42,7 @@ export async function runHerbEngine(intakeData) {
 
   const topHerbs = results.slice(0, 3);
 
-  const confidence = Math.min(
-    95,
-    Math.round((topHerbs[0].score / 40) * 100)
-  );
+  const confidence = Math.min(95, Math.round((topHerbs[0].score / 40) * 100));
 
   return {
     topHerbs,

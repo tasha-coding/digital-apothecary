@@ -10,16 +10,11 @@ const form = document.getElementById("intakeForm");
 
 let currentStep = 0;
 
-// ------------------
-// STEP NAVIGATION
-// ------------------
 function updateStep() {
   steps.forEach((step, index) => {
     step.classList.toggle("active", index === currentStep);
   });
-
-  progressFill.style.width =
-    ((currentStep + 1) / steps.length) * 100 + "%";
+  progressFill.style.width = ((currentStep + 1) / steps.length) * 100 + "%";
 }
 
 nextBtns.forEach(btn => {
@@ -44,9 +39,6 @@ backBtns.forEach(btn => {
 
 updateStep();
 
-// ------------------
-// FORM SUBMISSION
-// ------------------
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -70,10 +62,6 @@ form.addEventListener("submit", async (e) => {
     }
   });
 
-  // ------------------
-  // SCORING SYSTEM
-  // ------------------
-
   const anxiety = Number(data.anxiety || 0);
   const stressLevel = Number(data.stresslevel || 0);
   const fatigue = Number(data.fatigue || 0);
@@ -87,7 +75,6 @@ form.addEventListener("submit", async (e) => {
     sleepScore: sleepDisturb
   };
 
-  // Run herb intelligence engine
   const engineResults = await runHerbEngine(data);
   data.recommendations = engineResults;
 

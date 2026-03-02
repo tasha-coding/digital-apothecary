@@ -1,15 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Luxury Botanical Apothecary</title>
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-
     <header id="header">
         <div class="logo">Luxury Botanical</div>
         <nav>
@@ -20,7 +17,7 @@
             <a href="#contact">Contact</a>
         </nav>
     </header>
-
+    
     <section class="hero" id="hero">
         <h1>Modern Herbal Wisdom</h1>
         <p>Discover common medicinal herbs found in the United States.</p>
@@ -33,15 +30,16 @@
             our carefully curated collection of plants and herbs.</p>
     </section>
 
-    <!-- Dynamic Herb Library Section -->
     <section class="herb-library" id="herbs">
         <h2>Herbal Library</h2>
-        <ul id="herb-list" class="herb-list">
-            <!-- Herb links will be injected here by JavaScript -->
-        </ul>
+        <ul id="herb-list" class="herb-list"></ul>
     </section>
 
-    <!-- Herb Detail Section (hidden by default) -->
+    <section class="admin-results" id="admin-results">
+        <h2>Admin Intakes</h2>
+        <div id="adminResults"></div>
+    </section>
+
     <section id="herb-detail" class="herb-detail" style="display:none;">
         <button id="back-button">← Back to Herb List</button>
         <h2 id="herb-name"></h2>
@@ -70,9 +68,8 @@
         <p>© 2026 Luxury Botanical Apothecary | Crafted with care</p>
     </footer>
 
-    <!-- Include herb data and app script -->
     <script src="herbs.js"></script>
     <script src="app.js"></script>
+    <script src="admin.js"></script>
 </body>
-
 </html>

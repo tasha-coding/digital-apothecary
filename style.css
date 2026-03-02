@@ -1,12 +1,20 @@
 /* --- Base Styles --- */
+:root {
+    --primary-color: #6a8a6a;
+    --secondary-color: #5d7d60;
+    --background-light: #fdf6f0;
+    --background-dark: #e7f0e7;
+    --text-color-dark: #4b4b3f;
+    --text-color-light: #fff;
+}
+
 body {
     font-family: 'Georgia', serif;
-    background-color: #fdf6f0;
-    color: #4b4b3f;
+    background-color: var(--background-light);
+    color: var(--text-color-dark);
     margin: 0;
     line-height: 1.6;
     scroll-behavior: smooth;
-    /* smooth scrolling */
 }
 
 a {
@@ -15,7 +23,7 @@ a {
 
 /* --- Header --- */
 header {
-    background-color: #e7f0e7;
+    background-color: var(--background-dark);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -24,7 +32,8 @@ header {
     top: 0;
     z-index: 100;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s;}
+    transition: background-color 0.3s;
+}
 
 header.scrolled {
     background-color: #d4e3d4;
@@ -44,13 +53,13 @@ nav a {
 }
 
 nav a:hover {
-    color: #6a8a6a;
+    color: var(--primary-color);
 }
 
 /* --- Hero Section --- */
 .hero {
     background: url('images/herbal-bg.jpg') no-repeat center center/cover;
-    color: #fff;
+    color: var(--text-color-light);
     text-align: center;
     padding: 6rem 2rem;
     position: relative;
@@ -68,8 +77,8 @@ nav a:hover {
 }
 
 .btn {
-    background-color: #6a8a6a;
-    color: #fff;
+    background-color: var(--primary-color);
+    color: var(--text-color-light);
     padding: 0.75rem 1.5rem;
     border-radius: 5px;
     display: inline-block;
@@ -77,7 +86,7 @@ nav a:hover {
 }
 
 .btn:hover {
-    background-color: #527352;
+    background-color: var(--secondary-color);
     transform: translateY(-3px);
 }
 
@@ -132,7 +141,7 @@ section {
 /* --- Footer --- */
 footer {
     text-align: center;
-    background-color: #e7f0e7;
+    background-color: var(--background-dark);
     padding: 2rem;
     color: #3a503a;
 }
@@ -173,14 +182,14 @@ footer {
 
 .progress-fill {
     height: 100%;
-    background: #6f8f72;
+    background: var(--primary-color);
     width: 0%;
     border-radius: 20px;
     transition: width 0.4s ease;
 }
 
 button {
-    background: #6f8f72;
+    background: var(--primary-color);
     color: white;
     border: none;
     padding: 10px 18px;
@@ -189,7 +198,7 @@ button {
 }
 
 button:hover {
-    background: #5d7d60;
+    background: var(--secondary-color);
 }
 
 .nav-buttons {
@@ -229,7 +238,7 @@ input[type="range"] {
 
 .herb-library {
     padding: 2rem;
-    background-color: #f9f7f2; /* soft herbal background */
+    background-color: #f9f7f2;
 }
 
 .herb-library h2 {
