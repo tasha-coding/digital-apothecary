@@ -1,178 +1,193 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Comprehensive Intake</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Comprehensive Intake</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+  <style>
+
+
+
+
+
+
+
+  </style>
 </head>
+
 <body>
-    <header id="header">
-        <div class="logo">Luxury Botanical</div>
-        <nav>
-            <a href="index.html">Home</a>
-            <a href="register.html">Login</a>
-            <a href="intake.html">Intake Form</a>
-            <a href="#herbs">Herbs</a>
-            <a href="#contact">Contact</a>
-        </nav>
-    </header>
+  <header id="header">
+    <div class="logo">Luxury Botanical</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="register.html">Login</a>
+      <a href="intake.html">Intake Form</a>
+      <a href="#herbs">Herbs</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
 
-    <h1>Comprehensive Health Intake</h1>
-    <section class="container">
-        <div class="card">
+  <h1>Comprehensive Health Intake</h1>
+  <section class="container">
+    <div class="card">
+      <h2>Past Medical History</h2>
 
-            <h2>Past Medical History</h2>
+      <h3>Chronic Conditions</h3>
+      <h4>Diabetes</h4>
+      <label><input type="checkbox" value="type1"> Type 1</label>
+      <label><input type="checkbox" value="type2"> Type 2</label>
+      <label><input type="checkbox" value="gestational"> Gestational</label>
+      <label><input type="checkbox" value="prediabetes"> Prediabetes</label>
+      <label><input type="checkbox" value="neuropathy"> Diabetic Neuropathy</label>
+      <label><input type="checkbox" value="retinopathy"> Diabetic Retinopathy</label>
+      <label>Other: <input type="text" placeholder="Specify..."></label>
 
-            <h3>Chronic Conditions</h3>
-            <h4>Diabetes</h4>
-            <label><input type="checkbox" value="type1"> Type 1</label><br>
-            <label><input type="checkbox" value="type2"> Type 2</label><br>
-            <label><input type="checkbox" value="gestational"> Gestational</label><br>
-            <label><input type="checkbox" value="prediabetes"> Prediabetes</label><br>
-            <label><input type="checkbox" value="neuropathy"> Diabetic Neuropathy</label><br>
-            <label><input type="checkbox" value="retinopathy"> Diabetic Retinopathy</label><br>
-            <label>Other: <input type="text" placeholder="Specify..."></label><br><br>
+      <h4>Hypertension</h4>
+      <label><input type="checkbox" value="essential"> Essential Hypertension</label>
+      <label><input type="checkbox" value="secondary"> Secondary Hypertension</label>
+      <label><input type="checkbox" value="isolated"> Isolated Systolic Hypertension</label>
+      <label><input type="checkbox" value="controlled"> Controlled</label>
+      <label><input type="checkbox" value="uncontrolled"> Uncontrolled</label>
 
-            <h4>Hypertension</h4>
-            <label><input type="checkbox" value="essential"> Essential Hypertension</label><br>
-            <label><input type="checkbox" value="secondary"> Secondary Hypertension</label><br>
-            <label><input type="checkbox" value="isolated"> Isolated Systolic Hypertension</label><br>
-            <label><input type="checkbox" value="controlled"> Controlled</label><br>
-            <label><input type="checkbox" value="uncontrolled"> Uncontrolled</label><br><br>
+      <h4>Heart Disease</h4>
+      <label><input type="checkbox" value="coronary"> Coronary Artery Disease</label>
+      <label><input type="checkbox" value="mi"> Myocardial Infarction (Heart Attack)</label>
+      <label><input type="checkbox" value="congestive"> Congestive Heart Failure</label>
+      <label><input type="checkbox" value="arrhythmia"> Arrhythmia</label>
+      <label><input type="checkbox" value="afib"> Atrial Fibrillation</label>
+      <label><input type="checkbox" value="valve"> Valve Disorders (e.g., aortic stenosis)</label>
+      <label>Other: <input type="text" placeholder="Specify..."></label>
 
-            <h4>Heart Disease</h4>
-            <label><input type="checkbox" value="coronary"> Coronary Artery Disease</label><br>
-            <label><input type="checkbox" value="mi"> Myocardial Infarction (Heart Attack)</label><br>
-            <label><input type="checkbox" value="congestive"> Congestive Heart Failure</label><br>
-            <label><input type="checkbox" value="arrhythmia"> Arrhythmia</label><br>
-            <label><input type="checkbox" value="afib"> Atrial Fibrillation</label><br>
-            <label><input type="checkbox" value="valve"> Valve Disorders (e.g., aortic stenosis)</label><br>
-            <label>Other: <input type="text" placeholder="Specify..."></label><br><br>
+      <h4>Respiratory Disorders</h4>
+      <label><input type="checkbox" value="asthma"> Asthma</label>
+      <label><input type="checkbox" value="copd"> Chronic Obstructive Pulmonary Disease (COPD)</label>
+      <label><input type="checkbox" value="emphysema"> Emphysema</label>
+      <label><input type="checkbox" value="bronchitis"> Chronic Bronchitis</label>
+      <label><input type="checkbox" value="pulmonary"> Pulmonary Fibrosis</label>
+      <label><input type="checkbox" value="sleep_apnea"> Sleep Apnea</label>
+      <label>Other: <input type="text" placeholder="Specify..."></label>
 
-            <h4>Respiratory Disorders</h4>
-            <label><input type="checkbox" value="asthma"> Asthma</label><br>
-            <label><input type="checkbox" value="copd"> Chronic Obstructive Pulmonary Disease (COPD)</label><br>
-            <label><input type="checkbox" value="emphysema"> Emphysema</label><br>
-            <label><input type="checkbox" value="bronchitis"> Chronic Bronchitis</label><br>
-            <label><input type="checkbox" value="pulmonary"> Pulmonary Fibrosis</label><br>
-            <label><input type="checkbox" value="sleep_apnea"> Sleep Apnea</label><br>
-            <label>Other: <input type="text" placeholder="Specify..."></label><br><br>
+      <h4>Neurological Disorders</h4>
+      <label><input type="checkbox" value="stroke"> Stroke</label>
+      <label><input type="checkbox" value="tia"> Transient Ischemic Attack (TIA)</label>
+      <label><input type="checkbox" value="epilepsy"> Epilepsy/Seizure Disorders</label>
+      <label><input type="checkbox" value="parkinsons"> Parkinson's Disease</label>
+      <label><input type="checkbox" value="ms"> Multiple Sclerosis</label>
+      <label><input type="checkbox" value="alzheimers"> Alzheimer's Disease</label>
+      <label>Other: <input type="text" placeholder="Specify..."></label>
 
-            <h4>Neurological Disorders</h4>
-            <label><input type="checkbox" value="stroke"> Stroke</label><br>
-            <label><input type="checkbox" value="tia"> Transient Ischemic Attack (TIA)</label><br>
-            <label><input type="checkbox" value="epilepsy"> Epilepsy/Seizure Disorders</label><br>
-            <label><input type="checkbox" value="parkinsons"> Parkinson's Disease</label><br>
-            <label><input type="checkbox" value="ms"> Multiple Sclerosis</label><br>
-            <label><input type="checkbox" value="alzheimers"> Alzheimer's Disease</label><br>
-            <label>Other: <input type="text" placeholder="Specify..."></label><br><br>
+      <h4>Gastrointestinal Disorders</h4>
+      <label><input type="checkbox" value="gerd"> Gastroesophageal Reflux Disease (GERD)</label>
+      <label><input type="checkbox" value="ibd"> Inflammatory Bowel Disease</label>
+      <label><input type="checkbox" value="ibs"> Irritable Bowel Syndrome (IBS)</label>
+      <label><input type="checkbox" value="crohns"> Crohn's Disease</label>
+      <label><input type="checkbox" value="uc"> Ulcerative Colitis</label>
+      <label><input type="checkbox" value="hepatitis"> Hepatitis</label>
+      <label><input type="checkbox" value="cirrhosis"> Cirrhosis</label>
+      <label><input type="checkbox" value="pancreatitis"> Pancreatitis</label>
+      <label>Other: <input type="text" placeholder="Specify..."></label>
 
-            <h4>Gastrointestinal Disorders</h4>
-            <label><input type="checkbox" value="gerd"> Gastroesophageal Reflux Disease (GERD)</label><br>
-            <label><input type="checkbox" value="ibd"> Inflammatory Bowel Disease</label><br>
-            <label><input type="checkbox" value="ibs"> Irritable Bowel Syndrome (IBS)</label><br>
-            <label><input type="checkbox" value="crohns"> Crohn's Disease</label><br>
-            <label><input type="checkbox" value="uc"> Ulcerative Colitis</label><br>
-            <label><input type="checkbox" value="hepatitis"> Hepatitis</label><br>
-            <label><input type="checkbox" value="cirrhosis"> Cirrhosis</label><br>
-            <label><input type="checkbox" value="pancreatitis"> Pancreatitis</label><br>
-            <label>Other: <input type="text" placeholder="Specify..."></label><br><br>
+      <h4>Musculoskeletal Disorders</h4>
+      <label><input type="checkbox" value="osteoarthritis"> Osteoarthritis</label>
+      <label><input type="checkbox" value="rheumatoid"> Rheumatoid Arthritis</label>
+      <label><input type="checkbox" value="osteoporosis"> Osteoporosis</label>
+      <label><input type="checkbox" value="gout"> Gout</label>
+      <label><input type="checkbox" value="pain"> Chronic Pain Syndrome</label>
+      <label>Other: <input type="text" placeholder="Specify..."></label>
 
-            <h4>Musculoskeletal Disorders</h4>
-            <label><input type="checkbox" value="osteoarthritis"> Osteoarthritis</label><br>
-            <label><input type="checkbox" value="rheumatoid"> Rheumatoid Arthritis</label><br>
-            <label><input type="checkbox" value="osteoporosis"> Osteoporosis</label><br>
-            <label><input type="checkbox" value="gout"> Gout</label><br>
-            <label><input type="checkbox" value="pain"> Chronic Pain Syndrome</label><br>
-            <label>Other: <input type="text" placeholder="Specify..."></label><br><br>
+      <h4>Endocrine Disorders</h4>
+      <label><input type="checkbox" value="thyroid"> Thyroid Disease (Hypothyroidism/Hyperthyroidism)</label>
+      <label><input type="checkbox" value="cushing"> Cushing's Syndrome</label>
+      <label><input type="checkbox" value="addison"> Addison's Disease</label>
+      <label>Other: <input type="text" placeholder="Specify..."></label>
 
-            <h4>Endocrine Disorders</h4>
-            <label><input type="checkbox" value="thyroid"> Thyroid Disease (Hypothyroidism/Hyperthyroidism)</label><br>
-            <label><input type="checkbox" value="cushing"> Cushing's Syndrome</label><br>
-            <label><input type="checkbox" value="addison"> Addison's Disease</label><br>
-            <label>Other: <input type="text" placeholder="Specify..."></label><br><br>
+      <h4>Mental Health Disorders</h4>
+      <label><input type="checkbox" value="depression"> Depression</label>
+      <label><input type="checkbox" value="anxiety"> Anxiety Disorder</label>
+      <label><input type="checkbox" value="bipolar"> Bipolar Disorder</label>
+      <label><input type="checkbox" value="schizophrenia"> Schizophrenia</label>
+      <label><input type="checkbox" value="ptsd"> PTSD</label>
+      <label>Other: <input type="text" placeholder="Specify..."></label>
 
-            <h4>Mental Health Disorders</h4>
-            <label><input type="checkbox" value="depression"> Depression</label><br>
-            <label><input type="checkbox" value="anxiety"> Anxiety Disorder</label><br>
-            <label><input type="checkbox" value="bipolar"> Bipolar Disorder</label><br>
-            <label><input type="checkbox" value="schizophrenia"> Schizophrenia</label><br>
-            <label><input type="checkbox" value="ptsd"> PTSD</label><br>
-            <label>Other: <input type="text" placeholder="Specify..."></label><br><br>
+      <h4>Renal Disorders</h4>
+      <label><input type="checkbox" value="ckd"> Chronic Kidney Disease</label>
+      <label><input type="checkbox" value="stones"> Kidney Stones</label>
+      <label><input type="checkbox" value="dialysis"> Previous Dialysis</label>
+      <label>Other: <input type="text" placeholder="Specify..."></label>
 
-            <h4>Renal Disorders</h4>
-            <label><input type="checkbox" value="ckd"> Chronic Kidney Disease</label><br>
-            <label><input type="checkbox" value="stones"> Kidney Stones</label><br>
-            <label><input type="checkbox" value="dialysis"> Previous Dialysis</label><br>
-            <label>Other: <input type="text" placeholder="Specify..."></label><br><br>
+      <h4>Oncological History</h4>
+      <label>Current Cancer (Specify Type): <input type="text" placeholder="Type..."></label>
+      <label>Previous Cancer (Specify Type): <input type="text" placeholder="Type..."></label>
+      <label>Other: <input type="text" placeholder="Specify..."></label>
+    </div>
 
-            <h4>Oncological History</h4>
-            <label>Current Cancer (Specify Type): <input type="text" placeholder="Type..."></label><br>
-            <label>Previous Cancer (Specify Type): <input type="text" placeholder="Type..."></label><br>
-            <label>Other: <input type="text" placeholder="Specify..."></label><br><br>
+    <div class="card">
+      <h3>Previous Surgeries</h3>
 
-            <h3>Previous Surgeries</h3>
+      <h4>General Surgeries</h4>
+      <label><input type="checkbox" value="appendectomy"> Appendectomy</label>
+      <label><input type="checkbox" value="cholecystectomy"> Cholecystectomy</label>
+      <label><input type="checkbox" value="hernia"> Hernia Repair</label>
+      <label><input type="checkbox" value="hysterectomy"> Hysterectomy</label>
+      <label><input type="checkbox" value="cesarean"> Cesarean Section</label>
+      <label><input type="checkbox" value="bariatric"> Bariatric Surgery</label>
+      <label>Other: <input type="text" placeholder="Specify..."></label>
 
-            <h4>General Surgeries</h4>
-            <label><input type="checkbox" value="appendectomy"> Appendectomy</label><br>
-            <label><input type="checkbox" value="cholecystectomy"> Cholecystectomy</label><br>
-            <label><input type="checkbox" value="hernia"> Hernia Repair</label><br>
-            <label><input type="checkbox" value="hysterectomy"> Hysterectomy</label><br>
-            <label><input type="checkbox" value="cesarean"> Cesarean Section</label><br>
-            <label><input type="checkbox" value="bariatric"> Bariatric Surgery</label><br>
-            <label>Other: <input type="text" placeholder="Specify..."></label><br><br>
+      <h4>Cardiac Surgeries</h4>
+      <label><input type="checkbox" value="bypass"> Coronary Bypass Surgery</label>
+      <label><input type="checkbox" value="valve"> Valve Replacement</label>
+      <label><input type="checkbox" value="pacemaker"> Pacemaker Insertion</label>
+      <label><input type="checkbox" value="transplant"> Heart Transplant</label>
+      <label>Other: <input type="text" placeholder="Specify..."></label>
 
-            <h4>Cardiac Surgeries</h4>
-            <label><input type="checkbox" value="bypass"> Coronary Bypass Surgery</label><br>
-            <label><input type="checkbox" value="valve"> Valve Replacement</label><br>
-            <label><input type="checkbox" value="pacemaker"> Pacemaker Insertion</label><br>
-            <label><input type="checkbox" value="transplant"> Heart Transplant</label><br>
-            <label>Other: <input type="text" placeholder="Specify..."></label><br><br>
+      <h4>Orthopedic Surgeries</h4>
+      <label><input type="checkbox" value="joint"> Joint Replacement (Knee/Hip)</label>
+      <label><input type="checkbox" value="ligament"> Ligament Reconstruction</label>
+      <label><input type="checkbox" value="fracture"> Fracture Repair</label>
+      <label>Other: <input type="text" placeholder="Specify..."></label>
 
-            <h4>Orthopedic Surgeries</h4>
-            <label><input type="checkbox" value="joint"> Joint Replacement (Knee/Hip)</label><br>
-            <label><input type="checkbox" value="ligament"> Ligament Reconstruction</label><br>
-            <label><input type="checkbox" value="fracture"> Fracture Repair</label><br>
-            <label>Other: <input type="text" placeholder="Specify..."></label><br><br>
+      <h4>Neurosurgical Procedures</h4>
+      <label><input type="checkbox" value="craniotomy"> Craniotomy</label>
+      <label><input type="checkbox" value="spinal"> Spinal Surgery</label>
+      <label>Other: <input type="text" placeholder="Specify..."></label>
 
-            <h4>Neurosurgical Procedures</h4>
-            <label><input type="checkbox" value="craniotomy"> Craniotomy</label><br>
-            <label><input type="checkbox" value="spinal"> Spinal Surgery</label><br>
-            <label>Other: <input type="text" placeholder="Specify..."></label><br><br>
+      <h4>Other Surgeries</h4>
+      <label><input type="checkbox" value="eye"> Eye Surgery (Cataract, LASIK)</label>
+      <label><input type="checkbox" value="ear"> Ear Surgery (Tympanoplasty)</label>
+      <label>Plastic Surgery (Specify): <input type="text" placeholder="Type..."></label>
+      <label>Other: <input type="text" placeholder="Specify..."></label>
+    </div>
 
-            <h4>Other Surgeries</h4>
-            <label><input type="checkbox" value="eye"> Eye Surgery (Cataract, LASIK)</label><br>
-            <label><input type="checkbox" value="ear"> Ear Surgery (Tympanoplasty)</label><br>
-            <label>Plastic Surgery (Specify): <input type="text" placeholder="Type..."></label><br>
-            <label>Other: <input type="text" placeholder="Specify..."></label><br><br>
+    <div class="card">
+      <h3>Hospitalizations</h3>
+      <label for="hospitalizationReason">Reason for Hospitalizations:</label>
+      <label>Surgery (Specify): <input type="text" placeholder="Type..."></label>
+      <label>Serious Illness (Specify): <input type="text" placeholder="Type..."></label>
+      <label>Injury (Specify): <input type="text" placeholder="Type..."></label>
+      <label>Complications from Chronic Conditions (Specify): <input type="text" placeholder="Type..."></label>
+      <label>Mental Health Issues: <input type="text" placeholder="Type..."></label>
+      <label>Other: <input type="text" placeholder="Type..."></label>
 
-            <h3>Hospitalizations</h3>
-            <label for="hospitalizationReason">Reason for Hospitalizations:</label><br>
-            <label>Surgery (Specify): <input type="text" placeholder="Type..."></label><br>
-            <label>Serious Illness (Specify): <input type="text" placeholder="Type..."></label><br>
-            <label>Injury (Specify): <input type="text" placeholder="Type..."></label><br>
-            <label>Complications from Chronic Conditions (Specify): <input type="text" placeholder="Type..."></label><br>
-            <label>Mental Health Issues: <input type="text" placeholder="Type..."></label><br>
-            <label>Other: <input type="text" placeholder="Type..."></label><br><br>
+      <label for="hospitalizationDates">Dates of Hospitalizations:</label>
+      <input type="text" placeholder="From: _______________ To: _______________"><br>
+      <input type="text" placeholder="From: _______________ To: _______________"><br>
+      <input type="text" placeholder="From: _______________ To: _______________"><br>
 
-            <label for="hospitalizationDates">Dates of Hospitalizations:</label><br>
-            <input type="text" placeholder="From: _______________ To: _______________"><br>
-            <input type="text" placeholder="From: _______________ To: _______________"><br>
-            <input type="text" placeholder="From: _______________ To: _______________"><br><br>
+      <h3>Additional Notes</h3>
+      <label>Any significant findings during hospital stays: <input type="text" placeholder="Type..."></label><br>
 
-            <h3>Additional Notes</h3>
-            <label>Any significant findings during hospital stays: <input type="text" placeholder="Type..."></label><br><br>
+      <button class="btn" id="submitIntake">Submit Intake</button>
+    </div>
+  </section>
 
-            <button class="btn" id="submitIntake">Submit Intake</button>
-        </div>
-    </section>
-
-    <script src="firebase.js"></script>
-    <script src="auth.js"></script>
-    <script src="intake.js"></script>
+  <script src="firebase.js"></script>
+  <script src="auth.js"></script>
+  <script src="intake.js"></script>
 </body>
+
 </html>

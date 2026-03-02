@@ -1,11 +1,12 @@
 /* --- Base Styles --- */
 :root {
-    --primary-color: #6a8a6a;
-    --secondary-color: #5d7d60;
-    --background-light: #fdf6f0;
+    --primary-color: rgb(106, 138, 106);
+    --secondary-color: #b3c095;
+    --background-light: rgb(255, 253, 208);
     --background-dark: #e7f0e7;
-    --text-color-dark: #4b4b3f;
-    --text-color-light: #fff;
+    --text-color-dark: #565646;
+    --text-color-light: #082308;
+
 }
 
 body {
@@ -17,43 +18,77 @@ body {
     scroll-behavior: smooth;
 }
 
+.card {
+    background: rgb(171, 173, 150);
+    padding: 1.25rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
 a {
     text-decoration: none;
 }
 
+  label {
+            display: block;
+        }
+
 /* --- Header --- */
 header {
-    background-color: var(--background-dark);
+    background-color: rgb(85, 113, 73);
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    padding: 1rem 2rem;
+    align-items: flex-end;
     position: sticky;
+    padding: 4% 20px;
     top: 0;
     z-index: 100;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     transition: background-color 0.3s;
 }
-
+h2, h3, h4 {
+            margin: 20px 0;
+        }
 header.scrolled {
     background-color: #d4e3d4;
 }
+h1 {
+    
+            text-align: center;
+            margin-top: 20px;
+            color: #082308;
+        }
 
 header .logo {
     font-size: 1.8rem;
     font-weight: bold;
-    color: #3a503a;
+    color: #082308;
+    margin-left: -8px;
+    margin-bottom: -40px;
+}
+
+nav {
+    display: flex;
+    /* Ensure 'nav' uses flexbox */
+    flex-direction: row;
+    /* Aligns links in a row */
 }
 
 nav a {
     margin-left: 1.5rem;
-    color: #3a503a;
+    /* Spacing between links */
+    margin-bottom: -50px;
+    /* No bottom margin */
+    color: #082308;
     font-weight: 500;
     transition: color 0.3s;
+    align-items: center;
+    display: flex;
 }
 
+/* Hover effect on nav links */
 nav a:hover {
-    color: var(--primary-color);
+    color: #4b494cd3
 }
 
 /* --- Hero Section --- */
@@ -75,19 +110,23 @@ nav a:hover {
     font-size: 1.2rem;
     margin-bottom: 2rem;
 }
-
 .btn {
-    background-color: var(--primary-color);
-    color: var(--text-color-light);
     padding: 0.75rem 1.5rem;
+    border: none;
     border-radius: 5px;
-    display: inline-block;
+    cursor: pointer;
+    margin-top: 20px;
+    display: block;
+    width: 100%;
+    background-color: var(--primary-color);
+    color: #082308;
     transition: all 0.3s;
 }
 
 .btn:hover {
-    background-color: var(--secondary-color);
-    transform: translateY(-3px);
+    background-color: rgb(123, 167, 123);
+    transform: translateY(-1px);
+    /* Optional: keep or remove */
 }
 
 /* --- Sections --- */
@@ -121,11 +160,7 @@ section {
     transition: transform 0.3s, box-shadow 0.3s;
 }
 
-.herb-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-}
-
+/* Image settings */
 .herb-card img {
     width: 100%;
     height: 200px;
@@ -147,17 +182,24 @@ footer {
 }
 
 /* --- Utility Layouts --- */
-.container {
-    max-width: 1100px;
-    margin: 0 auto;
-}
+  .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 1200px;
+            margin: 20px auto;
+        }
+  .card {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 10px;
+            flex: 1;
+            min-width: 300px;
+            max-width: 400px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
 
-.card {
-    background: #fff;
-    padding: 1.25rem;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-}
 
 .intake-header {
     text-align: center;
@@ -194,7 +236,6 @@ button {
     border: none;
     padding: 10px 18px;
     border-radius: 8px;
-    cursor: pointer;
 }
 
 button:hover {
@@ -226,14 +267,6 @@ input[type="range"] {
 
 .herb-results {
     margin-top: 30px;
-}
-
-.herb-card {
-    background: #f4f8f5;
-    padding: 20px;
-    border-radius: 12px;
-    margin-bottom: 15px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
 }
 
 .herb-library {
@@ -270,12 +303,6 @@ input[type="range"] {
     color: #4a5a2a;
     font-weight: 500;
     display: block;
-}
-
-.herb-list li:hover {
-    background-color: #e8f0dc;
-    transform: translateY(-3px);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 #herb-detail {
