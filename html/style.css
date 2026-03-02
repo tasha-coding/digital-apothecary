@@ -12,7 +12,7 @@
 body {
     font-family: 'Georgia', serif;
     background-color: var(--background-light);
-    color: var(--text-color-dark);
+    color: #082308;
     margin: 0;
     line-height: 1.6;
     scroll-behavior: smooth;
@@ -60,7 +60,7 @@ h1 {
         }
 
 header .logo {
-    font-size: 1.8rem;
+    font-size: 2.4rem;
     font-weight: bold;
     color: #082308;
     margin-left: -8px;
@@ -72,6 +72,7 @@ nav {
     /* Ensure 'nav' uses flexbox */
     flex-direction: row;
     /* Aligns links in a row */
+    font-size: 2rem;
 }
 
 nav a {
@@ -126,6 +127,8 @@ nav a:hover {
 .btn:hover {
     background-color: rgb(123, 167, 123);
     transform: translateY(-1px);
+    color: #082308;
+
     /* Optional: keep or remove */
 }
 
@@ -140,6 +143,7 @@ section {
 .featured-herbs h2,
 .contact h2 {
     font-size: 2.2rem;
+    color: #082308;
     margin-bottom: 1rem;
 }
 
@@ -271,17 +275,17 @@ input[type="range"] {
 
 .herb-library {
     padding: 2rem;
-    background-color: #f9f7f2;
+    background-color: rgb(169, 129, 87);
 }
 
 .herb-library h2 {
     text-align: center;
-    color: #4a5a2a;
+    color: #082308;
     font-size: 2rem;
     margin-bottom: 1rem;
 }
 
-.herb-list {
+.herb-list { 
     list-style: none;
     padding: 0;
     display: grid;
@@ -341,3 +345,13 @@ input[type="range"] {
 #back-button:hover {
     background-color: #6b7b3a;
 }
+.search-bar input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    justify-content: flex-end;
+    font-size: 1rem;
+    align-items: center;
+}
+
