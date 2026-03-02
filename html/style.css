@@ -156,7 +156,7 @@ footer {
     background: #fff;
     padding: 1.25rem;
     border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .intake-header {
@@ -275,7 +275,7 @@ input[type="range"] {
 .herb-list li:hover {
     background-color: #e8f0dc;
     transform: translateY(-3px);
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 #herb-detail {
@@ -284,7 +284,7 @@ input[type="range"] {
     border-radius: 8px;
     max-width: 600px;
     margin: 2rem auto;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
 #herb-detail h2 {
