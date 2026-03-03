@@ -41,6 +41,32 @@ updateStep();
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
+  // 1) Save locally (works even if not logged in)
+  localStorage.setItem("latestIntake", JSON.stringify(intakeData));
+
+  // 2) If Firebase is available, also save to Firestore
+  let intakeId = null;
+
+  if (window.firebase?.firestore) {
+    const db = firebase.firestore();
+
+    // If user is logged in, attach uid, otherwise uid is null
+    const user = window.firebase?.auth ? firebase.auth().currentUser : null;
+
+    const docRef = await db.collection("intakes").add({
+      ...intakeData,
+      uid: user ? user.uid : null,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    intakeId = docRef.id; // <-- this is the "intakeId"
+  }
+
+  // 3) Redirect to results
+  // If we have an intakeId, pass it in the URL. If not, results will use localStorage.
+  window.location.href = intakeId
+    ? `results.html?intakeId=${encodeURIComponent(intakeId)}`
+    : `results.html`;
 
   const user = auth.currentUser;
   if (!user) {
@@ -89,3 +115,24 @@ form.addEventListener("submit", async (e) => {
     alert("Something went wrong saving your results.");
   }
 });
+
+// inside your form submit handler after you build `intakeData`
+localStorage.setItem("latestIntake", JSON.stringify(intakeData));
+
+let intakeId = null;
+
+if (window.firebase?.firestore && window.firebase?.auth) {
+  const user = firebase.auth().currentUser;
+  const db = firebase.firestore();
+
+  const docRef = await db.collection("intakes").add({
+    ...intakeData,
+    uid: user ? user.uid : null,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  });
+
+  intakeId = docRef.id;
+}
+
+const url = intakeId ? `results.html?intakeId=${encodeURIComponent(intakeId)}` : `results.html`;
+window.location.href = url;

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Your Results • Digital Apothecary</title>
+    <link rel="stylesheet" href="../css/main.css" />
+</head>
+
+<body>
+    <header id="header">
+        <div class="logo">Luxury Botanical</div>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="herbs.html">Herbs</a>
+            <a href="intake.html">Intake</a>
+            <a href="dashboard.html">Dashboard</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <h1>Your Personalized Herb Suggestions</h1>
+        <p id="results-subtitle"></p>
+
+        <section class="card" style="margin-top: 1rem;">
+            <h2>Top Matches</h2>
+            <div id="top-results"></div>
+        </section>
+
+        <section class="card" style="margin-top: 1rem;">
+            <h2>Safety Notes</h2>
+            <p class="muted">This is educational only and not medical advice.</p>
+            <div id="safety-results"></div>
+        </section>
+    </main>
+
+    <script type="module" src="../js/results.js"></script>
+</body>
+
+</html>
