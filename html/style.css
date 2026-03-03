@@ -18,11 +18,35 @@ body {
     scroll-behavior: smooth;
 }
 
+/* --- Card Layout --- */
+
+/* Row wrapper for cards */
+.card-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+/* Single clean card style */
 .card {
     background: rgb(171, 173, 150);
-    padding: 1.25rem;
+    border: 1px solid #ccc;
     border-radius: 10px;
+    padding: 20px;
+    flex: 1 1 300px;      /* equal responsive width */
+    max-width: 400px;
+    min-width: 280px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}  
+
+.card-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
 }
 
 a {
@@ -224,16 +248,7 @@ footer {
 }
 
 
-  .card {
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 20px;
-            margin: 10px;
-            flex: 1;
-            min-width: 300px;
-            max-width: 400px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
+  
 
 
 .intake-header {

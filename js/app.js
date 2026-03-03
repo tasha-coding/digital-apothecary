@@ -38,7 +38,9 @@ if (searchInput) {
         const filtered = herbs.filter(herb =>
             herb.name.toLowerCase().includes(query) ||
             herb.categories.some(cat => cat.toLowerCase().includes(query)) ||
-            herb.supports.some(s => s.toLowerCase().includes(query))
+            herb.supports.some(s => s.toLowerCase().includes(query)) ||
+            herb.contraindications.some(c => c.toLowerCase().includes(query)) ||
+            herb.synergy.some(sy => sy.toLowerCase().includes(query))
         );
 
         renderFilteredHerbs(filtered);
