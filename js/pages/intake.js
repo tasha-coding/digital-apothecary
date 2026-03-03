@@ -14,7 +14,9 @@ function updateStep() {
   steps.forEach((step, index) => {
     step.classList.toggle("active", index === currentStep);
   });
-  progressFill.style.width = ((currentStep + 1) / steps.length) * 100 + "%";
+  if (progressFill) {
+    progressFill.style.width = ((currentStep + 1) / steps.length) * 100 + "%";
+  }
 }
 
 nextBtns.forEach(btn => {
@@ -41,53 +43,30 @@ updateStep();
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
-  // 1) Save locally (works even if not logged in)
-  localStorage.setItem("latestIntake", JSON.stringify(intakeData));
 
-  // 2) If Firebase is available, also save to Firestore
-  let intakeId = null;
-
-  if (window.firebase?.firestore) {
-    const db = firebase.firestore();
-
-    // If user is logged in, attach uid, otherwise uid is null
-    const user = window.firebase?.auth ? firebase.auth().currentUser : null;
-
-    const docRef = await db.collection("intakes").add({
-      ...intakeData,
-      uid: user ? user.uid : null,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    });
-
-    intakeId = docRef.id; // <-- this is the "intakeId"
-  }
-
-  // 3) Redirect to results
-  // If we have an intakeId, pass it in the URL. If not, results will use localStorage.
-  window.location.href = intakeId
-    ? `results.html?intakeId=${encodeURIComponent(intakeId)}`
-    : `results.html`;
-
+  // 1) Must be logged in
   const user = auth.currentUser;
   if (!user) {
     alert("Please log in to complete your assessment.");
+    window.location.href = "register.html";
     return;
   }
 
+  // 2) Build data from the form
   const formData = new FormData(form);
   const data = {};
 
   formData.forEach((value, key) => {
+    // Handle multi-select / checkbox groups
     if (data[key]) {
-      if (!Array.isArray(data[key])) {
-        data[key] = [data[key]];
-      }
+      if (!Array.isArray(data[key])) data[key] = [data[key]];
       data[key].push(value);
     } else {
       data[key] = value;
     }
   });
 
+  // 3) Your scoring inputs (guard against missing fields)
   const anxiety = Number(data.anxiety || 0);
   const stressLevel = Number(data.stresslevel || 0);
   const fatigue = Number(data.fatigue || 0);
@@ -101,38 +80,29 @@ form.addEventListener("submit", async (e) => {
     sleepScore: sleepDisturb
   };
 
-  const engineResults = await runHerbEngine(data);
-  data.recommendations = engineResults;
-
+  // Attach user + timestamp
   data.userId = user.uid;
   data.timestamp = serverTimestamp();
 
   try {
-    await addDoc(collection(db, "intakes"), data);
-    window.location.href = "dashboard.html";
+    // 4) Run herb engine
+    const engineResults = await runHerbEngine(data);
+    data.recommendations = engineResults;
+
+    // 5) Save to Firestore
+    const docRef = await addDoc(collection(db, "intakes"), data);
+
+    // 6) Save locally too (useful fallback)
+    localStorage.setItem(
+      "latestIntake",
+      JSON.stringify({ ...data, intakeId: docRef.id })
+    );
+
+    // 7) Redirect to results page with intakeId
+    window.location.href = `results.html?intakeId=${encodeURIComponent(docRef.id)}`;
+
   } catch (error) {
     console.error("Error saving intake:", error);
     alert("Something went wrong saving your results.");
   }
 });
-
-// inside your form submit handler after you build `intakeData`
-localStorage.setItem("latestIntake", JSON.stringify(intakeData));
-
-let intakeId = null;
-
-if (window.firebase?.firestore && window.firebase?.auth) {
-  const user = firebase.auth().currentUser;
-  const db = firebase.firestore();
-
-  const docRef = await db.collection("intakes").add({
-    ...intakeData,
-    uid: user ? user.uid : null,
-    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-  });
-
-  intakeId = docRef.id;
-}
-
-const url = intakeId ? `results.html?intakeId=${encodeURIComponent(intakeId)}` : `results.html`;
-window.location.href = url;

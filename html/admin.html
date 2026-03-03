@@ -20,6 +20,8 @@
             <a href="register.html">Login</a>
             <a href="intake.html">Intake Form</a>
             <a href="herbs.html">Herbs</a>
+            <a href="results.html">Results</a>
+            <a href="dashboard.html">Dashboard</a>
             <a href="#contact">Contact</a>
         </nav>
     </header>
@@ -29,20 +31,13 @@
         <div id="adminResults"></div>
     </div>
 
-    firebase.auth().onAuthStateChanged(user => {
-    if (!user) {
-    window.location.href = "login.html"; // redirect non-logged-in
-    } else if (!user.admin) {
-    alert("Access denied");
-    window.location.href = "index.html";
-    }
-    });
+
 
     <script src="../js/herbs.js"></script>
-    <script src="app.js"></script>
-    <script src="firebase.js"></script>
-    <script src="auth.js"></script>
-    <script src="admin.js"></script>
+    <script src="../js/app.js"></script>
+    <script src="../js/firebase.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/intake.js"></script>
 </body>
 
 </html>
