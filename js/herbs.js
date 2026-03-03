@@ -110,4 +110,5 @@ const herbs = [
   {"name":"Wild Yam","categories":["hormonal","digestive"],"supports":["menstrual_support","digestion"],"contraindications":["pregnancy"],"synergy":["Black Cohosh"]}
 ]
 
+
 ];

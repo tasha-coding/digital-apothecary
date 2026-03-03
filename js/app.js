@@ -19,33 +19,33 @@ if (herbListEl) {
         herbListEl.appendChild(li);
     });
     // SEARCH FUNCTIONALITY
-const searchInput = document.getElementById("herb-search");
+    const searchInput = document.getElementById("herb-search");
 
-function renderFilteredHerbs(filteredHerbs) {
-    herbListEl.innerHTML = "";
+    function renderFilteredHerbs(filteredHerbs) {
+        herbListEl.innerHTML = "";
 
-    filteredHerbs.forEach(herb => {
-        const li = document.createElement("li");
-        li.innerHTML = `<a href="#" class="herb-link" data-name="${herb.name}">${herb.name}</a>`;
-        herbListEl.appendChild(li);
-    });
-}
+        filteredHerbs.forEach(herb => {
+            const li = document.createElement("li");
+            li.innerHTML = `<a href="#" class="herb-link" data-name="${herb.name}">${herb.name}</a>`;
+            herbListEl.appendChild(li);
+        });
+    }
 
-if (searchInput) {
-    searchInput.addEventListener("input", function () {
-        const query = this.value.toLowerCase();
+    if (searchInput) {
+        searchInput.addEventListener("input", function () {
+            const query = this.value.toLowerCase();
 
-        const filtered = herbs.filter(herb =>
-            herb.name.toLowerCase().includes(query) ||
-            herb.categories.some(cat => cat.toLowerCase().includes(query)) ||
-            herb.supports.some(s => s.toLowerCase().includes(query)) ||
-            herb.contraindications.some(c => c.toLowerCase().includes(query)) ||
-            herb.synergy.some(sy => sy.toLowerCase().includes(query))
-        );
+            const filtered = herbs.filter(herb =>
+                herb.name.toLowerCase().includes(query) ||
+                herb.categories.some(cat => cat.toLowerCase().includes(query)) ||
+                herb.supports.some(s => s.toLowerCase().includes(query)) ||
+                herb.contraindications.some(c => c.toLowerCase().includes(query)) ||
+                herb.synergy.some(sy => sy.toLowerCase().includes(query))
+            );
 
-        renderFilteredHerbs(filtered);
-    });
-}
+            renderFilteredHerbs(filtered);
+        });
+    }
 
     document.addEventListener("click", e => {
         if (e.target.classList.contains("herb-link")) {
