@@ -1,45 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Herb Library</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Herb Library</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header id="header">
-        <div class="logo">Luxury Botanical</div>
-        <nav>
-            <a href="index.html">Home</a>
-            <a href="register.html">Login</a>
-            <a href="intake.html">Intake Form</a>
-            <a href="#herbs">Herbs</a>
-            <a href="#contact">Contact</a>
-        </nav>
-    </header>
+  <header id="header">
+    <div class="logo">Luxury Botanical</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="register.html">Login</a>
+      <a href="intake.html">Intake Form</a>
+      <a href="herbs.html">Herbs</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
 
-    <section class="container">
-        <h1>Herb Library</h1>
-        <div class="controls">
-          
-            <input type="text" id="search" placeholder="Search herbs...">
+  <section class="container">
+    <h1>Herb Library</h1>
 
-            <select id="filter">
-                <option value="all">All Categories</option>
-                <option value="sleep">Sleep</option>
-                <option value="digestion">Digestion</option>
-                <option value="immune">Immune</option>
-            </select>
-        </div></p>
-        </main>
-       
-        
-        <div id="herb-list" class="grid"></div>
-    </section>
-    
-    <p>
-      
+    <div class="controls">
+      <input type="text" id="search" placeholder="Search herbs...">
+      <select id="filter">
+        <option value="all">All Categories</option>
+        <option value="sleep">Sleep</option>
+        <option value="digestion">Digestion</option>
+        <option value="immune">Immune</option>
+      </select>
+    </div>
 
-    <script src="app.js"></script>
+    <input type="text" id="herb-search" placeholder="Search herbs..." />
+    <ul id="herb-list" class="herb-list"></ul>
+  </section>
+
+  <!-- ALWAYS LOAD HERBS FIRST -->
+  <script src="herbs.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>

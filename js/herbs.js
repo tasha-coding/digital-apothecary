@@ -1,4 +1,5 @@
- 
+const herbs = [
+     
 [
   {"name":"Alfalfa","categories":["nutrient-rich","detox"],"supports":["nutrient_support","detoxification"],"contraindications":["autoimmune_conditions"],"synergy":["Nettle"]},
   {"name":"Anise","categories":["carminative","digestive"],"supports":["digestion","bloating"],"contraindications":["pregnancy"],"synergy":["Fennel"]},
@@ -108,3 +109,5 @@
   {"name":"White Willow Bark","categories":["anti-inflammatory","analgesic"],"supports":["pain","inflammation"],"contraindications":["pregnancy","blood_thinners"],"synergy":["Meadowsweet","Turmeric"]},
   {"name":"Wild Yam","categories":["hormonal","digestive"],"supports":["menstrual_support","digestion"],"contraindications":["pregnancy"],"synergy":["Black Cohosh"]}
 ]
+
+];

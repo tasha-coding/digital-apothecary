@@ -72,13 +72,13 @@ nav {
     /* Ensure 'nav' uses flexbox */
     flex-direction: row;
     /* Aligns links in a row */
-    font-size: 2rem;
+    font-size: 1.5rem;
 }
 
 nav a {
     margin-left: 1.5rem;
     /* Spacing between links */
-    margin-bottom: -50px;
+    margin-bottom: -2rem;
     /* No bottom margin */
     color: #082308;
     font-weight: 500;
@@ -112,13 +112,15 @@ nav a:hover {
     margin-bottom: 2rem;
 }
 .btn {
-    padding: 0.75rem 1.5rem;
+    padding: 1rem 6rem;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     margin-top: 20px;
-    display: block;
-    width: 100%;
+    
+    justify-content: center;
+    align-items: center;
+    width: 50%;
     background-color: var(--primary-color);
     color: #082308;
     transition: all 0.3s;
@@ -302,17 +304,7 @@ input[type="range"] {
     margin-top: 30px;
 }
 
-.herb-library {
-    padding: 2rem;
-    background-color: rgb(169, 129, 87);
-}
 
-.herb-library h2 {
-    text-align: center;
-    color: #082308;
-    font-size: 2rem;
-    margin-bottom: 1rem;
-}
 
 .herb-list { 
     list-style: none;
